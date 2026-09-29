@@ -13,9 +13,10 @@ Rules (important-info.md, agreed with Ting):
   GM / WM reactions unless the budget is exceeded (``pool_other_gm_wm: auto``), in which case they are
   pooled into one GM and one WM reaction.
 * ``VBO`` (vascular barrier niche, manual polygons) → one reaction per section that has VBO cells,
-  pooled across replicate slides only. VBO cells ignore the edge exclusion.
-* Everything counts Pu.1⁺ cells; lesion / GM / WM compartments respect the edge exclusion used for
-  wells (``dist_to_section_edge_um`` ≥ ``edge_exclusion_um``); VBO cells are excluded from the other
+  pooled across replicate slides only. VBO reactions take **every cell** inside the polygons (Pu.1⁺ and
+  Pu.1⁻; ``vbo_all_cells: true``) and ignore the edge exclusion.
+* Lesion / GM / WM compartments count Pu.1⁺ cells only and respect the edge exclusion used for wells
+  (``dist_to_section_edge_um`` ≥ ``edge_exclusion_um``); VBO cells are excluded from the other
   compartments.
 """
 from __future__ import annotations
@@ -76,16 +77,22 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
     order = cfg.get("order", "spatial")
     shortfall_frac = float(cfg.get("shortfall_frac", 0.8))
     rng = np.random.default_rng(int(cfg.get("seed", 0)))
+    vbo_all = bool(cfg.get("vbo_all_cells", True))
 
-    # ---- one long table of Pu.1+ cells with compartment -------------------------------------
+    # ---- one long table of candidate cells with compartment ----------------------------------
+    # Pu.1+ cells everywhere; inside VBO polygons every cell (the barrier niche is captured whole)
     frames = []
     for scene, c in cells_by_scene.items():
-        d = c[c["pu1_pos"].to_numpy(bool)].copy()
+        d = c.copy()
         d["scene"] = scene
         d["section"] = d["section_name"].astype(str) if "section_name" in d else d["section_id"].astype(str)
         d["compartment"] = _compartment(d, edge)
+        take = d["pu1_pos"].to_numpy(bool)
+        if vbo_all:
+            take = take | (d["compartment"] == "VBO").to_numpy()
+        d = d[take]
         d["orig_idx"] = d.index
-        keep = ["scene", "section", "compartment", "orig_idx", "x_um", "y_um", "area_um2"]
+        keep = ["scene", "section", "compartment", "orig_idx", "x_um", "y_um", "area_um2", "pu1_pos"]
         if "dist_to_lesion_um" in d:
             keep.append("dist_to_lesion_um")
         frames.append(d[keep])
@@ -165,6 +172,7 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
             "compartment": p["compartment"],
             "sections": ";".join(p["sections"]), "scenes": ";".join(sorted(avail["scene"].unique())),
             "n_sections": len(p["sections"]), "n_available": int(len(avail)), "n_selected": int(len(sel)),
+            "n_pu1_available": int(avail["pu1_pos"].sum()), "n_pu1_selected": int(sel["pu1_pos"].sum()),
             "area_selected_um2": float(sel["area_um2"].sum()),
             "shortfall": bool(len(avail) < shortfall_frac * target), "priority": p["priority"],
         })

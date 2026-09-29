@@ -47,6 +47,7 @@ def test_plan_pools_replicates_and_cfa():
     assert {"OS_1_C|GM", "OS_1_C|WM"} <= set(plan.reaction_name)
     # VBO per section, incl. the manual 'vbo' label in a control section; ignores edge exclusion
     vbo = plan[plan.pool_type == "VBO"]
+    assert (vbo.n_available >= vbo.n_pu1_available).all()  # VBO takes every cell, not only Pu.1+
     assert set(vbo.sections) == {"P1_T", "OS_1_C"}
     assert vbo.set_index("sections").loc["P1_T", "n_available"] == 40
     # cells carry reaction ids; VBO cells never end up in 'deep'
