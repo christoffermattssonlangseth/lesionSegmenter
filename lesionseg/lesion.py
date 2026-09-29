@@ -339,42 +339,36 @@ def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level:
     min_area = 2 * f * f  # drop sub-bin artefacts (< 2 grid bins)
 
     def _polys(mask):
-        """Polygons WITH holes: contours are classified as shells (interior in mask) or holes."""
+        """Polygons WITH holes. Contours are classified by nesting depth (even = shell, odd = hole)."""
         padded = np.pad(mask, 1)
-        shells, holes = [], []
+        cands = []
         for c in measure.find_contours(padded.astype(np.float32), 0.5):
             if len(c) < 4:
                 continue
-            p = Polygon(np.column_stack([c[:, 1], c[:, 0]]))  # grid coords (col, row) in padded frame
+            p = Polygon(np.column_stack([c[:, 1], c[:, 0]]))  # grid coords (col, row), padded frame
             if not p.is_valid:
                 p = p.buffer(0)
             if p.geom_type == "MultiPolygon":
                 p = max(p.geoms, key=lambda q: q.area)
             if p.is_empty or p.geom_type != "Polygon" or p.area < 2:
                 continue
-            rp = p.representative_point()
-            if rp.is_empty:
-                continue
-            r, q = int(round(rp.y)), int(round(rp.x))
-            inside = 0 <= r < padded.shape[0] and 0 <= q < padded.shape[1] and padded[r, q]
-            (shells if inside else holes).append(p)
-        shells.sort(key=lambda p: p.area, reverse=True)
+            cands.append(Polygon(p.exterior.coords))
+        cands.sort(key=lambda q: q.area, reverse=True)
+        pts = [q.representative_point() for q in cands]
+        depth = [sum(1 for j in range(i) if cands[j].contains(pts[i])) for i in range(len(cands))]
+        shells = [i for i, d in enumerate(depth) if d % 2 == 0]
+        holes = [i for i, d in enumerate(depth) if d % 2 == 1]
         out_polys = []
-        used = set()
-        for sh in shells:
-            hs = []
-            for i, h in enumerate(holes):
-                if i not in used and sh.contains(h.representative_point()):
-                    hs.append(h)
-                    used.add(i)
-            geom = Polygon(sh.exterior.coords, [h.exterior.coords for h in hs])
+        for i in shells:
+            # holes directly inside this shell: contained, and no smaller shell between them
+            hs = [cands[h] for h in holes if depth[h] == depth[i] + 1 and cands[i].contains(pts[h])]
+            geom = Polygon(cands[i].exterior.coords, [h.exterior.coords for h in hs])
             if not geom.is_valid:
                 geom = geom.buffer(0)
             if geom.is_empty:
                 continue
-            # padded grid coords -> µm / px: (col - 1 + 0.5) * f
-            geom = shp_affine(geom, f)
-            if not geom.is_empty and geom.area >= min_area:
+            geom = shp_affine(geom, f)  # padded grid coords -> µm / px
+            if geom.area >= min_area:
                 out_polys.append(geom)
         return out_polys
 

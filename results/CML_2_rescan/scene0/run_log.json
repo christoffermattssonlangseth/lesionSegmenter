@@ -278,7 +278,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_2_rescan.czi_shapes",
     "n_cells": 60095,
-    "seconds": 19.7
+    "seconds": 20.2
   },
   "segmentation": {
     "route": "spatialdata",
@@ -294,7 +294,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_2_rescan.czi_shapes",
     "n_cells": 60095,
-    "seconds": 19.7
+    "seconds": 20.2
   },
   "pu1": {
     "method": "mask",
@@ -662,5 +662,5 @@
     "target_area_um2": 3000
   },
   "cell_geojson": 13214,
-  "seconds_total": 30.8
+  "seconds_total": 31.5
 }
