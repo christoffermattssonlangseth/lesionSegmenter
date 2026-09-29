@@ -45,7 +45,8 @@ def load_label_image(path: str | Path) -> np.ndarray:
         if arr.shape[0] == 1:
             arr = arr[0]
         elif arr.shape[-1] in (3, 4):
-            arr = arr[..., 0].astype(np.int64) + (arr[..., 1].astype(np.int64) << 8) + (arr[..., 2].astype(np.int64) << 16)
+            r, g, b = (arr[..., i].astype(np.int64) for i in range(3))
+            arr = r + (g << 8) + (b << 16)
     if arr.ndim != 2:
         raise ValueError(f"label image must be 2-D, got {arr.shape}")
     if not np.issubdtype(arr.dtype, np.integer):
@@ -128,7 +129,7 @@ def match_pu1_mask(cell_labels: np.ndarray, pu1_labels: np.ndarray, cells: pd.Da
     # best cell per pu1 object (excluding background 0)
     fg = kc > 0
     best: dict[int, tuple[int, int]] = {}
-    for pl, cl, n in zip(kp[fg], kc[fg], cnt[fg]):
+    for pl, cl, n in zip(kp[fg], kc[fg], cnt[fg], strict=True):
         if pl not in best or n > best[pl][1]:
             best[pl] = (cl, n)
     pu1_ids = np.unique(p)
@@ -241,14 +242,14 @@ def cells_from_masks(cells_mask: str | Path, pu1_mask: str | Path | None, pixel_
         tab = cells_from_labels(labels, pixel_size_um, contours=True,
                                 contour_only_for=cells.loc[sel_cells, "label"][want[sel_cells]].to_numpy(),
                                 progress=progress)
-        wk = dict(zip(tab["label"], tab["contour_wkt"]))
-        cells["contour_wkt"] = [wk.get(l) for l in cells["label"]]
+        wk = dict(zip(tab["label"], tab["contour_wkt"], strict=True))
+        cells["contour_wkt"] = [wk.get(lab) for lab in cells["label"]]
         if pu1_mask is not None and (cells["source"] == "pu1_mask").any():
             ex = cells["source"] == "pu1_mask"
             tab2 = cells_from_labels(np.where(np.isin(pu1, (-cells.loc[ex, "label"]).to_numpy()), pu1, 0),
                                      pixel_size_um, contours=True, progress=False)
-            wk2 = dict(zip(-tab2["label"], tab2["contour_wkt"]))
-            cells.loc[ex, "contour_wkt"] = [wk2.get(l) for l in cells.loc[ex, "label"]]
+            wk2 = dict(zip(-tab2["label"], tab2["contour_wkt"], strict=True))
+            cells.loc[ex, "contour_wkt"] = [wk2.get(lab) for lab in cells.loc[ex, "label"]]
 
     if reader is not None and measure_channels:
         cells = measure_intensities(labels, reader, scene, measure_channels, cells, progress=progress)

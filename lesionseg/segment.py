@@ -219,7 +219,7 @@ def measure_tile(labels: np.ndarray, intensity: np.ndarray, channel_names: list[
     if contours:
         wkts = []
         bb = df[["bbox-0", "bbox-1", "bbox-2", "bbox-3"]].to_numpy().astype(int)
-        for lab, (r0, c0, r1, c1) in zip(lab_keep, bb):
+        for lab, (r0, c0, r1, c1) in zip(lab_keep, bb, strict=True):
             sub = labels[r0:r1, c0:c1] == lab
             wkts.append(_contour_wkt(sub, c0 + tile.x, r0 + tile.y, pixel_size_um))
         out["contour_wkt"] = wkts
@@ -254,12 +254,16 @@ def segment_scene(reader: SlideReader, scene: int, *, nuclear_channel: int, meas
         stack = reader.read_overview_stack(scene, scale, measure_channels)
         sub = ArrayReaderShim(stack, ch_names, px / scale)
         tiles = list(sub.iter_tiles(0, tile, overlap))
-        read = lambda t: sub.read_region_stack(0, t.x, t.y, t.w, t.h, range(len(measure_channels)))
         eff_px = px / scale
+
+        def read(t):
+            return sub.read_region_stack(0, t.x, t.y, t.w, t.h, range(len(measure_channels)))
     else:
         tiles = list(reader.iter_tiles(scene, tile, overlap))
-        read = lambda t: reader.read_region_stack(scene, t.x, t.y, t.w, t.h, measure_channels)
         eff_px = px
+
+        def read(t):
+            return reader.read_region_stack(scene, t.x, t.y, t.w, t.h, measure_channels)
 
     nuc_i = measure_channels.index(nuclear_channel)
     frames = []

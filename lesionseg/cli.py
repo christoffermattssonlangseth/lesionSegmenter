@@ -34,7 +34,7 @@ def overview(path: Path, out: Path = typer.Option(Path("overview.png")), scale: 
     r = open_slide(path)
     stack = r.read_overview_stack(scene, scale, range(len(r.channel_names)))
     fig, axes = plt.subplots(1, len(stack), figsize=(6 * len(stack), 6))
-    for ax, img, nm in zip(axes, stack, r.channel_names):
+    for ax, img, nm in zip(axes, stack, r.channel_names, strict=True):
         ax.imshow(autoscale(img), cmap="gray")
         ax.set_title(nm)
         ax.axis("off")

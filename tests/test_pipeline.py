@@ -32,7 +32,8 @@ def test_end_to_end(synthetic, tmp_path):
     cells = pd.read_parquet(tmp_path / "cells.parquet")
 
     # segmentation recovered (almost) every synthetic nucleus
-    assert abs(len(cells) - truth["n_total"]) / truth["n_total"] < 0.1, (len(cells), truth["n_total"])
+    n_true = truth["n_total"]
+    assert abs(len(cells) - n_true) / n_true < 0.1, (len(cells), n_true)
     # Pu.1 classification roughly right
     n_pos_true = truth["n_pos_out"] + truth["n_pos_in"]
     assert abs(log["pu1"]["n_pos"] - n_pos_true) / n_pos_true < 0.25
@@ -53,8 +54,13 @@ def test_end_to_end(synthetic, tmp_path):
     assert zs["core"] > 0.7 and zs["core"] > zs["distal"]
     d = cells.groupby("zone", observed=True)["dist_to_lesion_um"].mean()
     assert d["core"] < d["rim"] < 0 < d["peri"] < d["distal"]
+    # one tissue piece on the synthetic slide, everything attributed to it
+    assert log["n_sections"] == 1
+    assert (cells["section_id"] == 1).mean() > 0.99
+    sec = pd.read_csv(tmp_path / "section_summary.csv")
+    assert len(sec) == 1 and sec.n_lesions.iloc[0] == 1
     # outputs exist
-    for f in ["overview.png", "zones_px.geojson", "cells_pu1_px.geojson", "maps/zones.tif", "run_log.json",
+    for f in ["overview.png", "section_summary.csv", "zones_px.geojson", "cells_pu1_px.geojson", "maps/zones.tif", "run_log.json",
               "zone_summary.csv", "distance_profile.csv"]:
         assert (tmp_path / f).exists(), f
 

@@ -38,7 +38,7 @@ def overview_figure(overview_nuc: np.ndarray, overview_pu1: np.ndarray, maps: De
 
     rgb = np.zeros(overview_nuc.shape + (3,), np.float32)
     rgb[..., 2] = autoscale(overview_nuc)
-    rgb[..., 0] = autoscale(overview_pu1)
+    rgb[..., 0] = autoscale(overview_pu1, low=50, high=99.8)
     rgb[..., 1] = rgb[..., 0] * 0.6
 
     fig, axes = plt.subplots(2, 3, figsize=(18, 12))
@@ -72,6 +72,14 @@ def overview_figure(overview_nuc: np.ndarray, overview_pu1: np.ndarray, maps: De
                    extent=extent_g, origin="upper")
     ax.set_title(f"zones – {res.params['n_lesions']} lesion(s); rim {res.params['rim_width_um']:g} µm, "
                  f"peri {res.params['peri_width_um']:g} µm")
+    sections = maps.extra.get("sections")
+    if sections is not None and sections.max() > 0:
+        from scipy import ndimage as ndi
+
+        ids = np.arange(1, sections.max() + 1)
+        for sid, (cy, cx) in zip(ids, ndi.center_of_mass(sections > 0, sections, ids), strict=True):
+            ax.text(cx * g.bin_um, cy * g.bin_um, f"S{sid}", color="w", fontsize=9, ha="center", va="center",
+                    bbox=dict(facecolor="k", alpha=0.5, pad=1, lw=0))
 
     ax = axes[1, 2]
     ax.imshow(autoscale(overview_nuc), extent=extent_ov, cmap="gray")

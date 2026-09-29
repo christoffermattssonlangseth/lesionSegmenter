@@ -139,11 +139,19 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         res.dense_regions.to_csv(out_dir / "dense_nonmyeloid_regions.csv", index=False)
 
     cells = assign.assign_cells(cells, res, grid, **cfg["assign"])
+    sections = assign.label_sections(maps.tissue, grid.bin_um, **cfg.get("sections", {}))
+    cells, res.lesions = assign.assign_sections(cells, res.lesions, sections, grid)
+    maps.extra["sections"] = sections
+    res.lesions.to_csv(out_dir / "lesions.csv", index=False)
+    sec = assign.section_summary(cells, res.lesions, sections, grid.bin_um)
+    sec.to_csv(out_dir / "section_summary.csv", index=False)
+    log["n_sections"] = int(sections.max())
+    log["section_summary"] = sec.to_dict(orient="records")
     summary = assign.zone_summary(cells)
     summary.to_csv(out_dir / "zone_summary.csv", index=False)
     log["zone_summary"] = summary.to_dict(orient="records")
     if "lesion_id" in cells:
-        per_lesion = (cells[cells["lesion_id"] > 0].groupby(["lesion_id", "zone"], observed=True)
+        per_lesion = (cells[cells["lesion_id"] > 0].groupby(["section_id", "lesion_id", "zone"], observed=True)
                       .agg(n_cells=("cell_id", "size"), n_pu1=("pu1_pos", "sum")).reset_index())
         per_lesion.to_csv(out_dir / "per_lesion_zone_counts.csv", index=False)
 
@@ -193,7 +201,8 @@ def run_config(cfg: dict, *, only: list[str] | None = None, from_cells: bool = F
             continue
         scfg = sample_config(cfg, s)
         img = _p(s.get("image") or s.get("path"))
-        reader = open_slide(img, channel_names=s.get("channel_names"), pixel_size_um=s.get("pixel_size_um")) if img else None
+        reader = (open_slide(img, channel_names=s.get("channel_names"), pixel_size_um=s.get("pixel_size_um"))
+                  if img else None)
         scenes = s.get("scenes") or [s.get("scene", 0)]
         cm, pm = s.get("cells_mask"), s.get("pu1_mask")
         for sc in scenes:

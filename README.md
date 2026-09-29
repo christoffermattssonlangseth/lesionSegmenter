@@ -32,7 +32,9 @@ All distances are measured from the lesion boundary in µm and are configurable.
 | **peri** | outside lesion, within `peri_width_um` of the edge | 0–150 µm outside |
 | **distal** | remaining tissue (normal-appearing tissue / control) | > 150 µm |
 
-Each cell additionally gets `dist_to_lesion_um` (negative inside) and an optional `dist_bin`
+Slides carry several cross-sections; connected tissue pieces are labelled (`section_id`, ordered
+top-to-bottom / left-to-right, `sections` layer in `maps/`) and every cell and lesion carries it, so
+infiltration can be located per section. Each cell additionally gets `dist_to_lesion_um` (negative inside) and an optional `dist_bin`
 so zones can be re-binned later without re-running anything (`lesionseg run --from-cells`).
 
 ### What counts as a lesion – and what does not
@@ -113,7 +115,8 @@ lesionseg run configs/quicklook_image.yaml
 | `cells.parquet` / `.csv` | one row per cell: `x_px, y_px` (scene px), `x_um, y_um`, area, shape, `<ch>_mean/_bg`, `pu1_pos`, `zone`, `zone_code`, `lesion_id`, `dist_to_lesion_um`, `dist_bin`, `contour_wkt` (µm) |
 | `lesions.csv` | per lesion: area, centroid, core/rim area, mean Pu.1⁺ density & fraction, score |
 | `dense_nonmyeloid_regions.csv` | hypercellular Pu.1-poor regions (canal, grey matter) |
-| `zone_summary.csv`, `per_lesion_zone_counts.csv` | cell / Pu.1⁺ counts per zone (and per lesion) |
+| `zone_summary.csv`, `per_lesion_zone_counts.csv` | cell / Pu.1⁺ counts per zone (and per section × lesion) |
+| `section_summary.csv` | per tissue piece (e.g. each spinal-cord cross-section on the slide): area, cells, Pu.1⁺, lesion count / area / fraction, Pu.1⁺ per zone |
 | `distance_profile.csv/.png` | Pu.1⁺ counts & fraction vs signed distance to lesion edge |
 | `maps/*.tif` + `maps.json` | grid layers: `nuclei_density`, `pu1_density`, `pu1_fraction`, `z_*`, `lesion_score`, `lesion_mask`, `lesion_labels`, `zones`, `signed_distance_um`, `dense_nonmyeloid`, `tissue` |
 | `zones_px.geojson` / `zones_um.geojson` | lesion, core, rim, peri and dense_nonmyeloid polygons (QuPath-ready, classified) |

@@ -25,7 +25,7 @@ def make_synthetic(seed=0, size=1500, px_um=0.5, lesion_center=(750, 750), lesio
         idx = rng.choice(len(ys), n, replace=False)
         pos = rng.random(n) < pos_frac
         r = 5
-        for y, x, p in zip(ys[idx], xs[idx], pos):
+        for y, x, p in zip(ys[idx], xs[idx], pos, strict=True):
             y0, y1, x0, x1 = max(y - r, 0), min(y + r + 1, size), max(x - r, 0), min(x + r + 1, size)
             sub = ((xx[y0:y1, x0:x1] - x) ** 2 + (yy[y0:y1, x0:x1] - y) ** 2) <= (r - 1) ** 2
             nuc[y0:y1, x0:x1][sub] = 180
