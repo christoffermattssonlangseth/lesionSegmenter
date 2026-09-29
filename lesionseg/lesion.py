@@ -348,9 +348,13 @@ def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level:
             p = Polygon(np.column_stack([c[:, 1], c[:, 0]]))  # grid coords (col, row) in padded frame
             if not p.is_valid:
                 p = p.buffer(0)
-            if p.is_empty or p.area < 2:
+            if p.geom_type == "MultiPolygon":
+                p = max(p.geoms, key=lambda q: q.area)
+            if p.is_empty or p.geom_type != "Polygon" or p.area < 2:
                 continue
             rp = p.representative_point()
+            if rp.is_empty:
+                continue
             r, q = int(round(rp.y)), int(round(rp.x))
             inside = 0 <= r < padded.shape[0] and 0 <= q < padded.shape[1] and padded[r, q]
             (shells if inside else holes).append(p)
@@ -366,6 +370,8 @@ def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level:
             geom = Polygon(sh.exterior.coords, [h.exterior.coords for h in hs])
             if not geom.is_valid:
                 geom = geom.buffer(0)
+            if geom.is_empty:
+                continue
             # padded grid coords -> µm / px: (col - 1 + 0.5) * f
             geom = shp_affine(geom, f)
             if not geom.is_empty and geom.area >= min_area:
@@ -380,8 +386,9 @@ def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level:
         for zname in ("core", "rim"):
             zm = m & (res.zones == ZONE_CODES[zname])
             if zm.any():
-                geom = unary_union(_polys(zm))
-                out.append({"name": zname, "lesion_id": lab, "section": sec, "geometry": geom})
+                parts = _polys(zm)
+                if parts:
+                    out.append({"name": zname, "lesion_id": lab, "section": sec, "geometry": unary_union(parts)})
     for zname in ("peri", "deep"):
         if zname not in ZONE_CODES:
             continue
@@ -391,9 +398,10 @@ def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level:
         comp, n = ndi.label(band)
         for k in range(1, n + 1):
             cm = comp == k
-            geom = unary_union(_polys(cm))
-            if geom.is_empty:
+            parts = _polys(cm)
+            if not parts:
                 continue
+            geom = unary_union(parts)
             # lesions this band component touches (dilate by one bin)
             touch = np.unique(res.lesion_labels[ndi.binary_dilation(cm, iterations=max(int(200 / bin_um), 1))])
             touch = [int(t) for t in touch if t > 0]
@@ -403,4 +411,4 @@ def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level:
         for lab in range(1, int(res.dense_labels.max()) + 1):
             for p in _polys(res.dense_labels == lab):
                 out.append({"name": "dense_nonmyeloid", "lesion_id": lab, "section": None, "geometry": p})
-    return out
+    return [o for o in out if o["geometry"] is not None and not o["geometry"].is_empty]
