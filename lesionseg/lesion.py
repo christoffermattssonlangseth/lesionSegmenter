@@ -4,6 +4,7 @@ Definitions (all distances measured from the lesion boundary, in µm):
 
     distal   tissue farther than ``peri_width_um`` from any lesion
     peri     outside the lesion, within ``peri_width_um`` of the edge
+    deep     outside the peri band, a further ``deep_width_um`` outward (the additional DVP step)
     rim      inside the lesion, within ``rim_width_um`` of the edge
     core     inside the lesion, deeper than ``rim_width_um``
              (or, with ``core_method='score'``, lesion bins whose score exceeds
@@ -41,6 +42,7 @@ class LesionResult:
     dense_regions: pd.DataFrame | None = None
     rim_width_map: np.ndarray | None = None      # per-bin zone widths (µm) actually used
     peri_width_map: np.ndarray | None = None
+    deep_width_map: np.ndarray | None = None
 
 
 # --------------------------------------------------------------------------
@@ -105,7 +107,7 @@ def _threshold_value(score: np.ndarray, tissue: np.ndarray, spec: dict) -> float
 def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: dict | None = None,
                    threshold: dict | None = None, min_area_um2: float = 5000.0,
                    fill_holes: bool = True, smooth_um: float = 20.0,
-                   rim_width_um: float = 50.0, peri_width_um: float = 150.0,
+                   rim_width_um: float = 50.0, peri_width_um: float = 150.0, deep_width_um: float = 150.0,
                    core_method: str = "distance", core_threshold: float | None = None,
                    merge_within_um: float = 0.0, min_pu1_fraction: float = 0.15,
                    min_pu1_density: float = 0.0, min_lesion_pu1_fraction: float = 0.2,
@@ -191,8 +193,10 @@ def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: di
 
     rim_w = _width_map(rim_width_um, mask.shape)
     peri_w = _width_map(peri_width_um, mask.shape)
+    deep_w = _width_map(deep_width_um, mask.shape)
     zones = np.zeros(mask.shape, np.uint8)
     zones[tissue] = ZONE_CODES["distal"]
+    zones[tissue & ~mask & (sdist > peri_w) & (sdist <= peri_w + deep_w)] = ZONE_CODES["deep"]
     zones[tissue & ~mask & (sdist <= peri_w)] = ZONE_CODES["peri"]
     if core_method == "distance":
         core = mask & (sdist <= -rim_w)
@@ -217,6 +221,7 @@ def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: di
 
     params = {"score": score, "threshold": threshold, "threshold_value": thr, "min_area_um2": min_area_um2,
               "smooth_um": smooth_um, "rim_width_um": _w(rim_width_um), "peri_width_um": _w(peri_width_um),
+              "deep_width_um": _w(deep_width_um),
               "core_method": core_method, "core_threshold": core_threshold, "bin_um": bin_um,
               "components": comps, "n_lesions": int(labels.max()),
               "min_pu1_fraction": min_pu1_fraction, "min_pu1_density": min_pu1_density,
@@ -226,6 +231,7 @@ def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: di
                        dense_labels=dense_labels, dense_regions=dense_table)
     res.rim_width_map = rim_w
     res.peri_width_map = peri_w
+    res.deep_width_map = deep_w
     return res
 
 
@@ -284,6 +290,10 @@ def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int]
     peri_w = res.peri_width_map
     if peri_w is None:
         peri_w = _width_map(res.params["peri_width_um"], mask.shape)
+    deep_w = res.deep_width_map
+    if deep_w is None:
+        deep_w = _width_map(res.params.get("deep_width_um", 150.0), mask.shape)
+    zones[tissue & ~mask & (sdist > peri_w) & (sdist <= peri_w + deep_w)] = ZONE_CODES["deep"]
     zones[tissue & ~mask & (sdist <= peri_w)] = ZONE_CODES["peri"]
     zones[mask & ~core] = ZONE_CODES["rim"]
     zones[core] = ZONE_CODES["core"]
@@ -293,7 +303,7 @@ def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int]
     params["restricted_to_sections"] = sorted(int(k) for k in keep)
     out = LesionResult(res.score, mask, labels, zones, sdist, lesions, params, dense_nonmyeloid=res.dense_nonmyeloid,
                        dense_labels=res.dense_labels, dense_regions=res.dense_regions)
-    out.rim_width_map, out.peri_width_map = res.rim_width_map, peri_w
+    out.rim_width_map, out.peri_width_map, out.deep_width_map = res.rim_width_map, peri_w, deep_w
     return out
 
 

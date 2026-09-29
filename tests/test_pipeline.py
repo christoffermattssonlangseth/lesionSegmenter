@@ -53,9 +53,9 @@ def test_end_to_end(synthetic, tmp_path):
     # zones ordered by distance and Pu.1 fraction highest in core
     # (the synthetic lesion has a hard edge, so the thin rim band is nearly empty – only test core vs distal)
     zs = cells.groupby("zone", observed=True)["pu1_pos"].mean()
-    assert zs["core"] > 0.7 and zs["core"] > zs["distal"]
+    assert zs["core"] > 0.7 and zs["core"] > zs["deep"]
     d = cells.groupby("zone", observed=True)["dist_to_lesion_um"].mean()
-    assert d["core"] < d["rim"] < 0 < d["peri"] < d["distal"]
+    assert d["core"] < d["rim"] < 0 < d["peri"] < d["deep"]  # the single synthetic section is a lesion section
     # one tissue piece on the synthetic slide, everything attributed to it
     assert log["n_sections"] == 1
     assert (cells["section_id"] == 1).mean() > 0.99
@@ -88,3 +88,4 @@ def test_from_cells_reruns_fast(synthetic, tmp_path):
 
 def test_zone_codes_consistent():
     assert ZONE_CODES["core"] > ZONE_CODES["rim"] > ZONE_CODES["peri"] > ZONE_CODES["distal"]
+    assert ZONE_CODES["deep"] not in (ZONE_CODES["core"], ZONE_CODES["rim"], ZONE_CODES["peri"], ZONE_CODES["distal"])

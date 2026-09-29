@@ -29,7 +29,7 @@ DEFAULTS: dict = {
     "density": {"bin_um": 10.0, "sigma_um": 40.0},
     "lesion": {"score": "pu1_density", "weights": None, "threshold": {"type": "zscore", "value": 2.5},
                "min_area_um2": 5000.0, "smooth_um": 20.0, "fill_holes": True, "rim_width_um": 50.0,
-               "peri_width_um": 150.0, "core_method": "distance", "core_threshold": None,
+               "peri_width_um": 150.0, "deep_width_um": 150.0, "core_method": "distance", "core_threshold": None,
                "merge_within_um": 0.0,
                # myeloid gate – dense but Pu.1-poor regions (central canal, grey matter) are not lesions
                "min_pu1_fraction": 0.15, "min_pu1_density": 0.0, "min_lesion_pu1_fraction": 0.2,

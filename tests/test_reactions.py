@@ -19,7 +19,7 @@ def _scene(scene, rep_seed):
         _cells(scene, "P1_T", 200, "core", True, seed=rep_seed),
         _cells(scene, "P1_T", 150, "rim", True, seed=rep_seed + 1),
         _cells(scene, "P1_T", 90, "peri", True, seed=rep_seed + 2),
-        _cells(scene, "P1_T", 400, "distal", True, seed=rep_seed + 3),
+        _cells(scene, "P1_T", 400, "deep", True, seed=rep_seed + 3),
         _cells(scene, "P1_T", 20, "distal", True, vbo=True, seed=rep_seed + 4),
         _cells(scene, "CFA_1_C", 80, "distal", False, "GM"), _cells(scene, "CFA_1_C", 30, "distal", False, "WM"),
         _cells(scene, "CFA_1_L", 80, "distal", False, "GM"), _cells(scene, "CFA_1_L", 30, "distal", False, "WM"),

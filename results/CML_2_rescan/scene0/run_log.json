@@ -70,6 +70,7 @@
       "fill_holes": true,
       "rim_width_um": 50,
       "peri_width_um": 150,
+      "deep_width_um": 150,
       "core_method": "distance",
       "core_threshold": null,
       "merge_within_um": 0.0,
@@ -79,7 +80,8 @@
       "dense_nonmyeloid_z": 2.0,
       "model": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../models/lesion_hgb_loso_excl_CML_2_rescan.joblib",
       "rim_width_rel": 0.05,
-      "peri_width_rel": 0.15
+      "peri_width_rel": 0.15,
+      "deep_width_rel": 0.15
     },
     "sections": {
       "min_area_um2": 200000.0,
@@ -181,6 +183,26 @@
         }
       ]
     },
+    "reactions": {
+      "target_cells": 250,
+      "max_reactions": 60,
+      "pool_cfa": true,
+      "pool_other_gm_wm": "auto",
+      "lesion_compartments": [
+        "core",
+        "rim",
+        "peri",
+        "deep"
+      ],
+      "vbo_per_section": true,
+      "vbo_all_cells": true,
+      "control_prefixes": [
+        "OS"
+      ],
+      "edge_exclusion_um": 100,
+      "order": "spatial",
+      "shortfall_frac": 0.8
+    },
     "samples": [
       {
         "name": "CML_1",
@@ -256,7 +278,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_2_rescan.czi_shapes",
     "n_cells": 60095,
-    "seconds": 20.1
+    "seconds": 21.0
   },
   "segmentation": {
     "route": "spatialdata",
@@ -272,7 +294,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_2_rescan.czi_shapes",
     "n_cells": 60095,
-    "seconds": 20.1
+    "seconds": 21.0
   },
   "pu1": {
     "method": "mask",
@@ -284,7 +306,8 @@
   "sections_from": "Sample_category polygons",
   "zone_widths_relative": {
     "rim": 0.05,
-    "peri": 0.15
+    "peri": 0.15,
+    "deep": 0.15
   },
   "lesion_model": {
     "path": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../models/lesion_hgb_loso_excl_CML_2_rescan.joblib",
@@ -312,6 +335,10 @@
       "median_um": 59.221099853515625
     },
     "peri_width_um": {
+      "per_bin_um": true,
+      "median_um": 177.66329956054688
+    },
+    "deep_width_um": {
       "per_bin_um": true,
       "median_um": 177.66329956054688
     },
@@ -381,6 +408,7 @@
       "n_pu1_pos_core": 897,
       "n_pu1_pos_rim": 1785,
       "n_pu1_pos_peri": 1195,
+      "n_pu1_pos_deep": 516,
       "n_auto_lesions_unrestricted": 12,
       "has_manual_core": true
     },
@@ -399,6 +427,7 @@
       "n_pu1_pos_core": 703,
       "n_pu1_pos_rim": 1197,
       "n_pu1_pos_peri": 557,
+      "n_pu1_pos_deep": 364,
       "n_auto_lesions_unrestricted": 6,
       "has_manual_core": true
     },
@@ -417,6 +446,7 @@
       "n_pu1_pos_core": 0,
       "n_pu1_pos_rim": 0,
       "n_pu1_pos_peri": 0,
+      "n_pu1_pos_deep": 0,
       "n_auto_lesions_unrestricted": 1,
       "has_manual_core": false
     },
@@ -435,6 +465,7 @@
       "n_pu1_pos_core": 0,
       "n_pu1_pos_rim": 0,
       "n_pu1_pos_peri": 0,
+      "n_pu1_pos_deep": 0,
       "n_auto_lesions_unrestricted": 0,
       "has_manual_core": false
     },
@@ -453,6 +484,7 @@
       "n_pu1_pos_core": 0,
       "n_pu1_pos_rim": 0,
       "n_pu1_pos_peri": 0,
+      "n_pu1_pos_deep": 0,
       "n_auto_lesions_unrestricted": 0,
       "has_manual_core": false
     },
@@ -471,6 +503,7 @@
       "n_pu1_pos_core": 0,
       "n_pu1_pos_rim": 0,
       "n_pu1_pos_peri": 0,
+      "n_pu1_pos_deep": 0,
       "n_auto_lesions_unrestricted": 0,
       "has_manual_core": false
     },
@@ -489,6 +522,7 @@
       "n_pu1_pos_core": 0,
       "n_pu1_pos_rim": 0,
       "n_pu1_pos_peri": 0,
+      "n_pu1_pos_deep": 0,
       "n_auto_lesions_unrestricted": 0,
       "has_manual_core": false
     },
@@ -507,6 +541,7 @@
       "n_pu1_pos_core": 0,
       "n_pu1_pos_rim": 0,
       "n_pu1_pos_peri": 0,
+      "n_pu1_pos_deep": 0,
       "n_auto_lesions_unrestricted": 7,
       "has_manual_core": false
     },
@@ -525,6 +560,7 @@
       "n_pu1_pos_core": 306,
       "n_pu1_pos_rim": 334,
       "n_pu1_pos_peri": 275,
+      "n_pu1_pos_deep": 168,
       "n_auto_lesions_unrestricted": 4,
       "has_manual_core": true
     }
@@ -532,9 +568,9 @@
   "zone_summary": [
     {
       "zone": "distal",
-      "n_cells": 36383,
-      "n_pu1_pos": 5965,
-      "frac_pu1_pos": 0.16395019652035292
+      "n_cells": 31905,
+      "n_pu1_pos": 4917,
+      "frac_pu1_pos": 0.1541137752703338
     },
     {
       "zone": "peri",
@@ -553,6 +589,12 @@
       "n_cells": 4591,
       "n_pu1_pos": 1906,
       "frac_pu1_pos": 0.4151600958396863
+    },
+    {
+      "zone": "deep",
+      "n_cells": 4478,
+      "n_pu1_pos": 1048,
+      "frac_pu1_pos": 0.23403305046895936
     }
   ],
   "pu1_counts": {
@@ -581,8 +623,8 @@
         "GM": 8796,
         "WM": 5949,
         "core": 64,
-        "none": 21338,
-        "vbo": 236
+        "none": 16910,
+        "vbo": 186
       },
       "peri": {
         "GM": 0,
@@ -604,6 +646,13 @@
         "core": 3786,
         "none": 805,
         "vbo": 0
+      },
+      "deep": {
+        "GM": 0,
+        "WM": 0,
+        "core": 0,
+        "none": 4428,
+        "vbo": 50
       }
     }
   },
@@ -613,5 +662,5 @@
     "target_area_um2": 3000
   },
   "cell_geojson": 13214,
-  "seconds_total": 31.3
+  "seconds_total": 31.0
 }

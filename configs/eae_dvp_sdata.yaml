@@ -29,8 +29,10 @@ lesion:
   # cervical vs thoracic vs lumbar). Median radius ≈ 1 mm → 0.05 ≈ 50 µm, 0.15 ≈ 150 µm.
   rim_width_rel: 0.05
   peri_width_rel: 0.15
-  rim_width_um: 50               # fallback outside sections
+  deep_width_rel: 0.15           # one more band beyond peri (the "additional step"); the rest stays distal
+  rim_width_um: 50               # fallbacks outside sections
   peri_width_um: 150
+  deep_width_um: 150
   min_pu1_fraction: 0.0          # the model already learned the myeloid context
   min_lesion_pu1_fraction: 0.0
 

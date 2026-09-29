@@ -14,9 +14,10 @@ from matplotlib.colors import ListedColormap
 from .density import DensityMaps
 from .lesion import LesionResult
 
-ZONE_CMAP = ListedColormap([(0, 0, 0, 0), (0.55, 0.55, 0.55, 0.35), (1.0, 0.78, 0.0, 0.6),
-                            (1.0, 0.39, 0.0, 0.75), (0.78, 0.0, 0.0, 0.85)])
-ZONE_PALETTE = {"distal": "#8c8c8c", "peri": "#ffc800", "rim": "#ff6400", "core": "#c80000",
+# zone codes 0..5: background, distal, peri, rim, core, deep
+ZONE_CMAP = ListedColormap([(0, 0, 0, 0), (0.22, 0.53, 0.90, 0.30), (0.10, 0.62, 0.44, 0.6),
+                            (0.79, 0.52, 0.0, 0.75), (0.90, 0.40, 0.40, 0.85), (0.56, 0.52, 0.91, 0.45)])
+ZONE_PALETTE = {"distal": "#3987e5", "deep": "#9085e9", "peri": "#199e70", "rim": "#c98500", "core": "#e66767",
                 "background": "#000000"}
 
 
@@ -66,7 +67,7 @@ def overview_figure(overview_nuc: np.ndarray, overview_pu1: np.ndarray, maps: De
 
     ax = axes[1, 1]
     ax.imshow(rgb, extent=extent_ov)
-    ax.imshow(res.zones, extent=extent_g, cmap=ZONE_CMAP, vmin=0, vmax=4, interpolation="nearest")
+    ax.imshow(res.zones, extent=extent_g, cmap=ZONE_CMAP, vmin=0, vmax=5, interpolation="nearest")
     if res.dense_nonmyeloid is not None and res.dense_nonmyeloid.any():
         ax.contour(res.dense_nonmyeloid.astype(float), levels=[0.5], colors="#00a0ff", linewidths=1.0,
                    extent=extent_g, origin="upper")

@@ -43,7 +43,7 @@ def test_mask_route(synthetic, tmp_path):
     assert log["cells"]["pu1_match"]["n_unmatched_pu1"] == 0
     assert log["lesion"]["n_lesions"] == 1
     zs = cells.groupby("zone", observed=True)["pu1_pos"].mean()
-    assert zs["core"] > 0.7 and zs["core"] > zs["distal"]
+    assert zs["core"] > 0.7 and zs["core"] > zs["deep"]
     les = pd.read_csv(out / "lesions.csv").iloc[0]
     assert les.mean_pu1_fraction > 0.5
     assert abs(les.centroid_x_um - truth["lesion_center_um"][0]) < 30

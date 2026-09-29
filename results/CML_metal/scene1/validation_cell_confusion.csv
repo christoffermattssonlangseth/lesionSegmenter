@@ -1,6 +1,6 @@
-manual_annotation,distal,peri,rim,core
-GM,6234,0,0,0
-WM,2532,0,0,0
-core,0,76,835,1962
-none,20671,7251,8057,3241
-vbo,94,27,0,0
+manual_annotation,distal,peri,rim,core,deep
+GM,6234,0,0,0,0
+WM,2532,0,0,0,0
+core,0,76,835,1962,0
+none,16461,7251,8057,3241,4210
+vbo,79,27,0,0,15

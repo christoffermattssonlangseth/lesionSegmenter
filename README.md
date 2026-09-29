@@ -30,7 +30,8 @@ All distances are measured from the lesion boundary in µm and are configurable.
 | **core** | inside lesion, deeper than `rim_width_um` from the edge (or, `core_method: score`, bins above `core_threshold`) | > 50 µm inside |
 | **rim** | inside lesion, within `rim_width_um` of the edge | 0–50 µm inside |
 | **peri** | outside lesion, within `peri_width_um` of the edge | 0–150 µm outside |
-| **distal** | remaining tissue (normal-appearing tissue / control) | > 150 µm |
+| **deep** | outside the peri band, a further `deep_width_um` outward (the "additional step" captured for DVP) | 150–300 µm |
+| **distal** | everything farther out, and all tissue of lesion-free control sections | > 300 µm |
 
 Slides carry several cross-sections (nine per slide here). Sections come from the curated
 `Sample_category` polygons when present, otherwise connected tissue pieces are labelled

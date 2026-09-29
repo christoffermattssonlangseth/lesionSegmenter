@@ -91,7 +91,8 @@ def validate_against_manual(res: LesionResult, manual: dict[str, pd.DataFrame], 
             rows.append({"manual_core_id": i, "area_um2": float(n * grid.bin_um ** 2),
                          "frac_in_auto_lesion": float(res.lesion_mask[m].mean()),
                          "frac_core": float((zones == 4).mean()), "frac_rim": float((zones == 3).mean()),
-                         "frac_peri": float((zones == 2).mean()), "frac_distal": float((zones == 1).mean()),
+                         "frac_peri": float((zones == 2).mean()), "frac_deep": float((zones == 5).mean()),
+                         "frac_distal": float((zones == 1).mean()),
                          "auto_lesion_ids": sorted(set(np.unique(res.lesion_labels[m]).tolist()) - {0})})
         per_core = pd.DataFrame(rows)
         per_core.to_csv(out_dir / "validation_manual_cores.csv", index=False)

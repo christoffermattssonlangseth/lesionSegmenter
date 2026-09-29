@@ -4,7 +4,7 @@ Pipeline (see lesionseg.pipeline.run_sample):
 
     CZI scan ──► tissue mask ──► tiled nucleus segmentation ──► per-nucleus features
               ──► Pu.1+ classification ──► density maps ──► lesion score
-              ──► lesion mask ──► zones (core / rim / peri-lesion / distal)
+              ──► lesion mask ──► zones (core / rim / peri-lesion / deep / distal)
               ──► per-cell zone + signed distance ──► exports (parquet, GeoJSON, OME-TIFF, LMD)
 """
 from importlib.metadata import PackageNotFoundError, version
@@ -20,5 +20,6 @@ ZONE_CODES = {
     "peri": 2,        # outside lesion, within peri_width of the lesion edge
     "rim": 3,         # inside lesion, within rim_width of the lesion edge
     "core": 4,        # inside lesion, deeper than rim_width
+    "deep": 5,        # outside the peri band, a further deep_width outward ("additional step" for DVP)
 }
 ZONE_NAMES = {v: k for k, v in ZONE_CODES.items()}

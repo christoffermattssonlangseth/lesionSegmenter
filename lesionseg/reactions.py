@@ -6,7 +6,7 @@ Rules (important-info.md, agreed with Ting):
   section is present on two replicate slides; replicates of the same section × compartment are
   **pooled into one reaction**. Sections are never pooled with each other, except where stated.
 * Lesion sections → one reaction per section per lesion compartment: ``core``, ``rim``, ``peri`` and
-  ``deep`` (the "additional step": remaining tissue outward of the peri band, i.e. zone ``distal``
+  ``deep`` (the "additional step": the zone band outward of peri, ``deep_width``; zone ``deep``
   inside a lesion section).
 * Non-lesion sections → ``GM`` and ``WM`` (manual annotation) per section. Sections whose name starts
   with ``CFA`` are pooled together (one GM + one WM reaction). Other control sections keep their own
@@ -41,7 +41,7 @@ def _compartment(cells: pd.DataFrame, edge_exclusion_um: float) -> pd.Series:
                if "dist_to_section_edge_um" in cells and edge_exclusion_um > 0 else np.ones(len(cells), bool))
     comp = np.full(len(cells), None, dtype=object)
     # lesion compartments (lesion sections only)
-    for z, name in (("core", "core"), ("rim", "rim"), ("peri", "peri"), ("distal", "deep")):
+    for z, name in (("core", "core"), ("rim", "rim"), ("peri", "peri"), ("deep", "deep")):
         comp[has_les & (zone == z).to_numpy() & edge_ok] = name
     # GM / WM (non-lesion sections only)
     for m in ("GM", "WM"):

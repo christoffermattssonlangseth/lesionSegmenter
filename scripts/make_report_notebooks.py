@@ -53,7 +53,7 @@ these notebooks is to lay out the evidence so **you** decide whether the lesion 
 
 **Colour key used throughout**: <span style="color:#eda100">■</span> automatic lesion outline ·
 <span style="color:#e34948">■</span> automatic core · <span style="color:#e87ba4">■</span> manual CORE (collaborator, dashed) ·
-zones <span style="color:#3987e5">■ distal</span> <span style="color:#199e70">■ peri</span> <span style="color:#c98500">■ rim</span> <span style="color:#e66767">■ core</span>.
+zones <span style="color:#3987e5">■ distal (control)</span> <span style="color:#9085e9">■ deep</span> <span style="color:#199e70">■ peri</span> <span style="color:#c98500">■ rim</span> <span style="color:#e66767">■ core</span>.
 """), code(SETUP.format(run_dir=run_dir)), md("## Settings of this run"), code('''
 L = runs[0].log
 settings = {

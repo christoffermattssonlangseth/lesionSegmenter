@@ -42,7 +42,7 @@ def assign_cells(cells: pd.DataFrame, res: LesionResult, grid: Grid, *,
 
     cells["zone_code"] = zone.astype(np.uint8)
     cells["zone"] = pd.Categorical([ZONE_NAMES[int(z)] for z in zone],
-                                   categories=["background", "distal", "peri", "rim", "core"])
+                                   categories=["background", "distal", "peri", "rim", "core", "deep"])
     cells["lesion_id"] = lid
     cells["dist_to_lesion_um"] = dist.astype(np.float32)
 
@@ -208,7 +208,7 @@ def section_summary(cells: pd.DataFrame, lesions: pd.DataFrame, sections: np.nda
         out["n_lesions"] = 0
         out["lesion_area_mm2"] = 0.0
     out["lesion_frac_of_section"] = out["lesion_area_mm2"] / out["area_mm2"]
-    for z in ("core", "rim", "peri"):
+    for z in ("core", "rim", "peri", "deep"):
         zc = cells[(cells["zone"] == z) & (cells["section_id"] > 0)].groupby("section_id")[pos_col].sum()
         out[f"n_{pos_col}_{z}"] = zc.reindex(out.section_id).fillna(0).astype(int).to_numpy()
     return out

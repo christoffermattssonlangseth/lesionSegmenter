@@ -171,7 +171,7 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     geom = assign.section_geometry(sections, grid)
     maps.extra["rel_pos"] = geom["rel_pos"]
     rel_widths = {}
-    for zname in ("rim", "peri"):
+    for zname in ("rim", "peri", "deep"):
         frac = lcfg.pop(f"{zname}_width_rel", None)
         if frac is not None:
             wmap = (geom["radius_um"] * float(frac)).astype(np.float32)
@@ -239,6 +239,7 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         cells.loc[ctrl, "lesion_id"] = 0
         cells.loc[ctrl, "dist_to_lesion_um"] = np.inf
         cells.loc[ctrl, "dist_to_lesion_rel"] = np.inf
+    # (the "deep" zone – a further band outward of peri – comes from the zone map itself)
     if section_names:
         cells["section_name"] = cells["section_id"].map(section_names).fillna("unassigned")
         if len(res.lesions):
