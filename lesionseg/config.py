@@ -18,6 +18,9 @@ DEFAULTS: dict = {
                "image": {"sigma_um": 20.0, "threshold": None, "dilate_um": 300.0, "min_area_um2": 5e4,
                          "hole_area_um2": 2e5}},
     "masks": {"contours": "pu1", "min_overlap": 0.3},  # mask route options
+    # SpatialData route: labels layer ('filtered' | '' for unfiltered), Pu.1 column/value in the table
+    "spatialdata": {"labels": "filtered", "pu1_col": "Pu1_class", "pu1_positive": "Pu1_positive"},
+    "table": None,  # default AnnData table for all samples
     "segmentation": {"method": "classical", "tile": 2048, "overlap": 128, "contours": True,
                      "params": {"nucleus_diameter_um": 7.0, "min_area_um2": 8.0}},
     # pu1.method 'mask' = take positivity from the Pu.1 mask (mask route default);
@@ -32,9 +35,16 @@ DEFAULTS: dict = {
                "min_pu1_fraction": 0.15, "min_pu1_density": 0.0, "min_lesion_pu1_fraction": 0.2,
                "dense_nonmyeloid_z": 2.0},
     # separate tissue pieces on the slide (spinal-cord cross-sections) -> section_id
-    "sections": {"min_area_um2": 2e5, "merge_um": 0.0, "split_touching": True, "neck_depth_um": 200.0},
+    # focus: 'auto' = data-driven: a section is a lesion section when automatic lesions cover
+    #   >= lesion_min_frac of it (and >= lesion_min_area_mm2); other sections are lesion-free controls.
+    #   'manual' = sections with manual CORE polygons (comparison only); 'none' = no restriction.
+    "sections": {"min_area_um2": 2e5, "merge_um": 0.0, "split_touching": True, "neck_depth_um": 200.0,
+                 "focus": "auto", "lesion_min_frac": 0.02, "lesion_min_area_mm2": 0.05},
     "assign": {"distance_bins_um": [-100, -50, 0, 50, 100, 150, 300]},
     "export": {"cell_geojson": "pu1", "max_geojson_cells": None},  # pu1 | all | none
+    # LMD well selection (see lesionseg.wells): groups default to core / rim / rings / GM / WM per section
+    "wells": {"enabled": True, "target_area_um2": 3000.0, "size_filter_sd": 1.0, "order": "spatial",
+              "edge_exclusion_um": 100.0, "exclude_vbo": True, "inward_only": False, "groups": None},
     "samples": [],
 }
 
@@ -61,6 +71,7 @@ def load_config(path: str | Path | None) -> dict:
 
 def sample_config(cfg: dict, sample: dict) -> dict:
     """Merge a sample entry's overrides (any top-level key) onto the global config."""
-    skip = {"name", "path", "image", "cells_mask", "pu1_mask", "scene", "scenes", "pixel_size_um", "channel_names"}
+    skip = {"name", "path", "image", "cells_mask", "pu1_mask", "scene", "scenes", "pixel_size_um", "channel_names",
+            "sdata", "table", "slide_name"}
     over = {k: v for k, v in sample.items() if k not in skip}
     return deep_update(cfg, over)

@@ -12,9 +12,10 @@ from __future__ import annotations
 import time
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
-from . import assign, density, export, features, lesion, masks, segment, tissue, viz
+from . import assign, density, export, features, lesion, masks, sdata, segment, tissue, validate, viz, wells
 from .config import sample_config
 from .io import SlideReader, open_slide
 
@@ -34,6 +35,7 @@ def _overviews(reader: SlideReader | None, scene: int, cfg: dict, shape_px: tupl
 
 def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: SlideReader | None = None,
                cells_mask: Path | None = None, pu1_mask: Path | None = None, pixel_size_um: float | None = None,
+               sdata_path: Path | None = None, table_path: Path | None = None, slide_name: str | None = None,
                from_cells: Path | None = None, progress: bool = True) -> dict:
     """Run the pipeline for one scene and write outputs to ``out_dir``.
 
@@ -44,8 +46,8 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     t0 = time.time()
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    if reader is None and cells_mask is None and from_cells is None:
-        raise ValueError("need an image reader, a cells_mask or from_cells")
+    if reader is None and cells_mask is None and from_cells is None and sdata_path is None:
+        raise ValueError("need an image reader, a cells_mask, a SpatialData store or from_cells")
 
     px = reader.pixel_size_um if reader is not None else pixel_size_um
     if px is None:
@@ -58,6 +60,10 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         info = reader.scenes[scene]
         H, W = info.height, info.width
         log["scene_name"] = info.name
+    elif sdata_path is not None:
+        import zarr
+
+        H, W = zarr.open(str(sdata.find_labels_path(sdata_path)), mode="r").shape
     else:
         lab_shape = masks.load_label_image(cells_mask).shape if cells_mask is not None else None
         if lab_shape is None:
@@ -77,6 +83,16 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         cells = pd.read_parquet(from_cells)
         log["cells"] = {"from_cells": str(from_cells), "n_cells": len(cells)}
         route = "from_cells"
+    elif sdata_path is not None:
+        route = "spatialdata"
+        sd_cfg = cfg.get("spatialdata", {})
+        cells, _labels, sinfo = sdata.cells_from_spatialdata(
+            sdata_path, table_path, slide_name or name, px, pu1_col=sd_cfg.get("pu1_col", "Pu1_class"),
+            pu1_positive=sd_cfg.get("pu1_positive", "Pu1_positive"), contours=cfg["masks"]["contours"],
+            labels_prefer=sd_cfg.get("labels", "filtered"), progress=progress)
+        del _labels
+        sinfo.update({"n_cells": len(cells), "seconds": round(time.time() - t0, 1)})
+        log["cells"] = sinfo
     elif cells_mask is not None:
         route = "masks"
         measure_idx = None
@@ -138,12 +154,74 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     if res.dense_regions is not None:
         res.dense_regions.to_csv(out_dir / "dense_nonmyeloid_regions.csv", index=False)
 
-    cells = assign.assign_cells(cells, res, grid, **cfg["assign"])
-    sections = assign.label_sections(maps.tissue, grid.bin_um, **cfg.get("sections", {}))
-    cells, res.lesions = assign.assign_sections(cells, res.lesions, sections, grid)
+    manual = sdata.load_manual_annotations(sdata_path) if sdata_path is not None else {}
+    section_names = None
+    if "Sample_category" in manual and len(manual["Sample_category"]):
+        # curated section polygons take precedence over automatic tissue-piece labelling
+        sc = manual["Sample_category"].reset_index(drop=True)
+        sections = validate.rasterize_labels(sc["geometry"], grid, px)
+        section_names = {i + 1: str(v) for i, v in enumerate(sc["sample_category"])}
+        log["sections_from"] = "Sample_category polygons"
+    else:
+        sections = assign.label_sections(maps.tissue, grid.bin_um, **cfg.get("sections", {}))
+        log["sections_from"] = "tissue pieces"
     maps.extra["sections"] = sections
+    if section_names:
+        maps.extra["section_names"] = section_names
+
+    # -- lesion vs control sections (data-driven) ----------------------------------
+    # A section counts as a lesion section when the automatically detected lesion area
+    # is at least `lesion_min_frac` of its area (and `lesion_min_area_mm2`); the rest are
+    # lesion-free controls and get no lesion context. Manual CORE polygons are NOT used
+    # here – only for validation (validation_*.csv, has_manual_core column).
+    scfg = cfg.get("sections", {})
+    focus = scfg.get("focus", "auto")
+    _, les_all = assign.assign_sections(cells.iloc[:0], res.lesions, sections, grid)
+    sec_area = pd.Series(np.bincount(sections.ravel())[1:] * grid.bin_um ** 2 / 1e6,
+                         index=np.arange(1, int(sections.max()) + 1))
+    les_area = les_all.groupby("section_id")["area_mm2"].sum() if len(les_all) else pd.Series(dtype=float)
+    les_frac = (les_area.reindex(sec_area.index).fillna(0) / sec_area).fillna(0)
+    n_auto_all = les_all.groupby("section_id").size() if len(les_all) else pd.Series(dtype=int)
+    core_sections: set[int] = set()
+    if "CORE" in manual and len(manual["CORE"]):
+        core_sections = validate.sections_with_cores(manual["CORE"]["geometry"], sections, grid, px)
+    if focus == "auto":
+        lesion_sections = set(int(i) for i in sec_area.index
+                              if les_frac[i] >= scfg.get("lesion_min_frac", 0.02)
+                              and les_area.get(i, 0.0) >= scfg.get("lesion_min_area_mm2", 0.05))
+    elif focus == "manual":
+        lesion_sections = set(core_sections)
+    else:
+        lesion_sections = set(int(i) for i in sec_area.index)
+    if focus != "none" and lesion_sections != set(int(i) for i in sec_area.index):
+        res = lesion.restrict_to_sections(res, sections, lesion_sections, maps)
+    log["section_focus"] = {"mode": focus, "lesion_sections": sorted(lesion_sections),
+                            "lesion_area_frac": {int(k): round(float(v), 4) for k, v in les_frac.items()},
+                            "manual_core_sections": sorted(core_sections)}
+
+    cells = assign.assign_cells(cells, res, grid, **cfg["assign"])
+    cells, res.lesions = assign.assign_sections(cells, res.lesions, sections, grid)
+    cells["section_has_lesion"] = cells["section_id"].isin(lesion_sections)
+    if focus != "none":
+        # control sections: no lesion context at all (peri zones must not bleed across the gap)
+        ctrl = ~cells["section_has_lesion"].to_numpy(bool)
+        cells.loc[ctrl, "zone"] = "distal"
+        cells.loc[ctrl, "zone_code"] = 1
+        cells.loc[ctrl, "lesion_id"] = 0
+        cells.loc[ctrl, "dist_to_lesion_um"] = np.inf
+    if section_names:
+        cells["section_name"] = cells["section_id"].map(section_names).fillna("unassigned")
+        if len(res.lesions):
+            res.lesions["section_name"] = res.lesions["section_id"].map(section_names).fillna("unassigned")
     res.lesions.to_csv(out_dir / "lesions.csv", index=False)
     sec = assign.section_summary(cells, res.lesions, sections, grid.bin_um)
+    if section_names:
+        sec.insert(1, "section_name", sec["section_id"].map(section_names))
+    sec.insert(2, "is_lesion_section", sec["section_id"].isin(lesion_sections))
+    sec.insert(3, "lesion_area_frac_unrestricted", sec["section_id"].map(les_frac).round(4))
+    sec["n_auto_lesions_unrestricted"] = sec["section_id"].map(n_auto_all).fillna(0).astype(int)
+    if "CORE" in manual:
+        sec["has_manual_core"] = sec["section_id"].isin(core_sections)
     sec.to_csv(out_dir / "section_summary.csv", index=False)
     log["n_sections"] = int(sections.max())
     log["section_summary"] = sec.to_dict(orient="records")
@@ -154,6 +232,30 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         per_lesion = (cells[cells["lesion_id"] > 0].groupby(["section_id", "lesion_id", "zone"], observed=True)
                       .agg(n_cells=("cell_id", "size"), n_pu1=("pu1_pos", "sum")).reset_index())
         per_lesion.to_csv(out_dir / "per_lesion_zone_counts.csv", index=False)
+
+    # -- manual annotations: validation only (never used to define lesions) ----------
+    if manual:
+        if "VBO" in manual and len(manual["VBO"]):
+            cells = sdata.annotate_cells_with_polygons(cells, manual["VBO"], "in_vbo", default=0)
+            cells["in_vbo"] = cells["in_vbo"].astype(int) > 0
+        if "CORE" in manual and len(manual["CORE"]):
+            cells = sdata.annotate_cells_with_polygons(cells, manual["CORE"], "manual_core_id", default=0)
+            cells["manual_core_id"] = cells["manual_core_id"].astype(int)
+            mcore = validate.rasterize(manual["CORE"]["geometry"], grid, px)
+            cells = assign.add_signed_distance(cells, mcore, grid, "dist_to_manual_core_um")
+            maps.extra["manual_core"] = mcore.astype(np.uint8)
+        log["validation"] = validate.validate_against_manual(res, manual, grid, px, cells, out_dir)
+        validate.manual_to_geojson(manual, out_dir / "manual_annotations_px.geojson")
+
+    # -- LMD well selection ---------------------------------------------------
+    wcfg = dict(cfg.get("wells") or {})
+    wcfg.setdefault("focus_lesion_sections", focus != "none")
+    if wcfg.pop("enabled", True):
+        cells, well_table = wells.select_wells(
+            cells, lesions=res.lesions, sections_xy=assign.section_centroids_um(sections, grid.bin_um), **wcfg)
+        well_table.to_csv(out_dir / "wells.csv", index=False)
+        log["wells"] = {"n_groups": int(cells["well_group"].max()), "n_cells": int((cells["well_group"] > 0).sum()),
+                        "target_area_um2": wcfg.get("target_area_um2", 3000.0)}
 
     # -- exports --------------------------------------------------------------
     export.save_cells(cells, out_dir / "cells.parquet")
@@ -213,7 +315,12 @@ def run_config(cfg: dict, *, only: list[str] | None = None, from_cells: bool = F
             # per-scene masks may be given as dicts {scene_index: path}
             cm_s = _p(cm.get(sc) if isinstance(cm, dict) else cm) if cm else None
             pm_s = _p(pm.get(sc) if isinstance(pm, dict) else pm) if pm else None
+            sd = s.get("sdata")
+            sd_s = _p(sd.get(sc) if isinstance(sd, dict) else sd) if sd else None
+            sn = s.get("slide_name")
+            sn_s = (sn.get(sc) if isinstance(sn, dict) else sn) if sn else None
             logs.append(run_sample(scfg, name=s["name"], out_dir=out_dir, scene=sc, reader=reader, cells_mask=cm_s,
-                                   pu1_mask=pm_s, pixel_size_um=s.get("pixel_size_um"), from_cells=fc,
-                                   progress=progress))
+                                   pu1_mask=pm_s, pixel_size_um=s.get("pixel_size_um"), sdata_path=sd_s,
+                                   table_path=_p(s.get("table") or cfg.get("table")), slide_name=sn_s,
+                                   from_cells=fc, progress=progress))
     return logs

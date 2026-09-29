@@ -227,6 +227,39 @@ def _region_table(labels: np.ndarray, maps: DensityMaps, score: np.ndarray, bin_
     return df
 
 
+def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int], maps: DensityMaps) -> LesionResult:
+    """Drop lesions whose bins lie outside the ``keep`` sections and recompute zones / distances.
+
+    Used to confine lesion analysis to the data-driven lesion sections; other
+    sections become plain (distal) control tissue.
+    """
+    if not keep:
+        return res
+    allowed = np.isin(sections, list(keep))
+    mask = res.lesion_mask & allowed
+    labels = measure.label(mask, connectivity=1).astype(np.int32)
+    bin_um = res.params["bin_um"]
+    tissue = res.zones > 0
+    if mask.any():
+        sdist = np.where(mask, -ndi.distance_transform_edt(mask), ndi.distance_transform_edt(~mask)) * bin_um
+        sdist = sdist.astype(np.float32)
+    else:
+        sdist = np.full(mask.shape, np.inf, np.float32)
+    # rebuild zones keeping the original core definition inside surviving lesions
+    core = (res.zones == ZONE_CODES["core"]) & mask
+    zones = np.zeros(mask.shape, np.uint8)
+    zones[tissue] = ZONE_CODES["distal"]
+    zones[tissue & ~mask & (sdist <= res.params["peri_width_um"])] = ZONE_CODES["peri"]
+    zones[mask & ~core] = ZONE_CODES["rim"]
+    zones[core] = ZONE_CODES["core"]
+    lesions = _region_table(labels, maps, res.score, bin_um, core, "lesion_id")
+    params = dict(res.params)
+    params["n_lesions"] = int(labels.max())
+    params["restricted_to_sections"] = sorted(int(k) for k in keep)
+    return LesionResult(res.score, mask, labels, zones, sdist, lesions, params, dense_nonmyeloid=res.dense_nonmyeloid,
+                        dense_labels=res.dense_labels, dense_regions=res.dense_regions)
+
+
 def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level: str = "um") -> list[dict]:
     """Vectorise lesion outlines + zone rings to shapely polygons.
 

@@ -30,6 +30,7 @@ def test_mask_route(synthetic, tmp_path):
     cfg = deep_update(load_config(None), {
         "tissue": {"min_area_um2": 1e3, "hole_area_um2": 1e4, "sigma_um": 40},
         "density": {"bin_um": 5.0, "sigma_um": 20.0},
+        "sections": {"lesion_min_area_mm2": 0.01},
         "lesion": {"min_area_um2": 2000, "rim_width_um": 20, "peri_width_um": 40, "smooth_um": 10},
     })
     out = tmp_path / "out"

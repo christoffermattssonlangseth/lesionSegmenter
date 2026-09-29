@@ -32,9 +32,17 @@ All distances are measured from the lesion boundary in µm and are configurable.
 | **peri** | outside lesion, within `peri_width_um` of the edge | 0–150 µm outside |
 | **distal** | remaining tissue (normal-appearing tissue / control) | > 150 µm |
 
-Slides carry several cross-sections; connected tissue pieces are labelled (`section_id`, ordered
-top-to-bottom / left-to-right, `sections` layer in `maps/`) and every cell and lesion carries it, so
-infiltration can be located per section. Each cell additionally gets `dist_to_lesion_um` (negative inside) and an optional `dist_bin`
+Slides carry several cross-sections (nine per slide here). Sections come from the curated
+`Sample_category` polygons when present, otherwise connected tissue pieces are labelled
+automatically (`section_id`, `sections` layer in `maps/`). Every cell and lesion carries its
+section, so infiltration can be located per section (`section_summary.csv`).
+
+**Lesion vs control sections are decided from the data** (`sections.focus: auto`): a section is a
+lesion section when the automatically detected lesions cover ≥ `lesion_min_frac` (2 %) of it and
+≥ `lesion_min_area_mm2` (0.05). Control sections get no lesion context at all (all cells
+`distal`, `dist_to_lesion_um = inf`) and only supply GM / WM control wells. The manual CORE
+polygons are never used to define lesions or sections – they only feed the validation files and
+the `has_manual_core` column, so the two views can be compared. Each cell additionally gets `dist_to_lesion_um` (negative inside) and an optional `dist_bin`
 so zones can be re-binned later without re-running anything (`lesionseg run --from-cells`).
 
 ### What counts as a lesion – and what does not
@@ -64,7 +72,33 @@ pytest                                # synthetic end-to-end tests (~20 s)
 
 ## Input routes
 
-### 1. Segmentation masks (primary)
+### 1. SpatialData store + cell table (what the collaborator pipeline exports – primary)
+
+`cellpose_output.zip` from the Cellpose/SpatialData pipeline unpacks to one `<slide>.zarr`
+per scene plus `cell_table*.h5ad`. The pipeline reads
+
+* `labels/<name>_masks_filtered/s0` – int label image, **label == `cell_id`**, scene-pixel frame;
+* the AnnData table – centroids, area, channel means (`SytoG, Pu1, Iba1, Dapi`), `Pu1_class`
+  (Pu.1 positivity), `Sample_category` (section = animal + spinal level), `manual_annotation`;
+* `shapes/<name>_shapes` – exact Cellpose outlines (used as contours for Pu.1⁺ cells);
+* `shapes/Sample_category` – curated section outlines (used as section identity);
+* `shapes/CORE`, `NA_GW_WM`, `VBO` – manual annotations, **used for validation only**.
+
+```yaml
+# configs/eae_dvp_sdata.yaml (excerpt)
+table: ../data/masks/cellpose_output/cell_table_full_annotated_v2.h5ad
+samples:
+  - name: CML_1
+    image: ../data/raw/20260917_CML_1.czi                        # optional (figures)
+    sdata: ../data/masks/cellpose_output/20260917_CML_1.zarr
+    slide_name: 20260917_CML_1
+```
+
+```bash
+lesionseg run configs/eae_dvp_sdata.yaml            # 4 scenes, ~20–30 s each on a laptop
+```
+
+### 2. Plain segmentation masks
 
 Two label images in the **same full-resolution pixel frame** as the scan (and as the LMD
 calibration marks): one with every cell/nucleus, one with only the Pu.1⁺ cells (e.g. from BIAS,
@@ -95,7 +129,7 @@ lesionseg run configs/eae_dvp.yaml
 lesionseg run configs/eae_dvp.yaml --only CML_1 --from-cells   # re-tune lesion/zone params in seconds
 ```
 
-### 2. Raw image (fallback / quick look)
+### 3. Raw image (fallback / quick look)
 
 Without masks, nuclei are segmented from the nuclear channel (`classical` watershed on CPU,
 or `cellpose` / `stardist`) tile-by-tile straight from the CZI, and Pu.1⁺ is called from
@@ -121,24 +155,58 @@ lesionseg run configs/quicklook_image.yaml
 | `maps/*.tif` + `maps.json` | grid layers: `nuclei_density`, `pu1_density`, `pu1_fraction`, `z_*`, `lesion_score`, `lesion_mask`, `lesion_labels`, `zones`, `signed_distance_um`, `dense_nonmyeloid`, `tissue` |
 | `zones_px.geojson` / `zones_um.geojson` | lesion, core, rim, peri and dense_nonmyeloid polygons (QuPath-ready, classified) |
 | `cells_pu1_px.geojson` | Pu.1⁺ cell outlines as QuPath detections classified by zone |
-| `overview.png`, `pu1_histogram.png` | QC figures |
+| `wells.csv` | LMD well selection: per section × group (core, rim, rings, GM, WM) the selected cells, area, shortfall |
+| `validation_manual_cores.csv`, `validation_cell_confusion.csv`, `manual_annotations_px.geojson` | agreement with the manual CORE / GM / WM annotations (SpatialData route) |
+| `overview.png`, `pu1_histogram.png` | QC figures (green = manual CORE outlines, blue = dense non-myeloid) |
 | `run_log.json` | all parameters, thresholds and counts |
 
 ## DVP / LMD hand-off
 
-`export-lmd` writes a Leica LMD XML with [py-lmd](https://github.com/MannLabs/py-lmd), one well
-per zone. Calibration points must be the three physical marks in the **same scene-pixel frame**
+### Well selection (`lesionseg.wells`)
+
+Reproduces the collaborator's protocol (`docs/collaborator/code/2_2_Annotation.ipynb`) on the
+data-driven zones: per lesion section, a fixed **target area of Pu.1⁺ cells** (3000 µm²) is picked
+for each group – `core`, `rim`, rings `0–100`, `100–200`, `200–400` µm outside the lesion edge –
+and GM / WM control groups from the manual grey/white-matter polygons in any section. Cells within
+100 µm of the section edge or inside VBO polygons are excluded, cells far from the group's median
+size are dropped, and cells are taken in spatial order (`order: spatial | random | central`).
+Rings measured from the *manual* core boundary are available via `manual_dist_um` filters for
+direct comparison with the collaborator's wells. Result: `well_group` / `well_name` per cell and
+`wells.csv`.
+
+### LMD export
+
+`export-lmd` writes a Leica LMD XML with [py-lmd](https://github.com/MannLabs/py-lmd); by default
+one well per `well_name` with automatic plate positions (A1, A2, …). Calibration points must be the three physical marks in the **same scene-pixel frame**
 as the masks (see `x_px, y_px`).
 
 ```bash
-lesionseg export-lmd outputs/CML_1/scene0/cells.parquet outputs/CML_1/scene0/CML_1_lmd.xml \
+lesionseg export-lmd outputs/sdata/CML_1/scene0/cells.parquet outputs/sdata/CML_1/scene0/CML_1_lmd.xml \
     --calibration "1200,900,22800,950,1250,26500" \
-    --wells "core=A1,rim=A2,peri=A3,distal=A4" \
-    --pixel-size-um 0.3250972 --dilate-um 1.0
+    --pixel-size-um 0.3250972 --dilate-um 1.0          # add --group-col zone --wells "core=A1,..." for zone wells
 ```
 
 Or from Python (`lesionseg.export.export_lmd`) with `only=`, `group_col="dist_bin"` etc. for
 finer distance stratification.
+
+## Validation on the 20260917 scans
+
+Against the collaborator's hand-drawn lesion cores (never used by the pipeline):
+
+| scene | manual cores | detected (>50 % inside auto lesion) | manual core area inside auto lesion |
+|---|---|---|---|
+| CML_1 | 34 | 97 % | 98 % |
+| CML_2_rescan | 25 | 100 % | 95 % |
+| CML_metal scene0 | 33 | 88 % | 93 % |
+| CML_metal scene1 | 20 | 100 % | 100 % |
+
+The automatic lesion (core + rim) is larger than the manual core by design; 98 % of cells the
+annotator labelled `core` fall in the automatic core or rim, grey-matter cells stay distal.
+The data-driven section classification also flags infiltrated sections without manual cores
+(e.g. R1_3_C, R1_2_L, P3_1_L).
+
+Compute: the SpatialData route needs no GPU and runs in 20–30 s per scene on a laptop; only
+image-based Cellpose segmentation of full scans would justify the remote machine.
 
 ## Tuning notes
 
@@ -152,17 +220,21 @@ finer distance stratification.
 ## Layout
 
 ```
-lesionseg/    io.py (CZI/TIFF readers)  masks.py (mask route)  segment.py (image route)
-              features.py (Pu.1 calls)  density.py  lesion.py (score, gate, zones)  assign.py
-              export.py (parquet/GeoJSON/TIFF/LMD)  viz.py  pipeline.py  cli.py  config.py
-configs/      eae_dvp.yaml (masks + images), quicklook_image.yaml
+lesionseg/    io.py (CZI/TIFF readers)  sdata.py (SpatialData route)  masks.py (mask route)
+              segment.py (image route)  features.py (Pu.1 calls)  density.py
+              lesion.py (score, myeloid gate, zones)  assign.py (zones, sections)  wells.py (LMD wells)
+              validate.py (vs manual annotations)  export.py (parquet/GeoJSON/TIFF/LMD)  viz.py
+              pipeline.py  cli.py  config.py
+configs/      eae_dvp_sdata.yaml (primary), eae_dvp.yaml (plain masks), quicklook_image.yaml
+docs/collaborator/  the collaborator's annotation + well-selection notebook (reference)
+data/masks/cellpose_output -> unpacked cellpose_output.zip (not committed)
 tests/        synthetic end-to-end tests for both routes + LMD export
 data/raw ->   ../DVP/data/OneDrive_1_9-18-2026 (symlink, not committed)
 ```
 
 ## Open questions
 
-* Which secondary carries Pu.1 – AF647 or AF555? (`channels.pu1`, only matters for intensities/figures)
-* Mask format/coordinate frame from the segmentation pipeline (full scene vs. cropped region → `offset_px`).
+* Section threshold: 2 % lesion area calls CFA_L2_C (adjuvant-only control, CML_metal scene1) a
+  lesion section at 2.2 % – raise `lesion_min_frac` or add a Pu.1⁺-fraction criterion?
 * Calibration-mark coordinates for the LMD export.
-* Do we want a white/grey-matter annotation as an extra gate, or is the Pu.1 fraction gate enough?
+* Scans 2023-1 and CML_2 have no Cellpose output yet.

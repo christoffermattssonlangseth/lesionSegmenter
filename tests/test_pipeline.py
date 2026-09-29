@@ -26,6 +26,7 @@ def test_end_to_end(synthetic, tmp_path):
         "pu1": {"method": "gmm"},
         "tissue": {"min_area_um2": 1e3, "hole_area_um2": 1e4, "sigma_um": 40},
         "density": {"bin_um": 5.0, "sigma_um": 20.0},
+        "sections": {"lesion_min_area_mm2": 0.01},
         "lesion": {"min_area_um2": 2000, "rim_width_um": 20, "peri_width_um": 40, "smooth_um": 10},
     })
     log = run_sample(cfg, name="synthetic", scene=0, out_dir=tmp_path, reader=reader, progress=False)
@@ -74,6 +75,7 @@ def test_from_cells_reruns_fast(synthetic, tmp_path):
         "pu1": {"method": "gmm"},
         "tissue": {"min_area_um2": 1e3, "hole_area_um2": 1e4, "sigma_um": 40},
         "density": {"bin_um": 5.0, "sigma_um": 20.0},
+        "sections": {"lesion_min_area_mm2": 0.01},
         "lesion": {"min_area_um2": 2000, "rim_width_um": 20, "peri_width_um": 40, "smooth_um": 10},
     })
     run_sample(cfg, name="s", scene=0, out_dir=tmp_path, reader=reader, progress=False)

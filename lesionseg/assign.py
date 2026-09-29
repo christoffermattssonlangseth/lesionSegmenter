@@ -55,7 +55,8 @@ def assign_cells(cells: pd.DataFrame, res: LesionResult, grid: Grid, *,
 
 
 def label_sections(tissue: np.ndarray, bin_um: float, *, min_area_um2: float = 2e5,
-                   merge_um: float = 0.0, split_touching: bool = True, neck_depth_um: float = 200.0) -> np.ndarray:
+                   merge_um: float = 0.0, split_touching: bool = True, neck_depth_um: float = 200.0,
+                   **_) -> np.ndarray:
     """Label separate tissue pieces (e.g. the ~10 spinal-cord cross-sections on one slide).
 
     ``merge_um`` closes gaps narrower than this (a section split by a tear stays
@@ -110,12 +111,37 @@ def assign_sections(cells: pd.DataFrame, lesions: pd.DataFrame, sections: np.nda
     coords = np.vstack([np.clip(gy, 0, rows - 1), np.clip(gx, 0, cols - 1)])
     cells = cells.copy()
     cells["section_id"] = ndi.map_coordinates(sections, coords, order=0, mode="nearest").astype(int)
+    # distance to the edge of the own section (µm) – used for edge exclusion when picking LMD cells
+    edt = ndi.distance_transform_edt(sections > 0) * grid.bin_um
+    cells["dist_to_section_edge_um"] = ndi.map_coordinates(edt, coords, order=1, mode="nearest").astype(np.float32)
     lesions = lesions.copy()
     if len(lesions):
         lx, ly = grid.to_grid(lesions["centroid_x_um"].to_numpy(), lesions["centroid_y_um"].to_numpy())
         lc = np.vstack([np.clip(ly, 0, rows - 1), np.clip(lx, 0, cols - 1)])
         lesions["section_id"] = ndi.map_coordinates(sections, lc, order=0, mode="nearest").astype(int)
     return cells, lesions
+
+
+def add_signed_distance(cells: pd.DataFrame, mask: np.ndarray, grid: Grid, col: str) -> pd.DataFrame:
+    """Sample the signed distance (µm, negative inside ``mask``) at each cell centroid."""
+    cells = cells.copy()
+    if not mask.any():
+        cells[col] = np.inf
+        return cells
+    sd = np.where(mask, -ndi.distance_transform_edt(mask), ndi.distance_transform_edt(~mask)) * grid.bin_um
+    gx, gy = grid.to_grid(cells["x_um"].to_numpy(), cells["y_um"].to_numpy())
+    rows, cols = grid.shape
+    coords = np.vstack([np.clip(gy, 0, rows - 1), np.clip(gx, 0, cols - 1)])
+    cells[col] = ndi.map_coordinates(sd.astype(np.float32), coords, order=1, mode="nearest")
+    return cells
+
+
+def section_centroids_um(sections: np.ndarray, bin_um: float) -> dict[int, tuple[float, float]]:
+    n = int(sections.max())
+    if n == 0:
+        return {}
+    cm = ndi.center_of_mass(sections > 0, sections, np.arange(1, n + 1))
+    return {i + 1: (cx * bin_um, cy * bin_um) for i, (cy, cx) in enumerate(cm)}
 
 
 def section_summary(cells: pd.DataFrame, lesions: pd.DataFrame, sections: np.ndarray, bin_um: float,

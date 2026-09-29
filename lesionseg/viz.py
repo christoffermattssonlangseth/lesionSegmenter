@@ -72,13 +72,23 @@ def overview_figure(overview_nuc: np.ndarray, overview_pu1: np.ndarray, maps: De
                    extent=extent_g, origin="upper")
     ax.set_title(f"zones – {res.params['n_lesions']} lesion(s); rim {res.params['rim_width_um']:g} µm, "
                  f"peri {res.params['peri_width_um']:g} µm")
+    mc = maps.extra.get("manual_core")
+    if mc is not None and mc.any():
+        ax.contour(mc.astype(float), levels=[0.5], colors="#00ff00", linewidths=1.0, extent=extent_g, origin="upper")
+        axes[1, 2].contour(mc.astype(float), levels=[0.5], colors="#00ff00", linewidths=0.8, extent=extent_g,
+                           origin="upper")
+        ax.set_title(ax.get_title() + " | green = manual CORE")
     sections = maps.extra.get("sections")
     if sections is not None and sections.max() > 0:
         from scipy import ndimage as ndi
 
         ids = np.arange(1, sections.max() + 1)
+        names = maps.extra.get("section_names") or {}
         for sid, (cy, cx) in zip(ids, ndi.center_of_mass(sections > 0, sections, ids), strict=True):
-            ax.text(cx * g.bin_um, cy * g.bin_um, f"S{sid}", color="w", fontsize=9, ha="center", va="center",
+            if not np.isfinite(cx):
+                continue
+            ax.text(cx * g.bin_um, cy * g.bin_um, names.get(sid, f"S{sid}"), color="w", fontsize=8, ha="center",
+                    va="center",
                     bbox=dict(facecolor="k", alpha=0.5, pad=1, lw=0))
 
     ax = axes[1, 2]

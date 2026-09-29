@@ -31,7 +31,7 @@ def save_maps(maps: DensityMaps, res: LesionResult, out_dir: Path) -> None:
 
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    layers = maps.as_dict()
+    layers = {k: v for k, v in maps.as_dict().items() if isinstance(v, np.ndarray) and v.ndim == 2}
     layers["lesion_mask"] = res.lesion_mask.astype(np.uint8)
     layers["lesion_labels"] = res.lesion_labels.astype(np.int32)
     layers["zones"] = res.zones
@@ -143,6 +143,13 @@ def export_lmd(cells: pd.DataFrame, path: Path, *, calibration_points_px: np.nda
 
     sub = cells if only is None else cells[only]
     sub = sub.dropna(subset=["contour_wkt"])
+    if group_col == "well_name":  # only selected cells; auto plate positions in group order
+        sub = sub[sub["well_group"] > 0]
+        if not wells:
+            from .wells import plate_positions
+
+            names = sub.sort_values("well_group")["well_name"].astype(str).unique().tolist()
+            wells = dict(zip(names, plate_positions(len(names)), strict=True))
     wells = wells or {}
     counts: dict[str, int] = {}
     for r in sub.itertuples(index=False):

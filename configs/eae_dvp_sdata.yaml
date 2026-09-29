@@ -1,0 +1,48 @@
+# EAE / DVP – SpatialData input (Cellpose masks + annotated cell table from cellpose_output.zip)
+# Coordinates: full-resolution scene pixels (labels == cell_id), 0.325 µm/px.
+output_dir: outputs/sdata
+table: ../data/masks/cellpose_output/cell_table_full_annotated_v2.h5ad
+
+channels: {nuclei: SYTOG, pu1: AF647}    # CZI channel names (AF647 = Pu.1, AF555 = Iba1)
+overview_scale: 0.05
+
+spatialdata:
+  labels: filtered          # use *_masks_filtered (cells that survived QC)
+  pu1_col: Pu1_class
+  pu1_positive: Pu1_positive
+
+masks: {contours: pu1}      # exact Cellpose outlines for Pu.1+ cells (LMD / QuPath)
+pu1: {method: mask}         # positivity from the table
+
+tissue: {source: cells, min_cells_per_mm2: 100, sigma_um: 30}
+density: {bin_um: 10, sigma_um: 40}
+lesion:
+  score: pu1_density
+  threshold: {type: zscore, value: 2.5}
+  min_area_um2: 5000
+  smooth_um: 20
+  rim_width_um: 50
+  peri_width_um: 150
+  min_pu1_fraction: 0.15
+  min_lesion_pu1_fraction: 0.2
+assign: {distance_bins_um: [-100, -50, 0, 50, 100, 150, 300]}
+export: {cell_geojson: pu1}
+
+samples:
+  - name: CML_1
+    image: ../data/raw/20260917_CML_1.czi
+    sdata: ../data/masks/cellpose_output/20260917_CML_1.zarr
+    slide_name: 20260917_CML_1
+    scenes: [0]
+  - name: CML_2_rescan
+    image: ../data/raw/20260917_CML_2_rescan.czi
+    sdata: ../data/masks/cellpose_output/20260917_CML_2_rescan.zarr
+    slide_name: 20260917_CML_2_rescan
+    scenes: [0]
+  - name: CML_metal
+    image: ../data/raw/20260917_CML_metal.czi
+    channels: {nuclei: DAPI, pu1: AF647}
+    sdata: {0: ../data/masks/cellpose_output/20260917_CML_metal_scene0.zarr,
+            1: ../data/masks/cellpose_output/20260917_CML_metal_scene1.zarr}
+    slide_name: {0: 20260917_CML_metal_scene0, 1: 20260917_CML_metal_scene1}
+    scenes: [0, 1]

@@ -60,10 +60,11 @@ def run(config: Path, only: list[str] | None = typer.Option(None, help="sample n
 
 @app.command("export-lmd")
 def export_lmd_cmd(cells: Path, out: Path, calibration: str = typer.Option(..., help="x1,y1,x2,y2,x3,y3 in scene px"),
-                   wells: str = typer.Option("core=A1,rim=A2,peri=A3,distal=A4"),
+                   group_col: str = typer.Option("well_name", help="well_name (selected cells) | zone | dist_bin"),
+                   wells: str = typer.Option("", help="group=well,... ; empty = automatic plate positions"),
                    pixel_size_um: float = typer.Option(..., help="µm per full-res pixel"),
                    pu1_only: bool = True, dilate_um: float = 1.0):
-    """Write LMD XML (py-lmd) of cell contours grouped by zone into wells."""
+    """Write LMD XML (py-lmd) of cell contours; by default the selected wells (well_name)."""
     import numpy as np
     import pandas as pd
 
@@ -71,10 +72,10 @@ def export_lmd_cmd(cells: Path, out: Path, calibration: str = typer.Option(..., 
 
     df = pd.read_parquet(cells)
     calib = np.array([float(v) for v in calibration.split(",")]).reshape(3, 2)
-    wmap = dict(kv.split("=") for kv in wells.split(","))
+    wmap = dict(kv.split("=") for kv in wells.split(",")) if wells else None
     only = df["pu1_pos"] if pu1_only else None
-    counts = export_lmd(df, out, calibration_points_px=calib, wells=wmap, pixel_size_um=pixel_size_um,
-                        only=only, dilate_um=dilate_um)
+    counts = export_lmd(df, out, calibration_points_px=calib, group_col=group_col, wells=wmap,
+                        pixel_size_um=pixel_size_um, only=only, dilate_um=dilate_um)
     typer.echo(json.dumps(counts))
 
 
