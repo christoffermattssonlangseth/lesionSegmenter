@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
 
 import typer
 
@@ -63,7 +62,7 @@ def run(config: Path, only: list[str] | None = typer.Option(None, help="sample n
 def export_lmd_cmd(cells: Path, out: Path, calibration: str = typer.Option(..., help="x1,y1,x2,y2,x3,y3 in scene px"),
                    group_col: str = typer.Option("well_name",
                                                  help="well_name (selected cells) | reaction_name | zone | dist_bin"),
-                   reactions: Optional[Path] = typer.Option(None, help="cells_reactions.csv from summarize_cohort.py "
+                   reactions: Path | None = typer.Option(None, help="cells_reactions.csv from summarize_cohort.py "
                                                             "(merged onto cells for group_col=reaction_name)"),
                    wells: str = typer.Option("", help="group=well,... ; empty = automatic plate positions"),
                    pixel_size_um: float = typer.Option(..., help="µm per full-res pixel"),
