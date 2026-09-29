@@ -1,0 +1,26 @@
+# Quick look on a raw CZI *without* pre-computed masks: segments nuclei with the
+# classical method at half resolution and classifies Pu.1+ from intensity.
+# Useful to sanity-check a scan before the BIAS/Cellpose masks exist.
+output_dir: outputs/quicklook
+channels: {nuclei: SYTOG, pu1: AF647}   # TODO confirm Pu.1 channel
+overview_scale: 0.05
+analysis_scale: 0.5
+segmentation:
+  method: classical
+  tile: 2048
+  overlap: 128
+  contours: false
+  params: {nucleus_diameter_um: 7.0, min_area_um2: 8.0}
+pu1: {method: gmm, background: annulus, min_fold: 1.5}
+density: {bin_um: 10, sigma_um: 40}
+lesion:
+  score: pu1_density
+  threshold: {type: zscore, value: 2.5}
+  min_area_um2: 5000
+  rim_width_um: 50
+  peri_width_um: 150
+export: {cell_geojson: none}
+samples:
+  - name: CML_1
+    image: ../data/raw/20260917_CML_1.czi
+    scenes: [0]

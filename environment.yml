@@ -1,0 +1,26 @@
+# conda env for lesionseg on Apple Silicon (CPU / MPS)
+#   mamba env create -f environment.yml
+#   conda activate lesionseg
+#   pip install -e ".[cellpose,lmd,dev]"
+name: lesionseg
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - scipy
+  - pandas
+  - pyarrow
+  - scikit-image
+  - scikit-learn
+  - shapely
+  - tifffile
+  - matplotlib
+  - pyyaml
+  - tqdm
+  - typer
+  - pytest
+  - jupyterlab
+  - pip:
+      - aicspylibczi>=3.1

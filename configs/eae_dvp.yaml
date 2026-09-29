@@ -1,0 +1,88 @@
+# lesionseg config – EAE / DVP pilot (20260917 scans)
+#
+# All coordinates the pipeline writes are full-resolution *scene* pixels
+# (origin = top-left of the scene bounding box) plus µm.
+output_dir: outputs
+
+channels:
+  nuclei: SYTOG        # nuclear counterstain used for segmentation + density
+  pu1: AF647           # TODO confirm: which secondary carries Pu.1 – AF647 or AF555?
+  measure: null        # null = measure every channel per nucleus
+
+overview_scale: 0.05   # for tissue mask + figures
+analysis_scale: 1.0    # 1.0 = segment at full resolution (0.325 µm/px). 0.5 for quick looks.
+
+tissue:
+  source: cells        # cells (from cell positions) | image | both
+  min_cells_per_mm2: 50
+  sigma_um: 100
+  min_area_um2: 50000
+  hole_area_um2: 200000
+
+segmentation:
+  method: classical    # classical | cellpose | stardist
+  tile: 2048
+  overlap: 128
+  contours: true       # needed for LMD / QuPath export
+  params:
+    nucleus_diameter_um: 7.0
+    min_area_um2: 8.0
+  # cellpose settings (used when method: cellpose)
+  # model_type: nuclei
+  # gpu: true
+
+pu1:
+  method: mask         # mask (from pu1_mask) | gmm | otsu | quantile | absolute (intensity, needs image)
+  background: annulus  # subtract per-nucleus local background
+  min_fold: 1.5        # nuclear mean must be ≥ 1.5× local background
+
+density:
+  bin_um: 10
+  sigma_um: 40
+
+lesion:
+  score: pu1_density   # pu1_density | pu1_fraction | nuclei_density | combined
+  # myeloid gate: dense but Pu.1-poor regions (central canal, grey matter) are never lesions
+  min_pu1_fraction: 0.15
+  min_lesion_pu1_fraction: 0.2
+  dense_nonmyeloid_z: 2.0
+  threshold: {type: zscore, value: 2.5}   # robust z vs. all tissue bins; or {type: absolute, value: 1500}
+  min_area_um2: 5000
+  smooth_um: 20
+  fill_holes: true
+  rim_width_um: 50
+  peri_width_um: 150
+  core_method: distance   # distance | score
+
+assign:
+  distance_bins_um: [-100, -50, 0, 50, 100, 150, 300]
+
+export:
+  cell_geojson: pu1    # pu1 | all | none
+
+# Mask route: add cells_mask / pu1_mask (label images in scene-pixel frame) once available.
+# `image` is optional (intensities + figures); `pixel_size_um` is only needed without an image.
+masks:
+  contours: pu1          # pu1 | all | none – WKT outlines (needed for LMD / QuPath)
+  min_overlap: 0.3       # Pu.1 object must overlap a cell by ≥30 % to be matched
+
+samples:
+  - name: 2023-1
+    image: ../data/raw/20260917_2023-1.czi
+    # cells_mask: ../data/masks/2023-1_cells.tif
+    # pu1_mask:   ../data/masks/2023-1_pu1.tif
+    scenes: [0]
+  - name: CML_1
+    image: ../data/raw/20260917_CML_1.czi
+    scenes: [0]
+  - name: CML_2
+    image: ../data/raw/20260917_CML_2.czi
+    scenes: [0, 1]
+    # per-scene masks: cells_mask: {0: ../data/masks/CML_2_s0_cells.tif, 1: ...}
+  - name: CML_2_rescan
+    image: ../data/raw/20260917_CML_2_rescan.czi
+    scenes: [0]
+  - name: CML_metal
+    image: ../data/raw/20260917_CML_metal.czi
+    scenes: [0, 1]
+    channels: {nuclei: DAPI, pu1: AF647}   # this scan has a 4th channel (DAPI)
