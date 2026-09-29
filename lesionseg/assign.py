@@ -122,6 +122,52 @@ def assign_sections(cells: pd.DataFrame, lesions: pd.DataFrame, sections: np.nda
     return cells, lesions
 
 
+def section_geometry(sections: np.ndarray, grid: Grid) -> dict[str, np.ndarray]:
+    """Per-bin section geometry, size-normalised.
+
+    * ``radius_um``  – equivalent radius sqrt(area/π) of the bin's section
+    * ``d_edge_um``  – distance to the section boundary
+    * ``d_center_um``– distance to the section centroid (≈ central canal in spinal cord)
+    * ``rel_pos``    – d_center / (d_center + d_edge): 0 at the centre, 1 at the pial edge,
+                       independent of section size and shape
+    """
+    n = int(sections.max())
+    shape = sections.shape
+    radius = np.zeros(shape, np.float32)
+    d_center = np.zeros(shape, np.float32)
+    d_edge = (ndi.distance_transform_edt(sections > 0) * grid.bin_um).astype(np.float32)
+    if n > 0:
+        ids = np.arange(1, n + 1)
+        area = np.bincount(sections.ravel(), minlength=n + 1)[1:]
+        cm = ndi.center_of_mass(sections > 0, sections, ids)
+        yy, xx = np.mgrid[: shape[0], : shape[1]]
+        for sid, (cy, cx), a in zip(ids, cm, area, strict=True):
+            m = sections == sid
+            radius[m] = np.sqrt(a / np.pi) * grid.bin_um
+            d_center[m] = (np.hypot(xx[m] - cx, yy[m] - cy) * grid.bin_um).astype(np.float32)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        rel = np.where(sections > 0, d_center / np.maximum(d_center + d_edge, 1e-6), 0.0).astype(np.float32)
+    return {"radius_um": radius, "d_edge_um": d_edge, "d_center_um": d_center, "rel_pos": rel}
+
+
+def add_relative_geometry(cells: pd.DataFrame, geom: dict[str, np.ndarray], grid: Grid) -> pd.DataFrame:
+    """Per-cell ``section_radius_um``, ``rel_pos`` (0 centre → 1 edge), ``dist_to_edge_rel`` and
+    ``dist_to_lesion_rel`` (signed lesion distance / section radius)."""
+    cells = cells.copy()
+    gx, gy = grid.to_grid(cells["x_um"].to_numpy(), cells["y_um"].to_numpy())
+    rows, cols = grid.shape
+    coords = np.vstack([np.clip(gy, 0, rows - 1), np.clip(gx, 0, cols - 1)])
+    cells["section_radius_um"] = ndi.map_coordinates(geom["radius_um"], coords, order=0, mode="nearest")
+    cells["rel_pos"] = ndi.map_coordinates(geom["rel_pos"], coords, order=1, mode="nearest")
+    r = cells["section_radius_um"].to_numpy(float)
+    r = np.where(r > 0, r, np.nan)  # cells outside any section: relative quantities undefined
+    if "dist_to_section_edge_um" in cells:
+        cells["dist_to_edge_rel"] = cells["dist_to_section_edge_um"].to_numpy(float) / r
+    if "dist_to_lesion_um" in cells:
+        cells["dist_to_lesion_rel"] = cells["dist_to_lesion_um"].to_numpy(float) / r
+    return cells
+
+
 def add_signed_distance(cells: pd.DataFrame, mask: np.ndarray, grid: Grid, col: str) -> pd.DataFrame:
     """Sample the signed distance (µm, negative inside ``mask``) at each cell centroid."""
     cells = cells.copy()

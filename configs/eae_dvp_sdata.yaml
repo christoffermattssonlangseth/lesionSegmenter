@@ -16,17 +16,45 @@ pu1: {method: mask}         # positivity from the table
 
 tissue: {source: cells, min_cells_per_mm2: 100, sigma_um: 30}
 density: {bin_um: 10, sigma_um: 40}
+# Lesion detection: supervised model trained on the manual CORE annotations (leave-one-scene-out
+# models, so every scene is scored by a model that never saw its own annotations).
+# Baseline alternative: score: pu1_density, threshold: {type: zscore, value: 3.0, seed: 6}
 lesion:
-  score: pu1_density
-  threshold: {type: zscore, value: 2.5}
+  score: model
+  model: ../models/lesion_hgb_loso_excl_CML_1.joblib      # overridden per sample below
+  threshold: {type: absolute, value: 0.25, seed: 0.5}   # grow at p>0.25, must contain a p>0.5 seed
   min_area_um2: 5000
   smooth_um: 20
-  rim_width_um: 50
+  # zone widths as fractions of each section's equivalent radius (sections differ in size:
+  # cervical vs thoracic vs lumbar). Median radius ≈ 1 mm → 0.05 ≈ 50 µm, 0.15 ≈ 150 µm.
+  rim_width_rel: 0.05
+  peri_width_rel: 0.15
+  rim_width_um: 50               # fallback outside sections
   peri_width_um: 150
-  min_pu1_fraction: 0.15
-  min_lesion_pu1_fraction: 0.2
+  min_pu1_fraction: 0.0          # the model already learned the myeloid context
+  min_lesion_pu1_fraction: 0.0
+
+# Only sections with manually annotated lesions carry lesions; the rest are lesion-free controls.
+sections: {focus: manual}
 assign: {distance_bins_um: [-100, -50, 0, 50, 100, 150, 300]}
 export: {cell_geojson: pu1}
+
+# LMD wells: rings as fractions of the section radius (0.1 ≈ 100 µm at R = 1 mm).
+# To capture more material raise target_area_um2 (µm² of Pu.1+ nuclei per well) – the capture_sites
+# table lists how much is available per compartment.
+wells:
+  target_area_um2: 3000
+  edge_exclusion_um: 100
+  groups:
+    - {name: core, zone: [core]}
+    - {name: rim, zone: [rim]}
+    - {name: ring_0_10, dist_rel: [0.0, 0.1]}
+    - {name: ring_10_20, dist_rel: [0.1, 0.2]}
+    - {name: ring_20_40, dist_rel: [0.2, 0.4]}
+    - {name: ring_40_60, dist_rel: [0.4, 0.6]}      # deeper into the tissue …
+    - {name: ring_60_plus, dist_rel: [0.6, 10.0]}   # … up to the far edge of the section
+    - {name: GM, manual: [GM], zone: [distal]}
+    - {name: WM, manual: [WM], zone: [distal]}
 
 samples:
   - name: CML_1
@@ -34,11 +62,13 @@ samples:
     sdata: ../data/masks/cellpose_output/20260917_CML_1.zarr
     slide_name: 20260917_CML_1
     scenes: [0]
+    lesion: {model: ../models/lesion_hgb_loso_excl_CML_1.joblib}
   - name: CML_2_rescan
     image: ../data/raw/20260917_CML_2_rescan.czi
     sdata: ../data/masks/cellpose_output/20260917_CML_2_rescan.zarr
     slide_name: 20260917_CML_2_rescan
     scenes: [0]
+    lesion: {model: ../models/lesion_hgb_loso_excl_CML_2_rescan.joblib}
   - name: CML_metal
     image: ../data/raw/20260917_CML_metal.czi
     channels: {nuclei: DAPI, pu1: AF647}
@@ -46,3 +76,5 @@ samples:
             1: ../data/masks/cellpose_output/20260917_CML_metal_scene1.zarr}
     slide_name: {0: 20260917_CML_metal_scene0, 1: 20260917_CML_metal_scene1}
     scenes: [0, 1]
+    lesion: {model: {0: ../models/lesion_hgb_loso_excl_CML_metal_scene0.joblib,
+                     1: ../models/lesion_hgb_loso_excl_CML_metal_scene1.joblib}}

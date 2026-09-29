@@ -1,12 +1,15 @@
-# data & outputs (never commit raw scans)
+# data & outputs (never commit raw scans); curated copies live in results/ (see scripts/publish_results.py)
 data/
 outputs/
+!results/
 *.czi
 *.tif
 *.tiff
 *.zarr/
 *.parquet
 *.npy
+*.joblib
+models/*.joblib
 
 # python
 __pycache__/

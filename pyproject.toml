@@ -49,5 +49,9 @@ target-version = "py310"
 select = ["E", "F", "W", "I", "UP", "B"]
 ignore = ["B008"]  # typer.Option in defaults is the idiom
 
+[tool.ruff.lint.per-file-ignores]
+"scripts/make_report_notebooks.py" = ["E501"]  # notebook cell sources
+"scripts/make_report.py" = ["E501"]            # report prose
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

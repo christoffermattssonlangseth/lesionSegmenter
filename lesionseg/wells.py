@@ -12,6 +12,8 @@ Groups are declared in config; every key is a filter (all must hold):
     - {name: core,        zone: [core]}
     - {name: rim,         zone: [rim]}
     - {name: ring_0_100,  dist_um: [0, 100]}        # signed distance to lesion edge, [lo, hi)
+    - {name: ring_0_10pct, dist_rel: [0, 0.1]}      # …as a fraction of the section radius
+    - {name: central,     rel_pos: [0, 0.3]}        # radial position 0 (centre) → 1 (pia)
     - {name: ring_100_200, dist_um: [100, 200]}
     - {name: GM,          manual: [GM]}             # manual_annotation column
     - {name: WM,          manual: [WM], zone: [distal]}
@@ -40,6 +42,15 @@ def _group_mask(cells: pd.DataFrame, g: dict) -> np.ndarray:
     if "dist_um" in g:
         lo, hi = g["dist_um"]
         d = cells["dist_to_lesion_um"].to_numpy(float)
+        m &= (d >= lo) & (d < hi)
+    if "dist_rel" in g:  # signed lesion distance / section radius
+        lo, hi = g["dist_rel"]
+        col = "dist_to_lesion_rel"
+        d = cells[col].to_numpy(float) if col in cells else np.full(len(cells), np.inf)
+        m &= (d >= lo) & (d < hi)
+    if "rel_pos" in g:  # radial position 0 (centre) → 1 (pia)
+        lo, hi = g["rel_pos"]
+        d = cells["rel_pos"].to_numpy(float) if "rel_pos" in cells else np.full(len(cells), np.nan)
         m &= (d >= lo) & (d < hi)
     if "manual_dist_um" in g:  # distance to the manual CORE boundary (collaborator's reference)
         lo, hi = g["manual_dist_um"]
@@ -149,6 +160,65 @@ def select_wells(cells: pd.DataFrame, *, groups: list[dict] | None = None, targe
                          "note": "" if area >= 0.95 * target_area_um2 else f"short: {area:.0f} µm²"})
     wells = pd.DataFrame(rows)
     return cells, wells
+
+
+MANUAL_GROUPS = ("GM", "WM", "vbo", "core")
+
+
+def capture_site_summary(cells: pd.DataFrame, groups: list[dict] | None = None, *, pos_col: str = "pu1_pos",
+                         section_col: str = "section_name", edge_exclusion_um: float = 100.0,
+                         exclude_vbo: bool = True) -> pd.DataFrame:
+    """Pu.1⁺ cells per capture site (section × compartment) – the material available for DVP.
+
+    Rows: every section × every well group (lesion compartments only in lesion sections) plus the
+    manual-annotation compartments (GM, WM, vbo, manual core, unannotated). Columns:
+
+    * ``n_pu1_raw``      Pu.1⁺ cells in the compartment
+    * ``n_pu1_eligible`` …after edge exclusion / VBO exclusion (what a well can draw from)
+    * ``area_pu1_eligible_um2`` their summed nuclear area
+    * ``n_selected`` / ``area_selected_um2``  cells actually placed in a well (if selection ran)
+    * ``n_cells_all``    all cells (any Pu.1 status) in the compartment, for the fraction
+    """
+    groups = groups or DEFAULT_GROUPS
+    pos = cells[pos_col].to_numpy(bool)
+    elig = pos.copy()
+    if edge_exclusion_um > 0 and "dist_to_section_edge_um" in cells:
+        elig &= cells["dist_to_section_edge_um"].to_numpy(float) >= edge_exclusion_um
+    if exclude_vbo and "in_vbo" in cells:
+        elig &= ~cells["in_vbo"].to_numpy(bool)
+    sel = cells["well_group"].to_numpy() > 0 if "well_group" in cells else np.zeros(len(cells), bool)
+    area = cells["area_um2"].to_numpy(float)
+    has_les = cells["section_has_lesion"].to_numpy(bool) if "section_has_lesion" in cells else np.ones(len(cells), bool)
+    secs = cells[section_col].astype(str)
+    rows = []
+    for sec in sorted(secs.unique()):
+        if sec in ("unassigned", "None", "nan", "0"):
+            continue
+        in_sec = (secs == sec).to_numpy()
+        les_sec = bool(has_les[in_sec].any())
+        comps = []
+        for g in groups:
+            lesion_group = ("dist_um" in g or "dist_rel" in g or "manual_dist_um" in g
+                            or bool(set(g.get("zone", [])) - {"distal"}))
+            if lesion_group and not les_sec:
+                continue
+            comps.append((g["name"], "well group", _group_mask(cells, g)))
+        if "manual_annotation" in cells:
+            ma = cells["manual_annotation"].astype(str)
+            for m in MANUAL_GROUPS:
+                comps.append((f"manual:{m}", "manual annotation", (ma == m).to_numpy()))
+            comps.append(("manual:unannotated", "manual annotation", (~ma.isin(MANUAL_GROUPS)).to_numpy()))
+        comps.append(("all", "whole section", np.ones(len(cells), bool)))
+        for name, kind, m in comps:
+            mm = in_sec & m
+            rows.append({"section": sec, "lesion_section": les_sec, "compartment": name, "kind": kind,
+                         "n_cells_all": int(mm.sum()), "n_pu1_raw": int((mm & pos).sum()),
+                         "n_pu1_eligible": int((mm & elig).sum()),
+                         "area_pu1_eligible_um2": float(area[mm & elig].sum()),
+                         "n_selected": int((mm & sel).sum()), "area_selected_um2": float(area[mm & sel].sum())})
+    out = pd.DataFrame(rows)
+    out["frac_pu1"] = out["n_pu1_raw"] / out["n_cells_all"].replace(0, np.nan)
+    return out
 
 
 def plate_positions(n: int, rows: str = "ABCDEFGH", cols: int = 12) -> list[str]:

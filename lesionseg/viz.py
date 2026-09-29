@@ -70,8 +70,11 @@ def overview_figure(overview_nuc: np.ndarray, overview_pu1: np.ndarray, maps: De
     if res.dense_nonmyeloid is not None and res.dense_nonmyeloid.any():
         ax.contour(res.dense_nonmyeloid.astype(float), levels=[0.5], colors="#00a0ff", linewidths=1.0,
                    extent=extent_g, origin="upper")
-    ax.set_title(f"zones – {res.params['n_lesions']} lesion(s); rim {res.params['rim_width_um']:g} µm, "
-                 f"peri {res.params['peri_width_um']:g} µm")
+    def _wtxt(w):
+        return f"{w:g} µm" if isinstance(w, (int, float)) else f"~{w.get('median_um', 0):.0f} µm (relative)"
+
+    ax.set_title(f"zones – {res.params['n_lesions']} lesion(s); rim {_wtxt(res.params['rim_width_um'])}, "
+                 f"peri {_wtxt(res.params['peri_width_um'])}")
     mc = maps.extra.get("manual_core")
     if mc is not None and mc.any():
         ax.contour(mc.astype(float), levels=[0.5], colors="#00ff00", linewidths=1.0, extent=extent_g, origin="upper")
@@ -136,14 +139,15 @@ def distance_profile(cells: pd.DataFrame, path: Path, *, pos_col: str = "pu1_pos
     prof = pd.DataFrame({"n_cells": g.size(), "n_pos": g[pos_col].sum()})
     prof["frac_pos"] = prof["n_pos"] / prof["n_cells"].replace(0, np.nan)
     prof["center_um"] = [iv.mid for iv in prof.index]
-    fig, ax = plt.subplots(figsize=(7, 4))
-    ax.bar(prof["center_um"], prof["n_pos"], width=step_um * 0.9, color="#ff6400", label="Pu.1+ cells")
-    ax2 = ax.twinx()
-    ax2.plot(prof["center_um"], prof["frac_pos"], "k.-", label="Pu.1+ fraction")
-    ax.axvline(0, color="r", ls="--")
-    ax.set_xlabel("signed distance to lesion edge (µm; <0 inside)")
+    fig, (ax, ax2) = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
+    ax.bar(prof["center_um"], prof["n_pos"], width=step_um * 0.9, color="#eb6834")
     ax.set_ylabel("Pu.1+ cells")
+    ax2.plot(prof["center_um"], prof["frac_pos"], color="#2a78d6", lw=2)
     ax2.set_ylabel("Pu.1+ fraction")
+    ax2.set_xlabel("signed distance to lesion edge (µm; <0 inside)")
+    for a in (ax, ax2):
+        a.axvline(0, color="#898781", ls="--", lw=1)
+        a.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
     fig.savefig(path, dpi=130)
     plt.close(fig)

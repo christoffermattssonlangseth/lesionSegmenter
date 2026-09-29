@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 from . import assign, density, export, features, lesion, masks, sdata, segment, tissue, validate, viz, wells
-from .config import sample_config
+from .config import deep_update, sample_config
 from .io import SlideReader, open_slide
 
 
@@ -148,16 +148,11 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     maps = density.compute_density_maps(cells, grid, tissue_mask_lowres=img_tmask, sigma_um=cfg["density"]["sigma_um"],
                                         tissue_source=cfg["tissue"].get("source", "cells"), tissue_params=tcfg)
     log["tissue_area_mm2"] = float(maps.tissue.sum() * grid.bin_area_mm2())
-    res = lesion.detect_lesions(maps, **cfg["lesion"])
-    log["lesion"] = res.params
-    res.lesions.to_csv(out_dir / "lesions.csv", index=False)
-    if res.dense_regions is not None:
-        res.dense_regions.to_csv(out_dir / "dense_nonmyeloid_regions.csv", index=False)
 
+    # sections are needed before lesion detection (model features use them); manual layers for names/validation
     manual = sdata.load_manual_annotations(sdata_path) if sdata_path is not None else {}
     section_names = None
     if "Sample_category" in manual and len(manual["Sample_category"]):
-        # curated section polygons take precedence over automatic tissue-piece labelling
         sc = manual["Sample_category"].reset_index(drop=True)
         sections = validate.rasterize_labels(sc["geometry"], grid, px)
         section_names = {i + 1: str(v) for i, v in enumerate(sc["sample_category"])}
@@ -168,6 +163,39 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     maps.extra["sections"] = sections
     if section_names:
         maps.extra["section_names"] = section_names
+
+    lcfg = dict(cfg["lesion"])
+    model_path = lcfg.pop("model", None)
+    # zone widths relative to section size: rim_width_rel / peri_width_rel are fractions of the
+    # section's equivalent radius (sqrt(area/π)); they override the µm widths per bin
+    geom = assign.section_geometry(sections, grid)
+    maps.extra["rel_pos"] = geom["rel_pos"]
+    rel_widths = {}
+    for zname in ("rim", "peri"):
+        frac = lcfg.pop(f"{zname}_width_rel", None)
+        if frac is not None:
+            wmap = (geom["radius_um"] * float(frac)).astype(np.float32)
+            wmap[sections == 0] = float(lcfg.get(f"{zname}_width_um", 50.0))
+            lcfg[f"{zname}_width_um"] = wmap
+            rel_widths[zname] = frac
+    if rel_widths:
+        log["zone_widths_relative"] = rel_widths
+    if lcfg.get("score") == "model":
+        from . import model as lesion_model
+
+        if not model_path:
+            raise ValueError("lesion.score 'model' needs lesion.model = path to a trained .joblib")
+        clf, feat_names, mmeta = lesion_model.load_model(model_path)
+        sf = lesion_model.build_features(cells, grid, maps.tissue, sections)
+        if sf.names != list(feat_names):
+            raise ValueError(f"feature mismatch: model {feat_names} vs {sf.names}")
+        maps.extra["model_prob"] = lesion_model.predict_map(clf, sf)
+        log["lesion_model"] = {"path": str(model_path), "meta": {k: v for k, v in mmeta.items() if k != "loso"}}
+    res = lesion.detect_lesions(maps, **lcfg)
+    log["lesion"] = res.params
+    res.lesions.to_csv(out_dir / "lesions.csv", index=False)
+    if res.dense_regions is not None:
+        res.dense_regions.to_csv(out_dir / "dense_nonmyeloid_regions.csv", index=False)
 
     # -- lesion vs control sections (data-driven) ----------------------------------
     # A section counts as a lesion section when the automatically detected lesion area
@@ -201,6 +229,7 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
 
     cells = assign.assign_cells(cells, res, grid, **cfg["assign"])
     cells, res.lesions = assign.assign_sections(cells, res.lesions, sections, grid)
+    cells = assign.add_relative_geometry(cells, geom, grid)
     cells["section_has_lesion"] = cells["section_id"].isin(lesion_sections)
     if focus != "none":
         # control sections: no lesion context at all (peri zones must not bleed across the gap)
@@ -209,6 +238,7 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         cells.loc[ctrl, "zone_code"] = 1
         cells.loc[ctrl, "lesion_id"] = 0
         cells.loc[ctrl, "dist_to_lesion_um"] = np.inf
+        cells.loc[ctrl, "dist_to_lesion_rel"] = np.inf
     if section_names:
         cells["section_name"] = cells["section_id"].map(section_names).fillna("unassigned")
         if len(res.lesions):
@@ -233,6 +263,19 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
                       .agg(n_cells=("cell_id", "size"), n_pu1=("pu1_pos", "sum")).reset_index())
         per_lesion.to_csv(out_dir / "per_lesion_zone_counts.csv", index=False)
 
+    # -- plain Pu.1+ counts from the segmentation mask + Pu.1 calls (no zoning involved) -------
+    pc = (cells.groupby("section_name" if "section_name" in cells else "section_id", observed=True)
+          .agg(n_cells=("cell_id", "size"), n_pu1_pos=("pu1_pos", "sum"), area_pu1_um2=("area_um2", lambda a: 0.0))
+          .reset_index())
+    pos_area = cells[cells["pu1_pos"]].groupby("section_name" if "section_name" in cells else "section_id",
+                                                observed=True)["area_um2"].sum()
+    pc["area_pu1_um2"] = pc.iloc[:, 0].map(pos_area).fillna(0.0).to_numpy()
+    pc["frac_pu1"] = pc["n_pu1_pos"] / pc["n_cells"]
+    pc.insert(0, "scene", scene)
+    pc.insert(0, "sample", name)
+    pc.to_csv(out_dir / "pu1_counts.csv", index=False)
+    log["pu1_counts"] = {"n_cells": int(len(cells)), "n_pu1_pos": int(cells["pu1_pos"].sum())}
+
     # -- manual annotations: validation only (never used to define lesions) ----------
     if manual:
         if "VBO" in manual and len(manual["VBO"]):
@@ -254,6 +297,12 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         cells, well_table = wells.select_wells(
             cells, lesions=res.lesions, sections_xy=assign.section_centroids_um(sections, grid.bin_um), **wcfg)
         well_table.to_csv(out_dir / "wells.csv", index=False)
+        cap = wells.capture_site_summary(cells, wcfg.get("groups"),
+                                         edge_exclusion_um=wcfg.get("edge_exclusion_um", 100.0),
+                                         exclude_vbo=wcfg.get("exclude_vbo", True))
+        cap.insert(0, "scene", scene)
+        cap.insert(0, "sample", name)
+        cap.to_csv(out_dir / "capture_sites.csv", index=False)
         log["wells"] = {"n_groups": int(cells["well_group"].max()), "n_cells": int((cells["well_group"] > 0).sum()),
                         "target_area_um2": wcfg.get("target_area_um2", 3000.0)}
 
@@ -303,6 +352,7 @@ def run_config(cfg: dict, *, only: list[str] | None = None, from_cells: bool = F
             continue
         scfg = sample_config(cfg, s)
         img = _p(s.get("image") or s.get("path"))
+        model_spec = scfg.get("lesion", {}).get("model")
         reader = (open_slide(img, channel_names=s.get("channel_names"), pixel_size_um=s.get("pixel_size_um"))
                   if img else None)
         scenes = s.get("scenes") or [s.get("scene", 0)]
@@ -319,6 +369,9 @@ def run_config(cfg: dict, *, only: list[str] | None = None, from_cells: bool = F
             sd_s = _p(sd.get(sc) if isinstance(sd, dict) else sd) if sd else None
             sn = s.get("slide_name")
             sn_s = (sn.get(sc) if isinstance(sn, dict) else sn) if sn else None
+            if model_spec:
+                mp = model_spec.get(sc) if isinstance(model_spec, dict) else model_spec
+                scfg = deep_update(scfg, {"lesion": {"model": str(_p(mp))}})
             logs.append(run_sample(scfg, name=s["name"], out_dir=out_dir, scene=sc, reader=reader, cells_mask=cm_s,
                                    pu1_mask=pm_s, pixel_size_um=s.get("pixel_size_um"), sdata_path=sd_s,
                                    table_path=_p(s.get("table") or cfg.get("table")), slide_name=sn_s,

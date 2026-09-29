@@ -1,0 +1,617 @@
+{
+  "sample": "CML_metal",
+  "scene": 1,
+  "pixel_size_um": 0.3250972040640152,
+  "config": {
+    "output_dir": "outputs/sdata",
+    "channels": {
+      "nuclei": "DAPI",
+      "pu1": "AF647",
+      "measure": null
+    },
+    "overview_scale": 0.05,
+    "analysis_scale": 1.0,
+    "tissue": {
+      "source": "cells",
+      "min_cells_per_mm2": 100,
+      "sigma_um": 30,
+      "min_area_um2": 50000.0,
+      "hole_area_um2": 200000.0,
+      "dilate_um": 20.0,
+      "image": {
+        "sigma_um": 20.0,
+        "threshold": null,
+        "dilate_um": 300.0,
+        "min_area_um2": 50000.0,
+        "hole_area_um2": 200000.0
+      }
+    },
+    "masks": {
+      "contours": "pu1",
+      "min_overlap": 0.3
+    },
+    "spatialdata": {
+      "labels": "filtered",
+      "pu1_col": "Pu1_class",
+      "pu1_positive": "Pu1_positive"
+    },
+    "table": "../data/masks/cellpose_output/cell_table_full_annotated_v2.h5ad",
+    "segmentation": {
+      "method": "classical",
+      "tile": 2048,
+      "overlap": 128,
+      "contours": true,
+      "params": {
+        "nucleus_diameter_um": 7.0,
+        "min_area_um2": 8.0
+      }
+    },
+    "pu1": {
+      "method": "mask",
+      "value": null,
+      "background": "annulus",
+      "min_fold": 1.5,
+      "min_abs": 0.0
+    },
+    "density": {
+      "bin_um": 10,
+      "sigma_um": 40
+    },
+    "lesion": {
+      "score": "model",
+      "weights": null,
+      "threshold": {
+        "type": "absolute",
+        "value": 0.25,
+        "seed": 0.5
+      },
+      "min_area_um2": 5000,
+      "smooth_um": 20,
+      "fill_holes": true,
+      "rim_width_um": 50,
+      "peri_width_um": 150,
+      "core_method": "distance",
+      "core_threshold": null,
+      "merge_within_um": 0.0,
+      "min_pu1_fraction": 0.0,
+      "min_pu1_density": 0.0,
+      "min_lesion_pu1_fraction": 0.0,
+      "dense_nonmyeloid_z": 2.0,
+      "model": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../models/lesion_hgb_loso_excl_CML_metal_scene1.joblib",
+      "rim_width_rel": 0.05,
+      "peri_width_rel": 0.15
+    },
+    "sections": {
+      "min_area_um2": 200000.0,
+      "merge_um": 0.0,
+      "split_touching": true,
+      "neck_depth_um": 200.0,
+      "focus": "manual",
+      "lesion_min_frac": 0.02,
+      "lesion_min_area_mm2": 0.05
+    },
+    "assign": {
+      "distance_bins_um": [
+        -100,
+        -50,
+        0,
+        50,
+        100,
+        150,
+        300
+      ]
+    },
+    "export": {
+      "cell_geojson": "pu1",
+      "max_geojson_cells": null
+    },
+    "wells": {
+      "enabled": true,
+      "target_area_um2": 3000,
+      "size_filter_sd": 1.0,
+      "order": "spatial",
+      "edge_exclusion_um": 100,
+      "exclude_vbo": true,
+      "inward_only": false,
+      "groups": [
+        {
+          "name": "core",
+          "zone": [
+            "core"
+          ]
+        },
+        {
+          "name": "rim",
+          "zone": [
+            "rim"
+          ]
+        },
+        {
+          "name": "ring_0_10",
+          "dist_rel": [
+            0.0,
+            0.1
+          ]
+        },
+        {
+          "name": "ring_10_20",
+          "dist_rel": [
+            0.1,
+            0.2
+          ]
+        },
+        {
+          "name": "ring_20_40",
+          "dist_rel": [
+            0.2,
+            0.4
+          ]
+        },
+        {
+          "name": "ring_40_60",
+          "dist_rel": [
+            0.4,
+            0.6
+          ]
+        },
+        {
+          "name": "ring_60_plus",
+          "dist_rel": [
+            0.6,
+            10.0
+          ]
+        },
+        {
+          "name": "GM",
+          "manual": [
+            "GM"
+          ],
+          "zone": [
+            "distal"
+          ]
+        },
+        {
+          "name": "WM",
+          "manual": [
+            "WM"
+          ],
+          "zone": [
+            "distal"
+          ]
+        }
+      ]
+    },
+    "samples": [
+      {
+        "name": "CML_1",
+        "image": "../data/raw/20260917_CML_1.czi",
+        "sdata": "../data/masks/cellpose_output/20260917_CML_1.zarr",
+        "slide_name": "20260917_CML_1",
+        "scenes": [
+          0
+        ],
+        "lesion": {
+          "model": "../models/lesion_hgb_loso_excl_CML_1.joblib"
+        }
+      },
+      {
+        "name": "CML_2_rescan",
+        "image": "../data/raw/20260917_CML_2_rescan.czi",
+        "sdata": "../data/masks/cellpose_output/20260917_CML_2_rescan.zarr",
+        "slide_name": "20260917_CML_2_rescan",
+        "scenes": [
+          0
+        ],
+        "lesion": {
+          "model": "../models/lesion_hgb_loso_excl_CML_2_rescan.joblib"
+        }
+      },
+      {
+        "name": "CML_metal",
+        "image": "../data/raw/20260917_CML_metal.czi",
+        "channels": {
+          "nuclei": "DAPI",
+          "pu1": "AF647"
+        },
+        "sdata": {
+          "0": "../data/masks/cellpose_output/20260917_CML_metal_scene0.zarr",
+          "1": "../data/masks/cellpose_output/20260917_CML_metal_scene1.zarr"
+        },
+        "slide_name": {
+          "0": "20260917_CML_metal_scene0",
+          "1": "20260917_CML_metal_scene1"
+        },
+        "scenes": [
+          0,
+          1
+        ],
+        "lesion": {
+          "model": {
+            "0": "../models/lesion_hgb_loso_excl_CML_metal_scene0.joblib",
+            "1": "../models/lesion_hgb_loso_excl_CML_metal_scene1.joblib"
+          }
+        }
+      }
+    ],
+    "_config_path": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/eae_dvp_sdata.yaml"
+  },
+  "image": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../data/raw/20260917_CML_metal.czi",
+  "scene_name": "ScanRegion1",
+  "scene_shape_px": [
+    29613,
+    33318
+  ],
+  "image_tissue_area_mm2": 49.87871729656955,
+  "cells": {
+    "route": "spatialdata",
+    "zarr": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../data/masks/cellpose_output/20260917_CML_metal_scene1.zarr",
+    "table": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../data/masks/cellpose_output/cell_table_full_annotated_v2.h5ad",
+    "slide_name": "20260917_CML_metal_scene1",
+    "labels": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../data/masks/cellpose_output/20260917_CML_metal_scene1.zarr/labels/20260917_CML_metal_masks_filtered/s0",
+    "shape": [
+      29632,
+      33330
+    ],
+    "n_table": 50980,
+    "n_not_in_mask": 0,
+    "contours_from": "20260917_CML_metal_shapes",
+    "n_cells": 50980,
+    "seconds": 24.0
+  },
+  "segmentation": {
+    "route": "spatialdata",
+    "zarr": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../data/masks/cellpose_output/20260917_CML_metal_scene1.zarr",
+    "table": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../data/masks/cellpose_output/cell_table_full_annotated_v2.h5ad",
+    "slide_name": "20260917_CML_metal_scene1",
+    "labels": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../data/masks/cellpose_output/20260917_CML_metal_scene1.zarr/labels/20260917_CML_metal_masks_filtered/s0",
+    "shape": [
+      29632,
+      33330
+    ],
+    "n_table": 50980,
+    "n_not_in_mask": 0,
+    "contours_from": "20260917_CML_metal_shapes",
+    "n_cells": 50980,
+    "seconds": 24.0
+  },
+  "pu1": {
+    "method": "mask",
+    "n_pos": 17992,
+    "n_total": 50980,
+    "frac_pos": 0.3529227147901138
+  },
+  "tissue_area_mm2": 31.677500000000002,
+  "sections_from": "Sample_category polygons",
+  "zone_widths_relative": {
+    "rim": 0.05,
+    "peri": 0.15
+  },
+  "lesion_model": {
+    "path": "/Users/chrislangseth/work/karolinska_institutet/projects/lesionSegmenter/configs/../models/lesion_hgb_loso_excl_CML_metal_scene1.joblib",
+    "meta": {
+      "excluded": "CML_metal_scene1",
+      "trained_on": [
+        "CML_1_scene0",
+        "CML_2_rescan_scene0",
+        "CML_metal_scene0"
+      ]
+    }
+  },
+  "lesion": {
+    "score": "model",
+    "threshold": {
+      "type": "absolute",
+      "value": 0.25,
+      "seed": 0.5
+    },
+    "threshold_value": 0.25,
+    "min_area_um2": 5000,
+    "smooth_um": 20,
+    "rim_width_um": {
+      "per_bin_um": true,
+      "median_um": 56.99152755737305
+    },
+    "peri_width_um": {
+      "per_bin_um": true,
+      "median_um": 170.97459411621094
+    },
+    "core_method": "distance",
+    "core_threshold": null,
+    "bin_um": 10,
+    "components": {
+      "pu1_density": {
+        "median": 261.9685363769531,
+        "mad_sigma": 315.7587574676513
+      },
+      "nuclei_density": {
+        "median": 1199.018798828125,
+        "mad_sigma": 767.6461929199219
+      },
+      "pu1_fraction": {
+        "median": 0.23347973823547363,
+        "mad_sigma": 0.22394425769448278
+      },
+      "model": "probability map (0\u20131); use an absolute threshold"
+    },
+    "n_lesions": 30,
+    "min_pu1_fraction": 0.0,
+    "min_pu1_density": 0.0,
+    "min_lesion_pu1_fraction": 0.0,
+    "rejected_low_pu1": [],
+    "n_dense_nonmyeloid": 0
+  },
+  "section_focus": {
+    "mode": "manual",
+    "lesion_sections": [
+      1,
+      2,
+      9
+    ],
+    "lesion_area_frac": {
+      "1": 0.2005,
+      "2": 0.1439,
+      "3": 0.0024,
+      "4": 0.0,
+      "5": 0.0,
+      "6": 0.0,
+      "7": 0.0033,
+      "8": 0.0263,
+      "9": 0.0467
+    },
+    "manual_core_sections": [
+      1,
+      2,
+      9
+    ]
+  },
+  "n_sections": 9,
+  "section_summary": [
+    {
+      "section_id": 1,
+      "section_name": "R1_2_T",
+      "is_lesion_section": true,
+      "lesion_area_frac_unrestricted": 0.2005,
+      "area_mm2": 6.5335,
+      "n_cells": 14083,
+      "n_pu1_pos": 7664,
+      "frac_pu1_pos": 0.5442022296385713,
+      "n_lesions": 9,
+      "lesion_area_mm2": 1.3097,
+      "lesion_frac_of_section": 0.20045917195989899,
+      "n_pu1_pos_core": 1976,
+      "n_pu1_pos_rim": 2728,
+      "n_pu1_pos_peri": 1789,
+      "n_auto_lesions_unrestricted": 9,
+      "has_manual_core": true
+    },
+    {
+      "section_id": 2,
+      "section_name": "P3_1_C",
+      "is_lesion_section": true,
+      "lesion_area_frac_unrestricted": 0.1439,
+      "area_mm2": 5.0507,
+      "n_cells": 10081,
+      "n_pu1_pos": 4148,
+      "frac_pu1_pos": 0.4114671163575042,
+      "n_lesions": 9,
+      "lesion_area_mm2": 0.7268,
+      "lesion_frac_of_section": 0.1439008454273665,
+      "n_pu1_pos_core": 1011,
+      "n_pu1_pos_rim": 1343,
+      "n_pu1_pos_peri": 646,
+      "n_auto_lesions_unrestricted": 9,
+      "has_manual_core": true
+    },
+    {
+      "section_id": 3,
+      "section_name": "P3_1_L",
+      "is_lesion_section": false,
+      "lesion_area_frac_unrestricted": 0.0024,
+      "area_mm2": 2.7117,
+      "n_cells": 3904,
+      "n_pu1_pos": 708,
+      "frac_pu1_pos": 0.18135245901639344,
+      "n_lesions": 0,
+      "lesion_area_mm2": 0.0,
+      "lesion_frac_of_section": 0.0,
+      "n_pu1_pos_core": 0,
+      "n_pu1_pos_rim": 0,
+      "n_pu1_pos_peri": 0,
+      "n_auto_lesions_unrestricted": 1,
+      "has_manual_core": false
+    },
+    {
+      "section_id": 4,
+      "section_name": "CFA_L2_L",
+      "is_lesion_section": false,
+      "lesion_area_frac_unrestricted": 0.0,
+      "area_mm2": 5.8345,
+      "n_cells": 4878,
+      "n_pu1_pos": 843,
+      "frac_pu1_pos": 0.17281672816728166,
+      "n_lesions": 0,
+      "lesion_area_mm2": 0.0,
+      "lesion_frac_of_section": 0.0,
+      "n_pu1_pos_core": 0,
+      "n_pu1_pos_rim": 0,
+      "n_pu1_pos_peri": 0,
+      "n_auto_lesions_unrestricted": 0,
+      "has_manual_core": false
+    },
+    {
+      "section_id": 5,
+      "section_name": "CFA_L2_T",
+      "is_lesion_section": false,
+      "lesion_area_frac_unrestricted": 0.0,
+      "area_mm2": 2.7693,
+      "n_cells": 2057,
+      "n_pu1_pos": 211,
+      "frac_pu1_pos": 0.10257656781720953,
+      "n_lesions": 0,
+      "lesion_area_mm2": 0.0,
+      "lesion_frac_of_section": 0.0,
+      "n_pu1_pos_core": 0,
+      "n_pu1_pos_rim": 0,
+      "n_pu1_pos_peri": 0,
+      "n_auto_lesions_unrestricted": 0,
+      "has_manual_core": false
+    },
+    {
+      "section_id": 6,
+      "section_name": "R1_2_C",
+      "is_lesion_section": false,
+      "lesion_area_frac_unrestricted": 0.0,
+      "area_mm2": 0.9358,
+      "n_cells": 376,
+      "n_pu1_pos": 19,
+      "frac_pu1_pos": 0.05053191489361702,
+      "n_lesions": 0,
+      "lesion_area_mm2": 0.0,
+      "lesion_frac_of_section": 0.0,
+      "n_pu1_pos_core": 0,
+      "n_pu1_pos_rim": 0,
+      "n_pu1_pos_peri": 0,
+      "n_auto_lesions_unrestricted": 0,
+      "has_manual_core": false
+    },
+    {
+      "section_id": 7,
+      "section_name": "CFA_L2_C",
+      "is_lesion_section": false,
+      "lesion_area_frac_unrestricted": 0.0033,
+      "area_mm2": 4.0057,
+      "n_cells": 4024,
+      "n_pu1_pos": 929,
+      "frac_pu1_pos": 0.2308648111332008,
+      "n_lesions": 0,
+      "lesion_area_mm2": 0.0,
+      "lesion_frac_of_section": 0.0,
+      "n_pu1_pos_core": 0,
+      "n_pu1_pos_rim": 0,
+      "n_pu1_pos_peri": 0,
+      "n_auto_lesions_unrestricted": 1,
+      "has_manual_core": false
+    },
+    {
+      "section_id": 8,
+      "section_name": "R1_2_L",
+      "is_lesion_section": false,
+      "lesion_area_frac_unrestricted": 0.0263,
+      "area_mm2": 3.2396,
+      "n_cells": 5476,
+      "n_pu1_pos": 1557,
+      "frac_pu1_pos": 0.28433162892622355,
+      "n_lesions": 0,
+      "lesion_area_mm2": 0.0,
+      "lesion_frac_of_section": 0.0,
+      "n_pu1_pos_core": 0,
+      "n_pu1_pos_rim": 0,
+      "n_pu1_pos_peri": 0,
+      "n_auto_lesions_unrestricted": 7,
+      "has_manual_core": false
+    },
+    {
+      "section_id": 9,
+      "section_name": "P3_1_T",
+      "is_lesion_section": true,
+      "lesion_area_frac_unrestricted": 0.0467,
+      "area_mm2": 4.0816,
+      "n_cells": 6037,
+      "n_pu1_pos": 1900,
+      "frac_pu1_pos": 0.31472585721384794,
+      "n_lesions": 3,
+      "lesion_area_mm2": 0.1905,
+      "lesion_frac_of_section": 0.04667287338298706,
+      "n_pu1_pos_core": 287,
+      "n_pu1_pos_rim": 461,
+      "n_pu1_pos_peri": 302,
+      "n_auto_lesions_unrestricted": 3,
+      "has_manual_core": true
+    }
+  ],
+  "zone_summary": [
+    {
+      "zone": "distal",
+      "n_cells": 29531,
+      "n_pu1_pos": 7449,
+      "frac_pu1_pos": 0.2522434052351766
+    },
+    {
+      "zone": "peri",
+      "n_cells": 7354,
+      "n_pu1_pos": 2737,
+      "frac_pu1_pos": 0.37217840630949145
+    },
+    {
+      "zone": "rim",
+      "n_cells": 8892,
+      "n_pu1_pos": 4532,
+      "frac_pu1_pos": 0.5096716149347729
+    },
+    {
+      "zone": "core",
+      "n_cells": 5203,
+      "n_pu1_pos": 3274,
+      "frac_pu1_pos": 0.6292523544109168
+    }
+  ],
+  "pu1_counts": {
+    "n_cells": 50980,
+    "n_pu1_pos": 17992
+  },
+  "validation": {
+    "core_vs_lesion": {
+      "auto_area_mm2": 2.2270000000000003,
+      "manual_area_mm2": 0.3642,
+      "iou": 0.15776774943032035,
+      "manual_covered_by_auto": 0.9695222405271828,
+      "auto_inside_manual": 0.15855410866636732
+    },
+    "core_vs_core": {
+      "auto_area_mm2": 0.6121,
+      "manual_area_mm2": 0.3642,
+      "iou": 0.3392318244170096,
+      "manual_covered_by_auto": 0.6790225151015925,
+      "auto_inside_manual": 0.4040189511517726
+    },
+    "n_manual_cores": 20,
+    "manual_cores_detected_frac": 0.95,
+    "cell_confusion": {
+      "distal": {
+        "GM": 6234,
+        "WM": 2532,
+        "core": 0,
+        "none": 20671,
+        "vbo": 94
+      },
+      "peri": {
+        "GM": 0,
+        "WM": 0,
+        "core": 76,
+        "none": 7251,
+        "vbo": 27
+      },
+      "rim": {
+        "GM": 0,
+        "WM": 0,
+        "core": 835,
+        "none": 8057,
+        "vbo": 0
+      },
+      "core": {
+        "GM": 0,
+        "WM": 0,
+        "core": 1962,
+        "none": 3241,
+        "vbo": 0
+      }
+    }
+  },
+  "wells": {
+    "n_groups": 29,
+    "n_cells": 2463,
+    "target_area_um2": 3000
+  },
+  "cell_geojson": 17992,
+  "seconds_total": 34.0
+}

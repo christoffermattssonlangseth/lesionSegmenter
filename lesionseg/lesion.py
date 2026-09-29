@@ -39,6 +39,8 @@ class LesionResult:
     dense_nonmyeloid: np.ndarray | None = None   # bool: hypercellular but Pu.1-poor (canal, grey matter)
     dense_labels: np.ndarray | None = None
     dense_regions: pd.DataFrame | None = None
+    rim_width_map: np.ndarray | None = None      # per-bin zone widths (µm) actually used
+    peri_width_map: np.ndarray | None = None
 
 
 # --------------------------------------------------------------------------
@@ -59,7 +61,12 @@ def lesion_score(maps: DensityMaps, *, score: str = "pu1_density",
         z, med, mad = robust_z(arr, t)
         z_maps[name] = z
         comps[name] = {"median": med, "mad_sigma": mad}
-    if score == "combined":
+    if score == "model":
+        if "model_prob" not in maps.extra:
+            raise ValueError("score 'model' needs maps.extra['model_prob'] (see lesionseg.model)")
+        s = maps.extra["model_prob"].astype(np.float32)
+        comps["model"] = "probability map (0–1); use an absolute threshold"
+    elif score == "combined":
         w = {"pu1_density": 1.0, "nuclei_density": 0.5, "pu1_fraction": 0.5}
         w.update(weights or {})
         s = sum(w[k] * z_maps[k] for k in w) / sum(abs(v) for v in w.values())
@@ -73,6 +80,11 @@ def lesion_score(maps: DensityMaps, *, score: str = "pu1_density",
         maps.extra[f"z_{k}"] = v
     maps.extra["lesion_score"] = s
     return s, comps
+
+
+def _width_map(w, shape) -> np.ndarray:
+    """Zone width as a per-bin array (scalar µm or an array of µm per bin)."""
+    return np.broadcast_to(np.asarray(w, dtype=np.float32), shape) if np.ndim(w) == 0 else np.asarray(w, np.float32)
 
 
 def _threshold_value(score: np.ndarray, tissue: np.ndarray, spec: dict) -> float:
@@ -118,7 +130,7 @@ def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: di
     s, comps = lesion_score(maps, score=score, weights=weights)
     if threshold.get("type") == "absolute":
         raw = {"pu1_density": maps.pu1, "nuclei_density": maps.nuclei,
-               "pu1_fraction": maps.pu1_fraction}.get(score)
+               "pu1_fraction": maps.pu1_fraction, "model": maps.extra.get("model_prob")}.get(score)
         if raw is None:
             raise ValueError("absolute threshold needs a single-map score")
         thr = float(threshold["value"])
@@ -126,6 +138,16 @@ def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: di
     else:
         thr = _threshold_value(s, tissue, threshold)
         mask = (s > thr) & tissue
+    # hysteresis / seeded detection: a candidate must contain at least one bin above `seed`
+    # (same units as the threshold) – weakly elevated grey matter never becomes a lesion
+    seed = threshold.get("seed")
+    if seed is not None:
+        raw_for_seed = s if threshold.get("type") != "absolute" else raw
+        lab0, n0 = ndi.label(mask)
+        if n0:
+            has_seed = ndi.maximum(raw_for_seed, lab0, np.arange(1, n0 + 1)) > float(seed)
+            keep_ids = np.arange(1, n0 + 1)[np.asarray(has_seed)]
+            mask = np.isin(lab0, keep_ids)
 
     # myeloid gate: dense-but-not-myeloid bins (canal, grey matter) are excluded
     gate = (maps.pu1_fraction >= min_pu1_fraction) & (maps.pu1 >= min_pu1_density)
@@ -167,11 +189,13 @@ def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: di
     else:
         sdist = np.full(mask.shape, np.inf, np.float32)
 
+    rim_w = _width_map(rim_width_um, mask.shape)
+    peri_w = _width_map(peri_width_um, mask.shape)
     zones = np.zeros(mask.shape, np.uint8)
     zones[tissue] = ZONE_CODES["distal"]
-    zones[tissue & ~mask & (sdist <= peri_width_um)] = ZONE_CODES["peri"]
+    zones[tissue & ~mask & (sdist <= peri_w)] = ZONE_CODES["peri"]
     if core_method == "distance":
-        core = mask & (sdist <= -rim_width_um)
+        core = mask & (sdist <= -rim_w)
     elif core_method == "score":
         ct = core_threshold if core_threshold is not None else thr * 2
         core = mask & (s > ct)
@@ -186,15 +210,23 @@ def detect_lesions(maps: DensityMaps, *, score: str = "pu1_density", weights: di
     dense_table = _region_table(dense_labels, maps, s, bin_um, None, "region_id")
     maps.extra["dense_nonmyeloid"] = dense_nonmyeloid.astype(np.uint8)
 
+    def _w(w):
+        if np.ndim(w) == 0:
+            return float(w)
+        return {"per_bin_um": True, "median_um": float(np.median(w[tissue])) if tissue.any() else None}
+
     params = {"score": score, "threshold": threshold, "threshold_value": thr, "min_area_um2": min_area_um2,
-              "smooth_um": smooth_um, "rim_width_um": rim_width_um, "peri_width_um": peri_width_um,
+              "smooth_um": smooth_um, "rim_width_um": _w(rim_width_um), "peri_width_um": _w(peri_width_um),
               "core_method": core_method, "core_threshold": core_threshold, "bin_um": bin_um,
               "components": comps, "n_lesions": int(labels.max()),
               "min_pu1_fraction": min_pu1_fraction, "min_pu1_density": min_pu1_density,
               "min_lesion_pu1_fraction": min_lesion_pu1_fraction, "rejected_low_pu1": rejected,
               "n_dense_nonmyeloid": int(dense_labels.max())}
-    return LesionResult(s, mask, labels, zones, sdist, lesions, params, dense_nonmyeloid=dense_nonmyeloid,
-                        dense_labels=dense_labels, dense_regions=dense_table)
+    res = LesionResult(s, mask, labels, zones, sdist, lesions, params, dense_nonmyeloid=dense_nonmyeloid,
+                       dense_labels=dense_labels, dense_regions=dense_table)
+    res.rim_width_map = rim_w
+    res.peri_width_map = peri_w
+    return res
 
 
 def _region_table(labels: np.ndarray, maps: DensityMaps, score: np.ndarray, bin_um: float,
@@ -249,15 +281,20 @@ def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int]
     core = (res.zones == ZONE_CODES["core"]) & mask
     zones = np.zeros(mask.shape, np.uint8)
     zones[tissue] = ZONE_CODES["distal"]
-    zones[tissue & ~mask & (sdist <= res.params["peri_width_um"])] = ZONE_CODES["peri"]
+    peri_w = res.peri_width_map
+    if peri_w is None:
+        peri_w = _width_map(res.params["peri_width_um"], mask.shape)
+    zones[tissue & ~mask & (sdist <= peri_w)] = ZONE_CODES["peri"]
     zones[mask & ~core] = ZONE_CODES["rim"]
     zones[core] = ZONE_CODES["core"]
     lesions = _region_table(labels, maps, res.score, bin_um, core, "lesion_id")
     params = dict(res.params)
     params["n_lesions"] = int(labels.max())
     params["restricted_to_sections"] = sorted(int(k) for k in keep)
-    return LesionResult(res.score, mask, labels, zones, sdist, lesions, params, dense_nonmyeloid=res.dense_nonmyeloid,
-                        dense_labels=res.dense_labels, dense_regions=res.dense_regions)
+    out = LesionResult(res.score, mask, labels, zones, sdist, lesions, params, dense_nonmyeloid=res.dense_nonmyeloid,
+                       dense_labels=res.dense_labels, dense_regions=res.dense_regions)
+    out.rim_width_map, out.peri_width_map = res.rim_width_map, peri_w
+    return out
 
 
 def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level: str = "um") -> list[dict]:

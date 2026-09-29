@@ -1,0 +1,82 @@
+section,group,well_group,n_cells,area_um2,n_available,note
+CFA_L2_C,core,0,0,0.0,0,too few cells
+CFA_L2_C,rim,0,0,0.0,0,too few cells
+CFA_L2_C,ring_0_10,0,0,0.0,0,too few cells
+CFA_L2_C,ring_10_20,0,0,0.0,0,too few cells
+CFA_L2_C,ring_20_40,0,0,0.0,0,too few cells
+CFA_L2_C,ring_40_60,0,0,0.0,0,too few cells
+CFA_L2_C,ring_60_plus,0,0,0.0,0,too few cells
+CFA_L2_C,GM,1,81,2980.1,199,
+CFA_L2_C,WM,2,34,1112.2,34,short: 1112 µm²
+CFA_L2_L,core,0,0,0.0,0,too few cells
+CFA_L2_L,rim,0,0,0.0,0,too few cells
+CFA_L2_L,ring_0_10,0,0,0.0,0,too few cells
+CFA_L2_L,ring_10_20,0,0,0.0,0,too few cells
+CFA_L2_L,ring_20_40,0,0,0.0,0,too few cells
+CFA_L2_L,ring_40_60,0,0,0.0,0,too few cells
+CFA_L2_L,ring_60_plus,0,0,0.0,0,too few cells
+CFA_L2_L,GM,3,77,2966.7,284,
+CFA_L2_L,WM,4,12,412.4,12,short: 412 µm²
+CFA_L2_T,core,0,0,0.0,0,too few cells
+CFA_L2_T,rim,0,0,0.0,0,too few cells
+CFA_L2_T,ring_0_10,0,0,0.0,0,too few cells
+CFA_L2_T,ring_10_20,0,0,0.0,0,too few cells
+CFA_L2_T,ring_20_40,0,0,0.0,0,too few cells
+CFA_L2_T,ring_40_60,0,0,0.0,0,too few cells
+CFA_L2_T,ring_60_plus,0,0,0.0,0,too few cells
+CFA_L2_T,GM,5,93,2981.5,93,
+CFA_L2_T,WM,6,12,362.6,12,short: 363 µm²
+P3_1_C,core,7,114,2994.6,690,
+P3_1_C,rim,8,113,2977.9,957,
+P3_1_C,ring_0_10,9,103,2982.5,307,
+P3_1_C,ring_10_20,10,97,2985.4,235,
+P3_1_C,ring_20_40,11,84,2988.2,472,
+P3_1_C,ring_40_60,12,80,2989.6,164,
+P3_1_C,ring_60_plus,0,0,0.0,0,too few cells
+P3_1_C,GM,0,0,0.0,0,too few cells
+P3_1_C,WM,0,0,0.0,0,too few cells
+P3_1_L,core,0,0,0.0,0,too few cells
+P3_1_L,rim,0,0,0.0,0,too few cells
+P3_1_L,ring_0_10,0,0,0.0,0,too few cells
+P3_1_L,ring_10_20,0,0,0.0,0,too few cells
+P3_1_L,ring_20_40,0,0,0.0,0,too few cells
+P3_1_L,ring_40_60,0,0,0.0,0,too few cells
+P3_1_L,ring_60_plus,0,0,0.0,0,too few cells
+P3_1_L,GM,13,96,2998.5,115,
+P3_1_L,WM,14,89,2380.3,89,short: 2380 µm²
+P3_1_T,core,15,111,2978.1,201,
+P3_1_T,rim,16,120,2996.5,318,
+P3_1_T,ring_0_10,17,92,2999.5,157,
+P3_1_T,ring_10_20,18,87,2999.3,97,
+P3_1_T,ring_20_40,19,94,2980.6,161,
+P3_1_T,ring_40_60,20,99,2991.7,162,
+P3_1_T,ring_60_plus,21,94,2983.2,187,
+P3_1_T,GM,0,0,0.0,0,too few cells
+P3_1_T,WM,0,0,0.0,0,too few cells
+R1_2_C,core,0,0,0.0,0,too few cells
+R1_2_C,rim,0,0,0.0,0,too few cells
+R1_2_C,ring_0_10,0,0,0.0,0,too few cells
+R1_2_C,ring_10_20,0,0,0.0,0,too few cells
+R1_2_C,ring_20_40,0,0,0.0,0,too few cells
+R1_2_C,ring_40_60,0,0,0.0,0,too few cells
+R1_2_C,ring_60_plus,0,0,0.0,0,too few cells
+R1_2_C,GM,0,0,0.0,0,too few cells
+R1_2_C,WM,0,0,0.0,0,too few cells
+R1_2_L,core,0,0,0.0,0,too few cells
+R1_2_L,rim,0,0,0.0,0,too few cells
+R1_2_L,ring_0_10,0,0,0.0,0,too few cells
+R1_2_L,ring_10_20,0,0,0.0,0,too few cells
+R1_2_L,ring_20_40,0,0,0.0,0,too few cells
+R1_2_L,ring_40_60,0,0,0.0,0,too few cells
+R1_2_L,ring_60_plus,0,0,0.0,0,too few cells
+R1_2_L,GM,22,86,2997.5,232,
+R1_2_L,WM,23,106,2992.2,113,
+R1_2_T,core,24,102,2972.7,1319,
+R1_2_T,rim,25,102,2990.1,1866,
+R1_2_T,ring_0_10,26,102,2984.7,992,
+R1_2_T,ring_10_20,27,95,2976.7,436,
+R1_2_T,ring_20_40,28,81,2959.3,538,
+R1_2_T,ring_40_60,29,7,325.4,7,short: 325 µm²
+R1_2_T,ring_60_plus,0,0,0.0,0,too few cells
+R1_2_T,GM,0,0,0.0,0,too few cells
+R1_2_T,WM,0,0,0.0,0,too few cells
