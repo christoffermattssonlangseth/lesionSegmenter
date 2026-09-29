@@ -307,45 +307,100 @@ def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int]
     return out
 
 
-def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level: str = "um") -> list[dict]:
+def zone_polygons(res: LesionResult, bin_um: float, pixel_size_um: float, level: str = "um",
+                  sections: np.ndarray | None = None, section_names: dict | None = None) -> list[dict]:
     """Vectorise lesion outlines + zone rings to shapely polygons.
 
-    Returns a list of dicts ``{"name", "lesion_id", "geometry"}``; coordinates
-    are µm (``level='um'``) or full-res pixels (``level='px'``).
+    Returns a list of dicts ``{"name", "lesion_id", "section", "geometry"}``; coordinates
+    are µm (``level='um'``) or full-res pixels (``level='px'``). ``lesion`` / ``core`` /
+    ``rim`` are per lesion; ``peri`` and ``deep`` bands are per connected component
+    (they may wrap several lesions), each attributed to the section it lies in.
     """
+    from shapely.affinity import affine_transform
     from shapely.geometry import Polygon
     from shapely.ops import unary_union
 
     f = bin_um if level == "um" else bin_um / pixel_size_um
     out = []
 
+    def shp_affine(g, s):
+        return affine_transform(g, [s, 0, 0, s, -0.5 * s, -0.5 * s])
+
+    def _section_of(mask):
+        if sections is None or not mask.any():
+            return None
+        ids = sections[mask]
+        ids = ids[ids > 0]
+        if ids.size == 0:
+            return None
+        sid = int(np.bincount(ids).argmax())
+        return (section_names or {}).get(sid, f"S{sid}")
+
+    min_area = 2 * f * f  # drop sub-bin artefacts (< 2 grid bins)
+
     def _polys(mask):
-        polys = []
-        for c in measure.find_contours(np.pad(mask, 1).astype(np.float32), 0.5):
+        """Polygons WITH holes: contours are classified as shells (interior in mask) or holes."""
+        padded = np.pad(mask, 1)
+        shells, holes = [], []
+        for c in measure.find_contours(padded.astype(np.float32), 0.5):
             if len(c) < 4:
                 continue
-            xy = np.column_stack([(c[:, 1] - 1 + 0.5) * f, (c[:, 0] - 1 + 0.5) * f])
-            p = Polygon(xy)
+            p = Polygon(np.column_stack([c[:, 1], c[:, 0]]))  # grid coords (col, row) in padded frame
             if not p.is_valid:
                 p = p.buffer(0)
-            if not p.is_empty and p.area > 0:
-                polys.append(p)
-        return polys
+            if p.is_empty or p.area < 2:
+                continue
+            rp = p.representative_point()
+            r, q = int(round(rp.y)), int(round(rp.x))
+            inside = 0 <= r < padded.shape[0] and 0 <= q < padded.shape[1] and padded[r, q]
+            (shells if inside else holes).append(p)
+        shells.sort(key=lambda p: p.area, reverse=True)
+        out_polys = []
+        used = set()
+        for sh in shells:
+            hs = []
+            for i, h in enumerate(holes):
+                if i not in used and sh.contains(h.representative_point()):
+                    hs.append(h)
+                    used.add(i)
+            geom = Polygon(sh.exterior.coords, [h.exterior.coords for h in hs])
+            if not geom.is_valid:
+                geom = geom.buffer(0)
+            # padded grid coords -> µm / px: (col - 1 + 0.5) * f
+            geom = shp_affine(geom, f)
+            if not geom.is_empty and geom.area >= min_area:
+                out_polys.append(geom)
+        return out_polys
 
     for lab in range(1, res.lesion_labels.max() + 1):
         m = res.lesion_labels == lab
+        sec = _section_of(m)
         for p in _polys(m):
-            out.append({"name": "lesion", "lesion_id": lab, "geometry": p})
+            out.append({"name": "lesion", "lesion_id": lab, "section": sec, "geometry": p})
         for zname in ("core", "rim"):
             zm = m & (res.zones == ZONE_CODES[zname])
             if zm.any():
                 geom = unary_union(_polys(zm))
-                out.append({"name": zname, "lesion_id": lab, "geometry": geom})
-    peri = res.zones == ZONE_CODES["peri"]
-    if peri.any():
-        out.append({"name": "peri", "lesion_id": 0, "geometry": unary_union(_polys(peri))})
+                out.append({"name": zname, "lesion_id": lab, "section": sec, "geometry": geom})
+    for zname in ("peri", "deep"):
+        if zname not in ZONE_CODES:
+            continue
+        band = res.zones == ZONE_CODES[zname]
+        if not band.any():
+            continue
+        comp, n = ndi.label(band)
+        for k in range(1, n + 1):
+            cm = comp == k
+            geom = unary_union(_polys(cm))
+            if geom.is_empty:
+                continue
+            # lesions this band component touches (dilate by one bin)
+            touch = np.unique(res.lesion_labels[ndi.binary_dilation(cm, iterations=max(int(200 / bin_um), 1))])
+            touch = [int(t) for t in touch if t > 0]
+            out.append({"name": zname, "lesion_id": touch[0] if len(touch) == 1 else 0, "section": _section_of(cm),
+                        "geometry": geom, "lesion_ids": touch})
     if res.dense_labels is not None:
         for lab in range(1, int(res.dense_labels.max()) + 1):
             for p in _polys(res.dense_labels == lab):
-                out.append({"name": "dense_nonmyeloid", "lesion_id": lab, "geometry": p})
+                out.append({"name": "dense_nonmyeloid", "lesion_id": lab, "section": None, "geometry": p})
     return out

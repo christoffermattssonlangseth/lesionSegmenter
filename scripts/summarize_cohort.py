@@ -75,10 +75,11 @@ def main():
     by_an.to_csv(out / "capture_sites_by_animal.csv", index=False)
 
     if not a.no_figures:
-        from lesionseg.report import save_cell_zone_figures
+        from lesionseg.report import save_cell_zone_figures, save_zone_polygon_figures
 
         for r in runs:
             save_cell_zone_figures(r)
+            save_zone_polygon_figures(r)
     sections_table(runs).to_csv(out / "sections_all.csv", index=False)
     cohort_table(runs).to_csv(out / "cohort_table.csv", index=False)
 

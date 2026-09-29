@@ -70,12 +70,73 @@ def save_zone_geojson(res: LesionResult, maps: DensityMaps, path: Path, *, units
     scene is opened as an image; ``'um'`` is convenient for plotting.
     """
     feats = []
-    for item in zone_polygons(res, maps.grid.bin_um, maps.grid.pixel_size_um, level=units):
+    for item in zone_polygons(res, maps.grid.bin_um, maps.grid.pixel_size_um, level=units,
+                              sections=maps.extra.get("sections"), section_names=maps.extra.get("section_names")):
         cls = item["name"]
+        sec = item.get("section")
         nm = f"{cls}_{item['lesion_id']}" if item["lesion_id"] else cls
-        feats.append(_feature(item["geometry"], _qupath_props(nm, cls, {"lesion_id": item["lesion_id"]})))
+        if sec:
+            nm = f"{sec}|{nm}"
+        props = {"lesion_id": item["lesion_id"], "section": sec, "area_um2": float(item["geometry"].area)
+                 * (1.0 if units == "um" else maps.grid.pixel_size_um ** 2)}
+        if "lesion_ids" in item:
+            props["lesion_ids"] = item["lesion_ids"]
+        feats.append(_feature(item["geometry"], _qupath_props(nm, cls, props)))
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(json.dumps({"type": "FeatureCollection", "features": feats}))
+
+
+def save_zone_polygons_table(res: LesionResult, maps: DensityMaps, path: Path) -> pd.DataFrame:
+    """Zone / lesion polygons as a CSV (µm WKT) with name, lesion_id, section and area."""
+    rows = []
+    for item in zone_polygons(res, maps.grid.bin_um, maps.grid.pixel_size_um, level="um",
+                              sections=maps.extra.get("sections"), section_names=maps.extra.get("section_names")):
+        g = item["geometry"]
+        rows.append({"zone": item["name"], "lesion_id": item["lesion_id"], "section": item.get("section"),
+                     "lesion_ids": ";".join(str(i) for i in item.get("lesion_ids", [])),
+                     "area_um2": float(g.area), "n_parts": len(g.geoms) if g.geom_type == "MultiPolygon" else 1,
+                     "centroid_x_um": g.centroid.x, "centroid_y_um": g.centroid.y, "wkt_um": g.wkt})
+    df = pd.DataFrame(rows)
+    df.to_csv(path, index=False)
+    return df
+
+
+def export_zone_polygons_lmd(res: LesionResult, maps: DensityMaps, path: Path, *, calibration_points_px: np.ndarray,
+                             wells: dict[str, str] | None = None,
+                             zones: tuple[str, ...] = ("core", "rim", "peri", "deep"),
+                             orientation_transform: np.ndarray | None = None) -> dict:
+    """LMD XML of the zone *region* polygons (one well per zone name, or ``wells`` mapping zone→well).
+
+    Coordinates are the full-resolution scene pixels; calibration marks must be in the same frame.
+    Cuts whole regions rather than single cells – useful when the tissue, not the cells, is collected.
+    """
+    try:
+        from lmd.lib import Collection, Shape
+    except ImportError as e:  # pragma: no cover
+        raise ImportError("pip install py-lmd") from e
+
+    calib = np.asarray(calibration_points_px, dtype=float)
+    coll = Collection(calibration_points=calib)
+    if orientation_transform is not None:
+        coll.orientation_transform = np.asarray(orientation_transform)
+    wells = wells or {z: f"A{i + 1}" for i, z in enumerate(zones)}
+    counts: dict[str, int] = {}
+    for item in zone_polygons(res, maps.grid.bin_um, maps.grid.pixel_size_um, level="px",
+                              sections=maps.extra.get("sections"), section_names=maps.extra.get("section_names")):
+        z = item["name"]
+        if z not in zones or z not in wells:
+            continue
+        g = item["geometry"]
+        polys = g.geoms if g.geom_type == "MultiPolygon" else [g]
+        for k, p in enumerate(polys):
+            pts = np.asarray(p.exterior.coords)
+            if len(pts) < 4:
+                continue
+            coll.add_shape(Shape(pts, well=wells[z], name=f"{item.get('section') or 'S'}_{z}_{item['lesion_id']}_{k}"))
+            counts[z] = counts.get(z, 0) + 1
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    coll.save(str(path))
+    return counts
 
 
 def save_cell_geojson(cells: pd.DataFrame, path: Path, *, units: str = "px", pixel_size_um: float = 1.0,

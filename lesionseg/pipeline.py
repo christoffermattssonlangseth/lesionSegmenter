@@ -312,6 +312,7 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     export.save_maps(maps, res, out_dir / "maps")
     export.save_zone_geojson(res, maps, out_dir / "zones_px.geojson", units="px")
     export.save_zone_geojson(res, maps, out_dir / "zones_um.geojson", units="um")
+    export.save_zone_polygons_table(res, maps, out_dir / "zone_polygons.csv")
     which = cfg["export"].get("cell_geojson", "pu1")
     if which != "none" and "contour_wkt" in cells:
         only = cells["pu1_pos"] if which == "pu1" else None

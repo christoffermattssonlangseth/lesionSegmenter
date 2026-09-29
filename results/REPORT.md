@@ -290,6 +290,10 @@ Per-cell assignment for LMD: `results/<sample>/scene<i>/cells_reactions.csv` (`l
 
 ![CML_1 scene 0](CML_1/scene0/overview.png)
 
+Zone polygons (core / rim / peri / deep) as exported to GeoJSON / LMD:
+
+![CML_1 scene 0 zone polygons](CML_1/scene0/zone_polygons.png)
+
 Segmented Pu.1⁺ cells filled by zone, largest lesions:
 
 ![CML_1 scene 0 cells](CML_1/scene0/lesion_cells.png)

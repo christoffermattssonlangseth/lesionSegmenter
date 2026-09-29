@@ -87,5 +87,35 @@ def export_lmd_cmd(cells: Path, out: Path, calibration: str = typer.Option(..., 
     typer.echo(json.dumps(counts))
 
 
+@app.command("export-zones-lmd")
+def export_zones_lmd_cmd(run_dir: Path, out: Path,
+                         calibration: str = typer.Option(..., help="x1,y1,x2,y2,x3,y3 scene px"),
+                         zones: str = typer.Option("core,rim,peri,deep"),
+                         wells: str = typer.Option("", help="zone=well,...")):
+    """Write LMD XML of the zone *region* polygons of a finished run (outputs/<sample>/scene<i>)."""
+    import numpy as np
+
+    from .export import export_zone_polygons_lmd
+    from .report import load_runs
+
+    run = next(r for r in load_runs(run_dir.parent.parent) if r.dir.resolve() == run_dir.resolve())
+    from .density import DensityMaps
+    from .lesion import LesionResult
+
+    zmap = run.map("zones")
+    res = LesionResult(run.map("lesion_score"), run.map("lesion_mask").astype(bool), run.map("lesion_labels"), zmap,
+                       run.map("signed_distance_um"), run.lesions, run.log["lesion"])
+    maps = DensityMaps(run.grid, run.map("tissue").astype(bool), run.map("nuclei_density"), run.map("pu1_density"),
+                       run.map("pu1_fraction"))
+    maps.extra["sections"] = run.map("sections")
+    names = run.sections.set_index("section_id")["section_name"].to_dict() if "section_name" in run.sections else None
+    maps.extra["section_names"] = names
+    calib = np.array([float(v) for v in calibration.split(",")]).reshape(3, 2)
+    wmap = dict(kv.split("=") for kv in wells.split(",")) if wells else None
+    counts = export_zone_polygons_lmd(res, maps, out, calibration_points_px=calib, zones=tuple(zones.split(",")),
+                                      wells=wmap)
+    typer.echo(json.dumps(counts))
+
+
 if __name__ == "__main__":  # pragma: no cover
     app()

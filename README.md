@@ -154,7 +154,7 @@ lesionseg run configs/quicklook_image.yaml
 | `section_summary.csv` | per tissue piece (e.g. each spinal-cord cross-section on the slide): area, cells, Pu.1⁺, lesion count / area / fraction, Pu.1⁺ per zone |
 | `distance_profile.csv/.png` | Pu.1⁺ counts & fraction vs signed distance to lesion edge |
 | `maps/*.tif` + `maps.json` | grid layers: `nuclei_density`, `pu1_density`, `pu1_fraction`, `z_*`, `lesion_score`, `lesion_mask`, `lesion_labels`, `zones`, `signed_distance_um`, `dense_nonmyeloid`, `tissue` |
-| `zones_px.geojson` / `zones_um.geojson` | lesion, core, rim, peri and dense_nonmyeloid polygons (QuPath-ready, classified) |
+| `zones_px.geojson` / `zones_um.geojson`, `zone_polygons.csv` | lesion, core, rim, peri, deep and dense_nonmyeloid polygons per lesion / section (QuPath-ready GeoJSON; WKT table in µm). `lesionseg export-zones-lmd` cuts these regions on the LMD |
 | `cells_pu1_px.geojson` | Pu.1⁺ cell outlines as QuPath detections classified by zone |
 | `wells.csv` | LMD well selection: per section × group (core, rim, rings, GM, WM) the selected cells, area, shortfall |
 | `validation_manual_cores.csv`, `validation_cell_confusion.csv`, `manual_annotations_px.geojson` | agreement with the manual CORE / GM / WM annotations (SpatialData route) |

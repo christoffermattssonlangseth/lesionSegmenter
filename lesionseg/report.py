@@ -435,3 +435,92 @@ def save_cell_zone_figures(run: SceneRun, out_dir: Path | None = None) -> list[P
         plt.close(fig)
         paths.append(p)
     return paths
+
+
+# --------------------------------------------------------------------------
+# the zone polygons themselves (what the GeoJSON / LMD region export contains)
+# --------------------------------------------------------------------------
+def load_zone_polygons(run: SceneRun) -> pd.DataFrame:
+    from shapely import wkt
+
+    df = pd.read_csv(run.dir / "zone_polygons.csv")
+    df["geometry"] = [wkt.loads(w) for w in df["wkt_um"]]
+    return df
+
+
+def draw_zone_polygons(ax, polys: pd.DataFrame, *, lw: float = 1.6, fill_alpha: float = 0.18,
+                       zones=("deep", "peri", "rim", "core")):
+    from matplotlib.collections import PolyCollection
+
+    for z in zones:  # outer bands first so inner outlines stay on top
+        sub = polys[polys.zone == z]
+        verts = []
+        for g in sub.geometry:
+            for p in (g.geoms if g.geom_type == "MultiPolygon" else [g]):
+                verts.append(np.asarray(p.exterior.coords))
+        if verts:
+            ax.add_collection(PolyCollection(verts, facecolors=ZONE_COLORS[z], edgecolors=ZONE_COLORS[z],
+                                             linewidths=lw, alpha=fill_alpha))
+            ax.add_collection(PolyCollection(verts, facecolors="none", edgecolors=ZONE_COLORS[z], linewidths=lw))
+
+
+def plot_zone_polygons(run: SceneRun, section_id: int | None = None, ax=None, scale: float = 0.25, dim: float = 0.6,
+                       label_lesions: bool = True):
+    """Zone polygons (core/rim/peri/deep outlines) on the image, for one section or the whole scene."""
+    polys = load_zone_polygons(run)
+    if ax is None:
+        _, ax = plt.subplots(figsize=(10, 10))
+    if section_id is not None:
+        x0, x1, y1, y0 = section_bbox_um(run, section_id)
+        cx, cy, size = (x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0)
+        rgb, ext = read_crop_um(run, cx, cy, size, scale=scale)
+        name = run.sections.set_index("section_id").loc[section_id]
+        polys = polys[polys.section.astype(str) == str(name.get("section_name", f"S{section_id}"))]
+        title = f"{run.name} – {name.get('section_name', section_id)}: zone polygons"
+    else:
+        x0, x1, y1, y0 = run.extent_um[0], run.extent_um[1], run.extent_um[2], run.extent_um[3]
+        r = run.open_image()
+        rgb, ext = (None, None)
+        if r is not None:
+            nuc = r.channel_index("SYTOG") if "SYTOG" in r.channel_names else 0
+            pu1 = r.channel_index("AF647") if "AF647" in r.channel_names else 1
+            stack = r.read_overview_stack(run.scene, 0.08, [nuc, pu1])
+            rgb, ext = composite(stack, 0, 1, None), (0, x1, y1, 0)
+        title = f"{run.name}: zone polygons"
+    if rgb is not None:
+        ax.imshow(rgb * dim, extent=ext)
+    draw_zone_polygons(ax, polys)
+    if label_lesions:
+        for _, L in run.lesions.iterrows():
+            if x0 <= L.centroid_x_um <= x1 and y0 <= L.centroid_y_um <= y1:
+                ax.text(L.centroid_x_um, L.centroid_y_um, str(int(L.lesion_id)), color="white", fontsize=7,
+                        ha="center", va="center", bbox=dict(facecolor="black", alpha=0.5, pad=1, lw=0))
+    ax.set_xlim(x0, x1)
+    ax.set_ylim(y1, y0)
+    ax.set_title(title)
+    ax.set_xlabel("µm")
+    ax.set_ylabel("µm")
+    from matplotlib.patches import Patch
+
+    ax.legend(handles=[Patch(facecolor=ZONE_COLORS[z], edgecolor=ZONE_COLORS[z], alpha=0.6, label=z)
+                       for z in ("core", "rim", "peri", "deep")], loc="lower right", fontsize=8, framealpha=0.85)
+    return ax
+
+
+def save_zone_polygon_figures(run: SceneRun, out_dir: Path | None = None) -> list[Path]:
+    out_dir = Path(out_dir or run.dir)
+    paths = []
+    fig, ax = plt.subplots(figsize=(12, 12))
+    plot_zone_polygons(run, None, ax=ax, label_lesions=False)
+    p = out_dir / "zone_polygons.png"
+    fig.savefig(p, dpi=110, bbox_inches="tight")
+    plt.close(fig)
+    paths.append(p)
+    for _, s in run.sections[run.sections.is_lesion_section].iterrows():
+        fig, ax = plt.subplots(figsize=(10, 10))
+        plot_zone_polygons(run, int(s.section_id), ax=ax)
+        p = out_dir / f"zone_polygons_{s.get('section_name', s.section_id)}.png"
+        fig.savefig(p, dpi=110, bbox_inches="tight")
+        plt.close(fig)
+        paths.append(p)
+    return paths
