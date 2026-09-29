@@ -11,7 +11,8 @@ import argparse
 import shutil
 from pathlib import Path
 
-KEEP = ["overview.png", "distance_profile.png", "section_summary.csv", "lesions.csv", "wells.csv", "capture_sites.csv",
+KEEP = ["overview.png", "lesion_cells.png", "distance_profile.png", "section_summary.csv", "lesions.csv", "wells.csv",
+        "capture_sites.csv",
         "pu1_counts.csv", "zone_summary.csv", "per_lesion_zone_counts.csv", "validation_manual_cores.csv",
         "validation_cell_confusion.csv", "distance_profile.csv", "dense_nonmyeloid_regions.csv", "run_log.json"]
 
@@ -27,7 +28,7 @@ def main():
         d = logf.parent
         dest = out / d.parent.name / d.name
         dest.mkdir(parents=True, exist_ok=True)
-        for f in KEEP:
+        for f in KEEP + [p.name for p in d.glob("section_cells_*.png")]:
             if (d / f).exists():
                 shutil.copy2(d / f, dest / f)
                 n += 1

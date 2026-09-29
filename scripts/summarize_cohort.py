@@ -10,6 +10,7 @@ Writes
   capture_sites_pooled.csv      …pooled over all sections, split lesion vs control sections
   capture_sites_by_animal.csv   …pooled per animal
   sections_all.csv, cohort_table.csv
+  + per scene: lesion_cells.png and section_cells_<section>.png (segmented Pu.1+ cells filled by zone)
   reactions_plan.csv, reactions_budget.csv   mass-spec reaction plan (important-info.md), plus per-scene
                                              cells_reactions.csv (cell -> reaction) for LMD export
 """
@@ -73,6 +74,11 @@ def main():
     by_an = cap.groupby(["animal", "lesion_section", "kind", "compartment"])[num].sum().reset_index()
     by_an.to_csv(out / "capture_sites_by_animal.csv", index=False)
 
+    if not a.no_figures:
+        from lesionseg.report import save_cell_zone_figures
+
+        for r in runs:
+            save_cell_zone_figures(r)
     sections_table(runs).to_csv(out / "sections_all.csv", index=False)
     cohort_table(runs).to_csv(out / "cohort_table.csv", index=False)
 

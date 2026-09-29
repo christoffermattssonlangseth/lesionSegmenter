@@ -290,17 +290,33 @@ Per-cell assignment for LMD: `results/<sample>/scene<i>/cells_reactions.csv` (`l
 
 ![CML_1 scene 0](CML_1/scene0/overview.png)
 
+Segmented Pu.1⁺ cells filled by zone, largest lesions:
+
+![CML_1 scene 0 cells](CML_1/scene0/lesion_cells.png)
+
 ### CML_2_rescan scene 0
 
 ![CML_2_rescan scene 0](CML_2_rescan/scene0/overview.png)
+
+Segmented Pu.1⁺ cells filled by zone, largest lesions:
+
+![CML_2_rescan scene 0 cells](CML_2_rescan/scene0/lesion_cells.png)
 
 ### CML_metal scene 0
 
 ![CML_metal scene 0](CML_metal/scene0/overview.png)
 
+Segmented Pu.1⁺ cells filled by zone, largest lesions:
+
+![CML_metal scene 0 cells](CML_metal/scene0/lesion_cells.png)
+
 ### CML_metal scene 1
 
 ![CML_metal scene 1](CML_metal/scene1/overview.png)
+
+Segmented Pu.1⁺ cells filled by zone, largest lesions:
+
+![CML_metal scene 1 cells](CML_metal/scene1/lesion_cells.png)
 
 
 ## Notebooks (executed, in `notebooks/`)

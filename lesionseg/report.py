@@ -315,3 +315,123 @@ def bar_by_section(df: pd.DataFrame, value: str, ax=None, title: str = "", fmt: 
     ax.legend(handles=[Patch(color="#eb6834", label="lesion section"), Patch(color="#2a78d6", label="control section")],
               loc="lower right", fontsize=8)
     return ax
+
+
+# --------------------------------------------------------------------------
+# segmented Pu.1+ cells, filled by zone
+# --------------------------------------------------------------------------
+def _polys_in(run: SceneRun, ext, pos_only: bool = True):
+    """(geometries, zones) of cells with a contour inside the µm extent."""
+    from shapely import wkt
+
+    c = _cells_in(run, ext, pos_only)
+    c = c.dropna(subset=["contour_wkt"])
+    return [wkt.loads(w) for w in c["contour_wkt"]], c["zone"].astype(str).to_numpy()
+
+
+def draw_cell_polygons(ax, geoms, zones, *, alpha: float = 0.75, lw: float = 0.3):
+    """Fill each cell outline with its zone colour (cells outside any zone are grey)."""
+    from matplotlib.collections import PolyCollection
+
+    verts, cols = [], []
+    for g, z in zip(geoms, zones, strict=True):
+        polys = g.geoms if g.geom_type == "MultiPolygon" else [g]
+        for p in polys:
+            verts.append(np.asarray(p.exterior.coords))
+            cols.append(ZONE_COLORS.get(z, "#898781"))
+    if verts:
+        ax.add_collection(PolyCollection(verts, facecolors=cols, edgecolors="black", linewidths=lw, alpha=alpha))
+
+
+def zone_legend(ax, zones_present=None, loc="lower right"):
+    from matplotlib.patches import Patch
+
+    zs = [z for z in ZONE_ORDER if zones_present is None or z in zones_present]
+    ax.legend(handles=[Patch(facecolor=ZONE_COLORS[z], edgecolor="black", label=z) for z in zs]
+              + [plt.Line2D([], [], color=C_LESION, lw=2, label="automatic lesion"),
+                 plt.Line2D([], [], color=C_MANUAL, lw=2, ls="--", label="manual CORE")],
+              loc=loc, fontsize=8, framealpha=0.85)
+
+
+def plot_lesion_cells(run: SceneRun, lesion_id: int, ax=None, size_um: float = 700.0, dim: float = 0.55):
+    """One lesion: image (dimmed) + every segmented Pu.1⁺ cell filled by zone + outlines."""
+    L = run.lesions.set_index("lesion_id").loc[lesion_id]
+    size = max(size_um, 1.6 * L.equiv_diameter_um + 2 * 150)
+    rgb, ext = read_crop_um(run, L.centroid_x_um, L.centroid_y_um, size)
+    if ax is None:
+        _, ax = plt.subplots(figsize=(8, 8))
+    if rgb is not None:
+        ax.imshow(rgb * dim, extent=ext)
+    geoms, zones = _polys_in(run, ext)
+    draw_cell_polygons(ax, geoms, zones)
+    draw_outlines(ax, run, core=False)
+    ax.set_xlim(ext[0], ext[1])
+    ax.set_ylim(ext[2], ext[3])
+    counts = pd.Series(zones).value_counts()
+    txt = " · ".join(f"{z} {int(counts.get(z, 0))}" for z in ZONE_ORDER if counts.get(z, 0))
+    sec = L.get("section_name", "")
+    ax.set_title(f"lesion {int(lesion_id)} · {sec} · Pu.1⁺ cells: {txt}", fontsize=9)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return ax
+
+
+def lesion_cells_gallery(run: SceneRun, max_n: int = 9, ncols: int = 3, size_um: float = 700.0):
+    les = run.lesions.sort_values("area_um2", ascending=False).head(max_n)
+    n = len(les)
+    if n == 0:
+        return None
+    nrows = int(np.ceil(n / ncols))
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6.5 * ncols, 6.5 * nrows), squeeze=False)
+    for ax, lid in zip(axes.ravel(), les.lesion_id, strict=False):
+        plot_lesion_cells(run, int(lid), ax=ax, size_um=size_um)
+    for ax in axes.ravel()[n:]:
+        ax.axis("off")
+    zone_legend(axes.ravel()[0])
+    fig.suptitle(f"{run.name}: segmented Pu.1⁺ cells filled by zone", y=1.0)
+    fig.tight_layout()
+    return fig
+
+
+def plot_section_cells(run: SceneRun, section_id: int, ax=None, scale: float = 0.25, dim: float = 0.5):
+    """Whole lesion section: all segmented Pu.1⁺ cells filled by zone."""
+    x0, x1, y1, y0 = section_bbox_um(run, section_id)
+    cx, cy, size = (x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0)
+    if ax is None:
+        _, ax = plt.subplots(figsize=(10, 10))
+    rgb, ext = read_crop_um(run, cx, cy, size, scale=scale)
+    if rgb is not None:
+        ax.imshow(rgb * dim, extent=ext)
+    geoms, zones = _polys_in(run, (x0, x1, y1, y0))
+    draw_cell_polygons(ax, geoms, zones, lw=0.1)
+    draw_outlines(ax, run, core=False, lw=0.8)
+    ax.set_xlim(x0, x1)
+    ax.set_ylim(y1, y0)
+    name = run.sections.set_index("section_id").loc[section_id]
+    counts = pd.Series(zones).value_counts()
+    txt = " · ".join(f"{z} {int(counts.get(z, 0))}" for z in ZONE_ORDER if counts.get(z, 0))
+    ax.set_title(f"{run.name} – {name.get('section_name', section_id)} · Pu.1⁺ cells: {txt}", fontsize=10)
+    ax.set_xlabel("µm")
+    ax.set_ylabel("µm")
+    zone_legend(ax, set(zones))
+    return ax
+
+
+def save_cell_zone_figures(run: SceneRun, out_dir: Path | None = None) -> list[Path]:
+    """Write lesion_cells.png (gallery) and section_cells_<name>.png for each lesion section."""
+    out_dir = Path(out_dir or run.dir)
+    paths = []
+    fig = lesion_cells_gallery(run)
+    if fig is not None:
+        p = out_dir / "lesion_cells.png"
+        fig.savefig(p, dpi=110, bbox_inches="tight")
+        plt.close(fig)
+        paths.append(p)
+    for _, s in run.sections[run.sections.is_lesion_section].iterrows():
+        fig, ax = plt.subplots(figsize=(10, 10))
+        plot_section_cells(run, int(s.section_id), ax=ax)
+        p = out_dir / f"section_cells_{s.get('section_name', s.section_id)}.png"
+        fig.savefig(p, dpi=110, bbox_inches="tight")
+        plt.close(fig)
+        paths.append(p)
+    return paths

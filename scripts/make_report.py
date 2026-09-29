@@ -131,6 +131,9 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
     out.append("## Figures\n")
     for r in runs:
         out.append(f"### {r.name}\n\n![{r.name}]({r.dir.parent.name}/{r.dir.name}/overview.png)\n")
+        if (r.dir / "lesion_cells.png").exists():
+            out.append(f"Segmented Pu.1⁺ cells filled by zone, largest lesions:\n\n"
+                       f"![{r.name} cells]({r.dir.parent.name}/{r.dir.name}/lesion_cells.png)\n")
     out.append("""
 ## Notebooks (executed, in `notebooks/`)
 
