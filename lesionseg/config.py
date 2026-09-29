@@ -45,6 +45,10 @@ DEFAULTS: dict = {
     # LMD well selection (see lesionseg.wells): groups default to core / rim / rings / GM / WM per section
     "wells": {"enabled": True, "target_area_um2": 3000.0, "size_filter_sd": 1.0, "order": "spatial",
               "edge_exclusion_um": 100.0, "exclude_vbo": True, "inward_only": False, "groups": None},
+    # mass-spec reaction plan (cohort step, see lesionseg.reactions): pooled across replicate slides
+    "reactions": {"target_cells": 250, "max_reactions": 60, "pool_cfa": True, "pool_other_gm_wm": "auto",
+                  "lesion_compartments": ["core", "rim", "peri", "deep"], "vbo_per_section": True,
+                  "edge_exclusion_um": 100.0, "order": "spatial", "shortfall_frac": 0.8},
     "samples": [],
 }
 

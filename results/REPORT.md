@@ -171,6 +171,118 @@ By manual annotation compartment (collaborator's GM / WM / VBO / core polygons):
 
 Per section and per animal: `results/cohort/capture_sites_by_section.csv`, `capture_sites_by_animal.csv`; wells actually formed: `results/<sample>/scene<i>/wells.csv`.
 
+
+
+## Mass-spec reaction plan (important-info.md)
+
+Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a section are pooled; lesion sections give one reaction per section per compartment (core, rim, peri, deep = remaining tissue outward of peri); control sections give GM and WM per section (CFA sections pooled together; other controls pooled only if the budget is exceeded); VBO gives one reaction per section that has VBO cells. Manual GM/WM/VBO polygons define those compartments; lesion compartments come from the automatic zones.
+
+| item | value |
+|---|---|
+| reactions: GM | 7 |
+| reactions: VBO | 14 |
+| reactions: WM | 7 |
+| reactions: lesion | 32 |
+| reactions: total | 60 |
+| max_reactions | 60 |
+| within budget | True |
+| target cells per reaction | 250 |
+| reactions with shortfall | 22 |
+| CFA GM/WM pooled | True |
+| other control GM/WM pooled | False |
+| reactions if other controls unpooled | 60 |
+| reactions if other controls pooled | 50 |
+| VBO sections | 14 |
+
+
+**Plan** (`shortfall` = fewer than 80 % of the target available):
+
+| reaction_id | reaction_name | pool_type | compartment | sections | n_sections | n_available | n_selected | shortfall |
+|---|---|---|---|---|---|---|---|---|
+| 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 1137 | 250 | False |
+| 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 993 | 250 | False |
+| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1191 | 250 | False |
+| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 2337 | 250 | False |
+| 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1726 | 250 | False |
+| 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 501 | 250 | False |
+| 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 736 | 250 | False |
+| 8 | P2_3_L|deep | lesion | deep | P2_3_L | 1 | 1802 | 250 | False |
+| 9 | P2_3_T|core | lesion | core | P2_3_T | 1 | 2894 | 250 | False |
+| 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 596 | 250 | False |
+| 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 628 | 250 | False |
+| 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 1207 | 250 | False |
+| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 1712 | 250 | False |
+| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 2447 | 250 | False |
+| 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 1054 | 250 | False |
+| 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 2052 | 250 | False |
+| 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 564 | 250 | False |
+| 18 | P3_1_T|rim | lesion | rim | P3_1_T | 1 | 708 | 250 | False |
+| 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 543 | 250 | False |
+| 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 1540 | 250 | False |
+| 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 2865 | 250 | False |
+| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 4240 | 250 | False |
+| 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 2828 | 250 | False |
+| 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 2019 | 250 | False |
+| 25 | R1_3_L|core | lesion | core | R1_3_L | 1 | 28 | 28 | True |
+| 26 | R1_3_L|rim | lesion | rim | R1_3_L | 1 | 143 | 143 | True |
+| 27 | R1_3_L|peri | lesion | peri | R1_3_L | 1 | 223 | 223 | False |
+| 28 | R1_3_L|deep | lesion | deep | R1_3_L | 1 | 1940 | 250 | False |
+| 29 | R1_3_T|core | lesion | core | R1_3_T | 1 | 13 | 13 | True |
+| 30 | R1_3_T|rim | lesion | rim | R1_3_T | 1 | 85 | 85 | True |
+| 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 116 | 116 | True |
+| 32 | R1_3_T|deep | lesion | deep | R1_3_T | 1 | 1258 | 250 | False |
+| 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1626 | 250 | False |
+| 34 | OS1_2_|GM | GM | GM | OS1_2_ | 1 | 320 | 250 | False |
+| 35 | OS1_2_C|GM | GM | GM | OS1_2_C | 1 | 914 | 250 | False |
+| 36 | OS1_2_L|GM | GM | GM | OS1_2_L | 1 | 384 | 250 | False |
+| 37 | P3_1_L|GM | GM | GM | P3_1_L | 1 | 437 | 250 | False |
+| 38 | R1_2_L|GM | GM | GM | R1_2_L | 1 | 601 | 250 | False |
+| 39 | R1_3_C|GM | GM | GM | R1_3_C | 1 | 1886 | 250 | False |
+| 40 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 221 | 221 | False |
+| 41 | OS1_2_|WM | WM | WM | OS1_2_ | 1 | 76 | 76 | True |
+| 42 | OS1_2_C|WM | WM | WM | OS1_2_C | 1 | 129 | 129 | True |
+| 43 | OS1_2_L|WM | WM | WM | OS1_2_L | 1 | 99 | 99 | True |
+| 44 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 381 | 250 | False |
+| 45 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 547 | 250 | False |
+| 46 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 422 | 250 | False |
+| 47 | CFA_L2_C|VBO | VBO | VBO | CFA_L2_C | 1 | 3 | 3 | True |
+| 48 | CFA_L2_L|VBO | VBO | VBO | CFA_L2_L | 1 | 2 | 2 | True |
+| 49 | CFA_L2_T|VBO | VBO | VBO | CFA_L2_T | 1 | 4 | 4 | True |
+| 50 | OS1_2_C|VBO | VBO | VBO | OS1_2_C | 1 | 11 | 11 | True |
+| 51 | OS1_2_L|VBO | VBO | VBO | OS1_2_L | 1 | 2 | 2 | True |
+| 52 | P2_3_L|VBO | VBO | VBO | P2_3_L | 1 | 28 | 28 | True |
+| 53 | P2_3_T|VBO | VBO | VBO | P2_3_T | 1 | 10 | 10 | True |
+| 54 | P3_1_C|VBO | VBO | VBO | P3_1_C | 1 | 22 | 22 | True |
+| 55 | P3_1_L|VBO | VBO | VBO | P3_1_L | 1 | 2 | 2 | True |
+| 56 | P3_1_T|VBO | VBO | VBO | P3_1_T | 1 | 3 | 3 | True |
+| 57 | R1_2_L|VBO | VBO | VBO | R1_2_L | 1 | 8 | 8 | True |
+| 58 | R1_2_T|VBO | VBO | VBO | R1_2_T | 1 | 14 | 14 | True |
+| 59 | R1_3_C|VBO | VBO | VBO | R1_3_C | 1 | 18 | 18 | True |
+| 60 | R1_3_T|VBO | VBO | VBO | R1_3_T | 1 | 8 | 8 | True |
+
+
+Alternative pooling of the non-CFA control GM/WM (the other setting of `pool_other_gm_wm`):
+
+| item | value |
+|---|---|
+| reactions: GM | 2 |
+| reactions: VBO | 14 |
+| reactions: WM | 2 |
+| reactions: lesion | 32 |
+| reactions: total | 50 |
+| max_reactions | 60 |
+| within budget | True |
+| target cells per reaction | 250 |
+| reactions with shortfall | 19 |
+| CFA GM/WM pooled | True |
+| other control GM/WM pooled | True |
+| reactions if other controls unpooled | 60 |
+| reactions if other controls pooled | 50 |
+| VBO sections | 14 |
+
+
+Per-cell assignment for LMD: `results/<sample>/scene<i>/cells_reactions.csv` (`lesionseg export-lmd … --group-col reaction_name --reactions <that file>`).
+
 ## Figures
 
 ### CML_1 scene 0

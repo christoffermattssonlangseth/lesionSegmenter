@@ -108,6 +108,26 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
     out.append(md_table(ma[cols].round(0), "{:.0f}"))
     out.append("\n\nPer section and per animal: `results/cohort/capture_sites_by_section.csv`, `capture_sites_by_animal.csv`; "
                "wells actually formed: `results/<sample>/scene<i>/wells.csv`.\n")
+    rp, rb = coh / "reactions_plan.csv", coh / "reactions_budget.csv"
+    if rp.exists():
+        plan = pd.read_csv(rp)
+        budget = pd.read_csv(rb)
+        out.append("\n\n## Mass-spec reaction plan (important-info.md)\n")
+        out.append("Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a section are pooled; lesion sections "
+                   "give one reaction per section per compartment (core, rim, peri, deep = remaining tissue outward of peri); "
+                   "control sections give GM and WM per section (CFA sections pooled together; other controls pooled only if "
+                   "the budget is exceeded); VBO gives one reaction per section that has VBO cells. Manual GM/WM/VBO polygons "
+                   "define those compartments; lesion compartments come from the automatic zones.\n")
+        out.append(md_table(budget))
+        out.append("\n\n**Plan** (`shortfall` = fewer than 80 % of the target available):\n")
+        cols = ["reaction_id", "reaction_name", "pool_type", "compartment", "sections", "n_sections", "n_available", "n_selected", "shortfall"]
+        out.append(md_table(plan[cols]))
+        alt = coh / "reactions_budget_alternative.csv"
+        if alt.exists():
+            out.append("\n\nAlternative pooling of the non-CFA control GM/WM (the other setting of `pool_other_gm_wm`):\n")
+            out.append(md_table(pd.read_csv(alt)))
+        out.append("\n\nPer-cell assignment for LMD: `results/<sample>/scene<i>/cells_reactions.csv` "
+                   "(`lesionseg export-lmd … --group-col reaction_name --reactions <that file>`).\n")
     out.append("## Figures\n")
     for r in runs:
         out.append(f"### {r.name}\n\n![{r.name}]({r.dir.parent.name}/{r.dir.name}/overview.png)\n")

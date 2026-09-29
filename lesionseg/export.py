@@ -143,6 +143,16 @@ def export_lmd(cells: pd.DataFrame, path: Path, *, calibration_points_px: np.nda
 
     sub = cells if only is None else cells[only]
     sub = sub.dropna(subset=["contour_wkt"])
+    if group_col == "reaction_name":  # cohort reaction plan (scripts/summarize_cohort.py)
+        if "reaction_name" not in sub:
+            raise ValueError("cells lack reaction_name – merge cells_reactions.csv onto the cell table first "
+                             "(lesionseg export-lmd does this when --reactions is given)")
+        sub = sub[sub["reaction_id"] > 0]
+        if not wells:
+            from .wells import plate_positions
+
+            names = sub.sort_values("reaction_id")["reaction_name"].astype(str).unique().tolist()
+            wells = dict(zip(names, plate_positions(len(names), rows="ABCDEFGHIJKLMNOP", cols=24), strict=True))
     if group_col == "well_name":  # only selected cells; auto plate positions in group order
         sub = sub[sub["well_group"] > 0]
         if not wells:

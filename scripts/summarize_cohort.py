@@ -10,6 +10,8 @@ Writes
   capture_sites_pooled.csv      …pooled over all sections, split lesion vs control sections
   capture_sites_by_animal.csv   …pooled per animal
   sections_all.csv, cohort_table.csv
+  reactions_plan.csv, reactions_budget.csv   mass-spec reaction plan (important-info.md), plus per-scene
+                                             cells_reactions.csv (cell -> reaction) for LMD export
 """
 from __future__ import annotations
 
@@ -18,6 +20,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from lesionseg.config import DEFAULTS, load_config
+from lesionseg.reactions import plan_reactions
 from lesionseg.report import cohort_table, load_runs, sections_table
 
 
@@ -34,6 +38,7 @@ def level_of(section: pd.Series) -> pd.Series:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", default="outputs/sdata")
+    ap.add_argument("--config", default=None, help="YAML with a `reactions:` block (defaults otherwise)")
     a = ap.parse_args()
     root = Path(a.run_dir)
     out = root / "cohort"
@@ -70,6 +75,27 @@ def main():
 
     sections_table(runs).to_csv(out / "sections_all.csv", index=False)
     cohort_table(runs).to_csv(out / "cohort_table.csv", index=False)
+
+    # ---- mass-spec reaction plan (pools across replicate slides) ---------------------------
+    rcfg = (load_config(a.config) if a.config else DEFAULTS).get("reactions", {})
+    if not a.config:  # fall back to the config recorded in the run
+        rcfg = runs[0].log.get("config", {}).get("reactions", rcfg)
+    cells_by_scene = {r.name: r.cells for r in runs}
+    plan, cells_rx, budget = plan_reactions(cells_by_scene, rcfg)
+    plan.to_csv(out / "reactions_plan.csv", index=False)
+    budget.to_csv(out / "reactions_budget.csv", index=False)
+    for r in runs:
+        c = cells_rx[r.name]
+        sel = c[c["reaction_id"] > 0][["cell_id", "label", "x_px", "y_px", "reaction_id", "reaction_name"]]
+        sel.to_csv(r.dir / "cells_reactions.csv", index=False)
+    # both pooling variants for the report
+    alt = dict(rcfg)
+    alt["pool_other_gm_wm"] = not bool(budget.set_index("item").loc["other control GM/WM pooled", "value"])
+    plan_alt, _, budget_alt = plan_reactions(cells_by_scene, alt)
+    plan_alt.to_csv(out / "reactions_plan_alternative.csv", index=False)
+    budget_alt.to_csv(out / "reactions_budget_alternative.csv", index=False)
+    print("\nreaction plan:")
+    print(budget.to_string(index=False))
     print(tot.to_string(index=False))
     cols = ["lesion_section", "compartment", "n_sections", "n_pu1_raw", "n_pu1_eligible", "n_selected",
             "area_selected_um2"]

@@ -39,6 +39,19 @@ sections: {focus: manual}
 assign: {distance_bins_um: [-100, -50, 0, 50, 100, 150, 300]}
 export: {cell_geojson: pu1}
 
+# Mass-spec reaction plan (important-info.md): ≤60 reactions, ~250 Pu.1+ cells each; replicate slides of a
+# section are pooled; lesion sections -> core/rim/peri/deep per section; controls -> GM/WM per section
+# (CFA pooled; other controls pooled only if over budget); VBO -> one reaction per section.
+reactions:
+  target_cells: 250
+  max_reactions: 60
+  pool_cfa: true
+  pool_other_gm_wm: auto      # auto | true | false
+  lesion_compartments: [core, rim, peri, deep]
+  vbo_per_section: true
+  edge_exclusion_um: 100
+  order: spatial
+
 # LMD wells: rings as fractions of the section radius (0.1 ≈ 100 µm at R = 1 mm).
 # To capture more material raise target_area_um2 (µm² of Pu.1+ nuclei per well) – the capture_sites
 # table lists how much is available per compartment.

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Optional
 
 import typer
 
@@ -60,7 +61,10 @@ def run(config: Path, only: list[str] | None = typer.Option(None, help="sample n
 
 @app.command("export-lmd")
 def export_lmd_cmd(cells: Path, out: Path, calibration: str = typer.Option(..., help="x1,y1,x2,y2,x3,y3 in scene px"),
-                   group_col: str = typer.Option("well_name", help="well_name (selected cells) | zone | dist_bin"),
+                   group_col: str = typer.Option("well_name",
+                                                 help="well_name (selected cells) | reaction_name | zone | dist_bin"),
+                   reactions: Optional[Path] = typer.Option(None, help="cells_reactions.csv from summarize_cohort.py "
+                                                            "(merged onto cells for group_col=reaction_name)"),
                    wells: str = typer.Option("", help="group=well,... ; empty = automatic plate positions"),
                    pixel_size_um: float = typer.Option(..., help="µm per full-res pixel"),
                    pu1_only: bool = True, dilate_um: float = 1.0):
@@ -71,6 +75,11 @@ def export_lmd_cmd(cells: Path, out: Path, calibration: str = typer.Option(..., 
     from .export import export_lmd
 
     df = pd.read_parquet(cells)
+    if reactions is not None:
+        rx = pd.read_csv(reactions)[["cell_id", "reaction_id", "reaction_name"]]
+        df = df.drop(columns=[c for c in ("reaction_id", "reaction_name") if c in df])
+        df = df.merge(rx, on="cell_id", how="left")
+        df["reaction_id"] = df["reaction_id"].fillna(0).astype(int)
     calib = np.array([float(v) for v in calibration.split(",")]).reshape(3, 2)
     wmap = dict(kv.split("=") for kv in wells.split(",")) if wells else None
     only = df["pu1_pos"] if pu1_only else None

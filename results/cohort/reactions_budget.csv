@@ -1,0 +1,15 @@
+item,value
+reactions: GM,7
+reactions: VBO,14
+reactions: WM,7
+reactions: lesion,32
+reactions: total,60
+max_reactions,60
+within budget,True
+target cells per reaction,250
+reactions with shortfall,22
+CFA GM/WM pooled,True
+other control GM/WM pooled,False
+reactions if other controls unpooled,60
+reactions if other controls pooled,50
+VBO sections,14
