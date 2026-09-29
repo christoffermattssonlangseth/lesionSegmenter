@@ -41,7 +41,8 @@ def test_end_to_end(synthetic, tmp_path):
     assert log["lesion"]["n_lesions"] == 1
     les = pd.read_csv(tmp_path / "lesions.csv").iloc[0]
     cx, cy = truth["lesion_center_um"]
-    assert abs(les.centroid_x_um - cx) < 30 and abs(les.centroid_y_um - cy) < 30
+    assert abs(les.centroid_x_um - cx) < 30
+    assert abs(les.centroid_y_um - cy) < 30
     assert 0.6 < les.equiv_diameter_um / (2 * truth["lesion_r_um"]) < 1.4
     # the dense-but-Pu.1-negative "canal" was flagged, not called a lesion
     assert log["lesion"]["n_dense_nonmyeloid"] >= 1
@@ -60,7 +61,8 @@ def test_end_to_end(synthetic, tmp_path):
     sec = pd.read_csv(tmp_path / "section_summary.csv")
     assert len(sec) == 1 and sec.n_lesions.iloc[0] == 1
     # outputs exist
-    for f in ["overview.png", "section_summary.csv", "zones_px.geojson", "cells_pu1_px.geojson", "maps/zones.tif", "run_log.json",
+    for f in ["overview.png", "section_summary.csv", "zones_px.geojson", "cells_pu1_px.geojson",
+              "maps/zones.tif", "run_log.json",
               "zone_summary.csv", "distance_profile.csv"]:
         assert (tmp_path / f).exists(), f
 

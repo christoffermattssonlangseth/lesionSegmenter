@@ -69,14 +69,16 @@ def tissue_mask(overview: np.ndarray, pixel_size_um: float, *, sigma_um: float =
     return mask
 
 
-def tissue_from_counts(counts: np.ndarray, bin_um: float, *, sigma_um: float = 100.0,
-                       min_cells_per_mm2: float = 50.0, min_area_um2: float = 5e4,
-                       hole_area_um2: float = 2e5, dilate_um: float = 30.0, **_) -> np.ndarray:
+def tissue_from_counts(counts: np.ndarray, bin_um: float, *, sigma_um: float = 30.0,
+                       min_cells_per_mm2: float = 100.0, min_area_um2: float = 5e4,
+                       hole_area_um2: float = 2e5, dilate_um: float = 20.0, **_) -> np.ndarray:
     """Tissue mask on the density grid derived from cell positions alone.
 
     Works when only segmentation masks (no image) are available and is robust to
     sparse regions (white matter): any bin with a smoothed density above
     ``min_cells_per_mm2`` counts as tissue; holes (vessels, canal) are filled.
+    Keep ``sigma_um`` small (≈30 µm): a wide kernel bleeds past the section edge
+    and merges neighbouring cross-sections on the slide into one piece.
     """
     sigma_px = sigma_um / bin_um
     dens = ndi.gaussian_filter(counts.astype(np.float32), sigma_px, mode="constant") / (bin_um / 1000.0) ** 2

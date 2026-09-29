@@ -55,11 +55,15 @@ def assign_cells(cells: pd.DataFrame, res: LesionResult, grid: Grid, *,
 
 
 def label_sections(tissue: np.ndarray, bin_um: float, *, min_area_um2: float = 2e5,
-                   merge_um: float = 100.0) -> np.ndarray:
+                   merge_um: float = 0.0, split_touching: bool = True, neck_depth_um: float = 200.0) -> np.ndarray:
     """Label separate tissue pieces (e.g. the ~10 spinal-cord cross-sections on one slide).
 
-    Pieces closer than ``merge_um`` are merged (a section split by a tear stays one
-    section); pieces smaller than ``min_area_um2`` get section 0.
+    ``merge_um`` closes gaps narrower than this (a section split by a tear stays
+    one section). With ``split_touching`` pieces that touch are separated by a
+    watershed on the distance transform: two blobs stay separate when the neck
+    between them is at least ``neck_depth_um`` narrower than the blobs themselves
+    (h-maxima seeds), so an irregular single section is not over-split.
+    Pieces smaller than ``min_area_um2`` get section 0.
     """
     from .tissue import disk, remove_small
 
@@ -68,6 +72,24 @@ def label_sections(tissue: np.ndarray, bin_um: float, *, min_area_um2: float = 2
     m = remove_small(m, int(min_area_um2 / bin_um ** 2))
     lab, n = ndi.label(m)
     lab = lab.astype(np.int32)
+    if split_touching and n > 0:
+        from skimage.morphology import h_maxima
+        from skimage.segmentation import watershed
+
+        edt = ndi.distance_transform_edt(m) * bin_um
+        seeds = h_maxima(edt, neck_depth_um)
+        markers, k = ndi.label(seeds)
+        if k > n:
+            ws = watershed(-edt, markers, mask=m)
+            lab = ws.astype(np.int32)
+            # drop tiny watershed fragments back into their neighbour
+            small = remove_small(lab > 0, int(min_area_um2 / bin_um ** 2))
+            lab[~small] = 0
+            keep = np.unique(lab[lab > 0])
+            remap = np.zeros(lab.max() + 1, np.int32)
+            remap[keep] = np.arange(1, len(keep) + 1)
+            lab = remap[lab]
+            n = len(keep)
     # order sections top-to-bottom, left-to-right for stable ids
     if n > 1:
         cy, cx = np.array(ndi.center_of_mass(m, lab, np.arange(1, n + 1))).T

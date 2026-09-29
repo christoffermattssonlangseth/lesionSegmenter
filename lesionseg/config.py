@@ -12,8 +12,8 @@ DEFAULTS: dict = {
     "overview_scale": 0.05,
     "analysis_scale": 1.0,
     # tissue.source: cells (from cell positions; default) | image | both
-    "tissue": {"source": "cells", "min_cells_per_mm2": 50.0, "sigma_um": 100.0, "min_area_um2": 5e4,
-               "hole_area_um2": 2e5, "dilate_um": 30.0,
+    "tissue": {"source": "cells", "min_cells_per_mm2": 100.0, "sigma_um": 30.0, "min_area_um2": 5e4,
+               "hole_area_um2": 2e5, "dilate_um": 20.0,
                # image-based mask (used to skip empty tiles when segmenting, or source: image)
                "image": {"sigma_um": 20.0, "threshold": None, "dilate_um": 300.0, "min_area_um2": 5e4,
                          "hole_area_um2": 2e5}},
@@ -32,7 +32,7 @@ DEFAULTS: dict = {
                "min_pu1_fraction": 0.15, "min_pu1_density": 0.0, "min_lesion_pu1_fraction": 0.2,
                "dense_nonmyeloid_z": 2.0},
     # separate tissue pieces on the slide (spinal-cord cross-sections) -> section_id
-    "sections": {"min_area_um2": 2e5, "merge_um": 100.0},
+    "sections": {"min_area_um2": 2e5, "merge_um": 0.0, "split_touching": True, "neck_depth_um": 200.0},
     "assign": {"distance_bins_um": [-100, -50, 0, 50, 100, 150, 300]},
     "export": {"cell_geojson": "pu1", "max_geojson_cells": None},  # pu1 | all | none
     "samples": [],

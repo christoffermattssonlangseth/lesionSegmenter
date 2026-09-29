@@ -14,8 +14,8 @@ analysis_scale: 1.0    # 1.0 = segment at full resolution (0.325 µm/px). 0.5 fo
 
 tissue:
   source: cells        # cells (from cell positions) | image | both
-  min_cells_per_mm2: 50
-  sigma_um: 100
+  min_cells_per_mm2: 100
+  sigma_um: 30           # keep small – wide kernels merge neighbouring sections
   min_area_um2: 50000
   hole_area_um2: 200000
 
