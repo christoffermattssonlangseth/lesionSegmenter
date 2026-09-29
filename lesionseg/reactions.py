@@ -10,8 +10,9 @@ Rules (important-info.md, agreed with Ting):
   inside a lesion section).
 * Non-lesion sections → ``GM`` and ``WM`` (manual annotation) per section. Sections whose name starts
   with ``CFA`` are pooled together (one GM + one WM reaction). Other control sections keep their own
-  GM / WM reactions unless the budget is exceeded (``pool_other_gm_wm: auto``), in which case they are
-  pooled into one GM and one WM reaction.
+  GM / WM reactions unless the budget is exceeded (``pool_other_gm_wm: auto``); then the smallest pooling
+  that fits is applied: first sections sharing a control prefix (``control_prefixes``, default OS) are
+  pooled, and only if still over budget all remaining control sections are pooled.
 * ``VBO`` (vascular barrier niche, manual polygons) → one reaction per section that has VBO cells,
   pooled across replicate slides only. VBO reactions take **every cell** inside the polygons (Pu.1⁺ and
   Pu.1⁻; ``vbo_all_cells: true``) and ignore the edge exclusion.
@@ -71,6 +72,7 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
     max_rx = int(cfg.get("max_reactions", 60))
     pool_cfa = bool(cfg.get("pool_cfa", True))
     pool_other = cfg.get("pool_other_gm_wm", "auto")
+    control_prefixes = list(cfg.get("control_prefixes", ["OS"]))
     lesion_comps = tuple(cfg.get("lesion_compartments", LESION_COMPARTMENTS))
     vbo_per_section = bool(cfg.get("vbo_per_section", True))
     edge = float(cfg.get("edge_exclusion_um", 100.0))
@@ -100,7 +102,9 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
     pos = pos[pos["compartment"].notna() & ~pos["section"].isin(IGNORED_SECTIONS)]
 
     # ---- pools ------------------------------------------------------------------------------
-    def build(pool_other_flag: bool) -> list[dict]:
+    def build(pool_level: int) -> list[dict]:
+        """pool_level 0: every control section separate; 1: pool sections sharing a control prefix
+        (``control_prefixes``, e.g. OS); 2: pool all remaining control sections."""
         pools: list[dict] = []
         secs = sorted(pos["section"].unique())
         lesion_secs = sorted(pos.loc[pos.compartment.isin(lesion_comps), "section"].unique())
@@ -122,10 +126,23 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
                     m = (pos.section == s) & (pos.compartment == comp)
                     pools.append({"pool_type": comp, "compartment": comp, "sections": [s], "mask": m,
                                   "name": f"{s}|{comp}", "priority": 2})
-            if other and pool_other_flag:
+            if other and pool_level >= 2:
                 m = pos.section.isin(other) & (pos.compartment == comp)
                 pools.append({"pool_type": comp, "compartment": comp, "sections": other, "mask": m,
                               "name": f"controls(pooled)|{comp}", "priority": 3})
+            elif other and pool_level == 1:
+                rest = list(other)
+                for pref in control_prefixes:
+                    grp = [s for s in rest if s.upper().startswith(pref.upper())]
+                    if len(grp) > 1:
+                        m = pos.section.isin(grp) & (pos.compartment == comp)
+                        pools.append({"pool_type": comp, "compartment": comp, "sections": grp, "mask": m,
+                                      "name": f"{pref}(pooled)|{comp}", "priority": 3})
+                        rest = [s for s in rest if s not in grp]
+                for s in rest:
+                    m = (pos.section == s) & (pos.compartment == comp)
+                    pools.append({"pool_type": comp, "compartment": comp, "sections": [s], "mask": m,
+                                  "name": f"{s}|{comp}", "priority": 3})
             else:
                 for s in other:
                     m = (pos.section == s) & (pos.compartment == comp)
@@ -143,16 +160,15 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
                           "name": "VBO(pooled)", "priority": 4})
         return [p for p in pools if int(p["mask"].sum()) > 0]
 
-    variants = {}
-    for flag in (False, True):
-        pools = build(flag)
-        variants[flag] = pools
-    n_unpooled, n_pooled = len(variants[False]), len(variants[True])
-    if pool_other == "auto":
-        use_pooled = n_unpooled > max_rx
+    variants = {lvl: build(lvl) for lvl in (0, 1, 2)}
+    n_by_level = {lvl: len(v) for lvl, v in variants.items()}
+    n_unpooled, n_pooled = n_by_level[0], n_by_level[2]
+    if pool_other == "auto":  # smallest amount of pooling that fits the budget
+        use_level = next((lvl for lvl in (0, 1, 2) if n_by_level[lvl] <= max_rx), 2)
     else:
-        use_pooled = bool(pool_other)
-    pools = variants[use_pooled]
+        use_level = 2 if pool_other is True else (1 if str(pool_other).lower() in ("prefix", "1") else 0)
+    use_pooled = use_level > 0
+    pools = variants[use_level]
 
     # ---- selection --------------------------------------------------------------------------
     plan_rows = []
@@ -196,7 +212,9 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
         {"item": "reactions with shortfall", "value": int(plan["shortfall"].sum()) if len(plan) else 0},
         {"item": "CFA GM/WM pooled", "value": pool_cfa},
         {"item": "other control GM/WM pooled", "value": use_pooled},
+        {"item": "control pooling level (0 none, 1 by prefix, 2 all)", "value": use_level},
         {"item": "reactions if other controls unpooled", "value": n_unpooled},
+        {"item": "reactions if controls pooled by prefix", "value": n_by_level[1]},
         {"item": "reactions if other controls pooled", "value": n_pooled},
         {"item": "VBO sections", "value": int((plan.pool_type == "VBO").sum()) if len(plan) else 0},
     ])

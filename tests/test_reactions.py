@@ -60,14 +60,21 @@ def test_plan_pools_replicates_and_cfa():
 
 
 def test_budget_auto_pooling():
-    # many control sections -> unpooled plan exceeds the budget -> auto pools GM/WM of non-CFA controls
+    # 20 OS control sections + 5 other controls: unpooled = 50 reactions.
     parts = [_cells("A", f"OS_{i}_C", 50, "distal", False, m) for i in range(20) for m in ("GM", "WM")]
+    parts += [_cells("A", f"X_{i}_C", 50, "distal", False, m) for i in range(5) for m in ("GM", "WM")]
     cells = {"A": pd.concat(parts, ignore_index=True)}
-    plan, _, budget = plan_reactions(cells, {"max_reactions": 10, "pool_other_gm_wm": "auto"})
-    assert set(plan.reaction_name) == {"controls(pooled)|GM", "controls(pooled)|WM"}
+    # budget 20 -> level 1: OS pooled (2) + 5 others x 2 = 12 reactions
+    plan, _, budget = plan_reactions(cells, {"max_reactions": 20, "pool_other_gm_wm": "auto"})
+    assert {"OS(pooled)|GM", "OS(pooled)|WM"} <= set(plan.reaction_name) and len(plan) == 12
     b = budget.set_index("item")["value"]
-    assert b["other control GM/WM pooled"] and b["reactions if other controls unpooled"] == 40
+    assert b["control pooling level (0 none, 1 by prefix, 2 all)"] == 1
+    assert b["reactions if other controls unpooled"] == 50 and b["reactions if other controls pooled"] == 2
+    # budget 5 -> level 2: everything pooled
+    plan1, _, _ = plan_reactions(cells, {"max_reactions": 5, "pool_other_gm_wm": "auto"})
+    assert set(plan1.reaction_name) == {"controls(pooled)|GM", "controls(pooled)|WM"}
+    # generous budget -> no pooling
     plan2, _, _ = plan_reactions(cells, {"max_reactions": 100, "pool_other_gm_wm": "auto"})
-    assert len(plan2) == 40
+    assert len(plan2) == 50
     plan3, _, _ = plan_reactions(cells, {"max_reactions": 100, "pool_other_gm_wm": True})
     assert len(plan3) == 2

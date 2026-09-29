@@ -47,7 +47,8 @@ DEFAULTS: dict = {
               "edge_exclusion_um": 100.0, "exclude_vbo": True, "inward_only": False, "groups": None},
     # mass-spec reaction plan (cohort step, see lesionseg.reactions): pooled across replicate slides
     "reactions": {"target_cells": 250, "max_reactions": 60, "pool_cfa": True, "pool_other_gm_wm": "auto",
-                  "lesion_compartments": ["core", "rim", "peri", "deep"], "vbo_per_section": True, "vbo_all_cells": True,
+                  "lesion_compartments": ["core", "rim", "peri", "deep"],
+                  "vbo_per_section": True, "vbo_all_cells": True, "control_prefixes": ["OS"],
                   "edge_exclusion_um": 100.0, "order": "spatial", "shortfall_frac": 0.8},
     "samples": [],
 }

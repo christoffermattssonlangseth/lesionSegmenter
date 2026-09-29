@@ -179,18 +179,20 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a sec
 
 | item | value |
 |---|---|
-| reactions: GM | 2 |
+| reactions: GM | 5 |
 | reactions: VBO | 15 |
-| reactions: WM | 2 |
+| reactions: WM | 5 |
 | reactions: lesion | 32 |
-| reactions: total | 51 |
+| reactions: total | 57 |
 | max_reactions | 60 |
 | within budget | True |
 | target cells per reaction | 250 |
 | reactions with shortfall | 20 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | True |
+| control pooling level (0 none, 1 by prefix, 2 all) | 1 |
 | reactions if other controls unpooled | 61 |
+| reactions if controls pooled by prefix | 57 |
 | reactions if other controls pooled | 51 |
 | VBO sections | 15 |
 
@@ -232,24 +234,30 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a sec
 | 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 116 | 116 | True |
 | 32 | R1_3_T|deep | lesion | deep | R1_3_T | 1 | 1258 | 250 | False |
 | 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1626 | 250 | False |
-| 34 | controls(pooled)|GM | GM | GM | OS1_2_;OS1_2_C;OS1_2_L;P3_1_L;R1_2_L;R1_3_C | 6 | 4542 | 250 | False |
-| 35 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 221 | 221 | False |
-| 36 | controls(pooled)|WM | WM | WM | OS1_2_;OS1_2_C;OS1_2_L;P3_1_L;R1_2_L;R1_3_C | 6 | 1654 | 250 | False |
-| 37 | CFA_L2_C|VBO | VBO | VBO | CFA_L2_C | 1 | 50 | 50 | True |
-| 38 | CFA_L2_L|VBO | VBO | VBO | CFA_L2_L | 1 | 100 | 100 | True |
-| 39 | CFA_L2_T|VBO | VBO | VBO | CFA_L2_T | 1 | 34 | 34 | True |
-| 40 | OS1_2_C|VBO | VBO | VBO | OS1_2_C | 1 | 127 | 127 | True |
-| 41 | OS1_2_L|VBO | VBO | VBO | OS1_2_L | 1 | 53 | 53 | True |
-| 42 | P2_3_L|VBO | VBO | VBO | P2_3_L | 1 | 95 | 95 | True |
-| 43 | P2_3_T|VBO | VBO | VBO | P2_3_T | 1 | 39 | 39 | True |
-| 44 | P3_1_C|VBO | VBO | VBO | P3_1_C | 1 | 104 | 104 | True |
-| 45 | P3_1_L|VBO | VBO | VBO | P3_1_L | 1 | 13 | 13 | True |
-| 46 | P3_1_T|VBO | VBO | VBO | P3_1_T | 1 | 46 | 46 | True |
-| 47 | R1_2_L|VBO | VBO | VBO | R1_2_L | 1 | 45 | 45 | True |
-| 48 | R1_2_T|VBO | VBO | VBO | R1_2_T | 1 | 63 | 63 | True |
-| 49 | R1_3_C|VBO | VBO | VBO | R1_3_C | 1 | 83 | 83 | True |
-| 50 | R1_3_L|VBO | VBO | VBO | R1_3_L | 1 | 15 | 15 | True |
-| 51 | R1_3_T|VBO | VBO | VBO | R1_3_T | 1 | 41 | 41 | True |
+| 34 | OS(pooled)|GM | GM | GM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 1618 | 250 | False |
+| 35 | P3_1_L|GM | GM | GM | P3_1_L | 1 | 437 | 250 | False |
+| 36 | R1_2_L|GM | GM | GM | R1_2_L | 1 | 601 | 250 | False |
+| 37 | R1_3_C|GM | GM | GM | R1_3_C | 1 | 1886 | 250 | False |
+| 38 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 221 | 221 | False |
+| 39 | OS(pooled)|WM | WM | WM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 304 | 250 | False |
+| 40 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 381 | 250 | False |
+| 41 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 547 | 250 | False |
+| 42 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 422 | 250 | False |
+| 43 | CFA_L2_C|VBO | VBO | VBO | CFA_L2_C | 1 | 50 | 50 | True |
+| 44 | CFA_L2_L|VBO | VBO | VBO | CFA_L2_L | 1 | 100 | 100 | True |
+| 45 | CFA_L2_T|VBO | VBO | VBO | CFA_L2_T | 1 | 34 | 34 | True |
+| 46 | OS1_2_C|VBO | VBO | VBO | OS1_2_C | 1 | 127 | 127 | True |
+| 47 | OS1_2_L|VBO | VBO | VBO | OS1_2_L | 1 | 53 | 53 | True |
+| 48 | P2_3_L|VBO | VBO | VBO | P2_3_L | 1 | 95 | 95 | True |
+| 49 | P2_3_T|VBO | VBO | VBO | P2_3_T | 1 | 39 | 39 | True |
+| 50 | P3_1_C|VBO | VBO | VBO | P3_1_C | 1 | 104 | 104 | True |
+| 51 | P3_1_L|VBO | VBO | VBO | P3_1_L | 1 | 13 | 13 | True |
+| 52 | P3_1_T|VBO | VBO | VBO | P3_1_T | 1 | 46 | 46 | True |
+| 53 | R1_2_L|VBO | VBO | VBO | R1_2_L | 1 | 45 | 45 | True |
+| 54 | R1_2_T|VBO | VBO | VBO | R1_2_T | 1 | 63 | 63 | True |
+| 55 | R1_3_C|VBO | VBO | VBO | R1_3_C | 1 | 83 | 83 | True |
+| 56 | R1_3_L|VBO | VBO | VBO | R1_3_L | 1 | 15 | 15 | True |
+| 57 | R1_3_T|VBO | VBO | VBO | R1_3_T | 1 | 41 | 41 | True |
 
 
 Alternative pooling of the non-CFA control GM/WM (the other setting of `pool_other_gm_wm`):
@@ -267,7 +275,9 @@ Alternative pooling of the non-CFA control GM/WM (the other setting of `pool_oth
 | reactions with shortfall | 23 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | False |
+| control pooling level (0 none, 1 by prefix, 2 all) | 0 |
 | reactions if other controls unpooled | 61 |
+| reactions if controls pooled by prefix | 57 |
 | reactions if other controls pooled | 51 |
 | VBO sections | 15 |
 

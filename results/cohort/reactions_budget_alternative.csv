@@ -10,6 +10,8 @@ target cells per reaction,250
 reactions with shortfall,23
 CFA GM/WM pooled,True
 other control GM/WM pooled,False
+"control pooling level (0 none, 1 by prefix, 2 all)",0
 reactions if other controls unpooled,61
+reactions if controls pooled by prefix,57
 reactions if other controls pooled,51
 VBO sections,15
