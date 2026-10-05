@@ -145,6 +145,7 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
 3. `03_zones_relative_distance` – section radii, relative zone widths, Pu.1⁺ fraction vs relative distance, radial position of lesions, intensity by zone
 4. `04_manual_vs_automatic` – model report, threshold baseline, missed manual cores and automatic lesions without a manual core, cell-level confusion
 5. `05_capture_sites_and_wells` – capture-site tables (pooled, per section, per animal), wells, selected-cell maps, overlap with the collaborator's selection, LMD export demo
+6. `06_collection_by_section` – section by section on both slides: which cells are collected into which reaction, with per-section tables and cohort aggregates
 
 ## Open decisions
 

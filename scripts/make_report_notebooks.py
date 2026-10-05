@@ -381,6 +381,84 @@ print(out.read_text()[:600])
 ''')]
 
 
+def nb_collection(run_dir):
+    return [md("""
+# 06 · Collection, section by section
+
+For every section (animal × spinal level) on both replicate slides: **which cells are collected and
+into which reaction**. Filled outlines are collected cells coloured by compartment (core, rim, peri,
+deep, GM, WM, VBO); grey dots are Pu.1⁺ cells in that section that are *not* collected (outside the
+eligible compartments, within the edge exclusion, in the meninges, or beyond the per-reaction target).
+White line = parenchyma boundary; yellow = automatic lesion. The table under each section lists its
+reactions and how the selected cells split between the two slides. Aggregates at the end.
+"""), code(SETUP.format(run_dir=run_dir)), code('''
+plan = R.load_reaction_plan(RUN_DIR)
+cells_by_scene = {r.name: R.attach_reactions(r) for r in runs}
+budget = pd.read_csv(Path(RUN_DIR) / "cohort" / "reactions_budget.csv")
+display(budget)
+sections = sorted({s for r in runs for s in r.sections.section_name.astype(str) if s not in ("unassigned", "nan")})
+print(len(sections), "sections:", sections)
+'''), md("## Sections"), code('''
+for sec in sections:
+    hits = [(r, int(r.sections.set_index("section_name").loc[sec, "section_id"])) for r in runs
+            if sec in set(r.sections.section_name.astype(str))]
+    if not hits:
+        continue
+    les = any(bool(r.sections.set_index("section_name").loc[sec, "is_lesion_section"]) for r, _ in hits)
+    tab = R.section_collection_table(plan, sec, cells_by_scene)
+    display(Markdown(f"### {sec} — {'lesion section' if les else 'control section'} · {len(hits)} slide(s) · "
+                     f"{int(tab.n_selected.sum()) if len(tab) else 0} cells in {len(tab)} reaction(s)"))
+    fig, axes = plt.subplots(1, len(hits), figsize=(10 * len(hits), 10), squeeze=False)
+    for ax, (r, sid) in zip(axes.ravel(), hits):
+        R.plot_section_collection(r, sid, ax=ax, cells=cells_by_scene[r.name])
+    plt.tight_layout(); plt.show()
+    if len(tab):
+        display(tab.round(1))
+'''), md("## Aggregates"), code('''
+allc = pd.concat([c.assign(scene=k) for k, c in cells_by_scene.items()], ignore_index=True)
+sel = allc[allc.reaction_id > 0]
+display(Markdown(f"**{len(sel):,} cells collected in {sel.reaction_id.nunique()} reactions; "
+                 f"{int(sel.pu1_pos.sum()):,} of them Pu.1⁺ ({100*sel.pu1_pos.mean():.0f} %).**"))
+display(Markdown("### Per compartment (pooled over all sections)"))
+agg = sel.groupby("compartment").agg(reactions=("reaction_id", "nunique"), cells=("cell_id", "size"),
+                                      pu1_pos=("pu1_pos", "sum"), area_um2=("area_um2", "sum"),
+                                      median_cell_area_um2=("area_um2", "median")).reindex(R.REACTION_ORDER).dropna(how="all")
+display(agg.round(1))
+display(Markdown("### Per section × compartment (cells collected)"))
+display(sel.pivot_table(index="section_name", columns="compartment", values="cell_id", aggfunc="size", fill_value=0)
+        .reindex(columns=[c for c in R.REACTION_ORDER if c in sel.compartment.unique()]).astype(int))
+display(Markdown("### Per animal and level"))
+sel = sel.assign(animal=sel.section_name.astype(str).str.replace(r"_[TCL]?$", "", regex=True),
+                 level=sel.section_name.astype(str).str.extract(r"_([TCL])$")[0].fillna("?"))
+display(sel.pivot_table(index=["animal", "level"], columns="compartment", values="cell_id", aggfunc="size", fill_value=0).astype(int))
+display(Markdown("### Collected cells by manual annotation (sanity check)"))
+display(pd.crosstab(sel.compartment, sel.manual_annotation.fillna("none")))
+'''), code('''
+# cells per reaction vs the 250-cell target, and area per reaction
+fig, axes = plt.subplots(1, 2, figsize=(16, 0.28 * len(plan) + 1.5))
+d = plan.sort_values(["pool_type", "n_selected"])
+col = [R.REACTION_COLORS.get(c, "#898781") for c in d.compartment]
+axes[0].barh(d.reaction_name, d.n_selected, color=col, height=0.75)
+axes[0].axvline(250, color="#898781", ls="--", lw=1); axes[0].set_title("cells selected per reaction (dashed = target 250)", loc="left")
+axes[1].barh(d.reaction_name, d.area_selected_um2 / 1e3, color=col, height=0.75)
+axes[1].set_title("nuclear area selected per reaction (×10³ µm²)", loc="left"); axes[1].set_yticklabels([])
+for ax in axes:
+    ax.tick_params(axis="y", labelsize=7)
+plt.tight_layout()
+'''), code('''
+# size of collected cells per compartment
+fig, ax = plt.subplots(figsize=(9, 4))
+data = [sel.loc[sel.compartment == k, "area_um2"].dropna() for k in R.REACTION_ORDER if k in sel.compartment.unique()]
+labels = [k for k in R.REACTION_ORDER if k in sel.compartment.unique()]
+bp = ax.boxplot(data, showfliers=False, patch_artist=True, widths=0.6)
+ax.set_xticks(range(1, len(labels) + 1), labels)
+for patch, k in zip(bp["boxes"], labels):
+    patch.set_facecolor(R.REACTION_COLORS[k]); patch.set_alpha(0.85)
+ax.set_ylabel("nuclear area (µm²)"); ax.set_title("size of collected cells per compartment", loc="left")
+plt.tight_layout()
+''')]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", default="outputs/sdata")
@@ -389,7 +467,8 @@ def main():
     a = ap.parse_args()
     NB_DIR.mkdir(exist_ok=True)
     books = {"01_cohort_overview": nb_overview, "02_judge_lesions": nb_judge, "03_zones_relative_distance": nb_zones,
-             "04_manual_vs_automatic": nb_manual, "05_capture_sites_and_wells": nb_wells}
+             "04_manual_vs_automatic": nb_manual, "05_capture_sites_and_wells": nb_wells,
+             "06_collection_by_section": nb_collection}
     if a.only:
         books = {k: v for k, v in books.items() if any(k.startswith(o) for o in a.only)}
     for name, fn in books.items():

@@ -525,3 +525,98 @@ def save_zone_polygon_figures(run: SceneRun, out_dir: Path | None = None) -> lis
         plt.close(fig)
         paths.append(p)
     return paths
+
+
+# --------------------------------------------------------------------------
+# collection view: which cells go into which reaction, section by section
+# --------------------------------------------------------------------------
+REACTION_COLORS = {"core": "#e66767", "rim": "#c98500", "peri": "#199e70", "deep": "#9085e9",
+                   "GM": "#3987e5", "WM": "#52514e", "VBO": "#e87ba4"}
+REACTION_ORDER = ["core", "rim", "peri", "deep", "GM", "WM", "VBO"]
+
+
+def load_reaction_plan(run_dir: str | Path = "outputs/sdata") -> pd.DataFrame:
+    return pd.read_csv(Path(run_dir) / "cohort" / "reactions_plan.csv")
+
+
+def attach_reactions(run: SceneRun) -> pd.DataFrame:
+    """Cells of a scene with ``reaction_id`` / ``reaction_name`` / ``compartment`` merged in (0 if not collected)."""
+    c = run.cells.copy()
+    f = run.dir / "cells_reactions.csv"
+    if f.exists():
+        m = pd.read_csv(f)[["cell_id", "reaction_id", "reaction_name"]]
+        c = c.merge(m, on="cell_id", how="left")
+        c["reaction_id"] = c["reaction_id"].fillna(0).astype(int)
+    else:
+        c["reaction_id"] = 0
+        c["reaction_name"] = None
+    c["compartment"] = c["reaction_name"].astype(str).str.split("|").str[-1].where(c["reaction_id"] > 0, None)
+    return c
+
+
+def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: float = 0.25, dim: float = 0.5,
+                            cells: pd.DataFrame | None = None):
+    """One section on one slide: collected cells as filled outlines coloured by reaction compartment;
+    other Pu.1⁺ cells as faint dots; lesion outline and parenchyma boundary for orientation."""
+    from shapely import wkt
+
+    c = cells if cells is not None else attach_reactions(run)
+    x0, x1, y1, y0 = section_bbox_um(run, section_id)
+    cx, cy, size = (x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0)
+    if ax is None:
+        _, ax = plt.subplots(figsize=(10, 10))
+    rgb, ext = read_crop_um(run, cx, cy, size, scale=scale)
+    if rgb is not None:
+        ax.imshow(rgb * dim, extent=ext)
+    sec = c[c.section_id == section_id]
+    other = sec[sec.pu1_pos & (sec.reaction_id == 0)]
+    ax.scatter(other.x_um, other.y_um, s=1.5, c="#898781", alpha=0.5, linewidths=0)
+    sel = sec[sec.reaction_id > 0]
+    # cells with a contour (Pu.1+) as polygons, VBO Pu.1- cells (no contour) as dots
+    has = sel.dropna(subset=["contour_wkt"]) if "contour_wkt" in sel else sel.iloc[:0]
+    if len(has):
+        geoms = [wkt.loads(w) for w in has.contour_wkt]
+        from matplotlib.collections import PolyCollection
+
+        verts, cols = [], []
+        for g, comp in zip(geoms, has.compartment, strict=True):
+            for p in (g.geoms if g.geom_type == "MultiPolygon" else [g]):
+                verts.append(np.asarray(p.exterior.coords))
+                cols.append(REACTION_COLORS.get(comp, "#ffffff"))
+        ax.add_collection(PolyCollection(verts, facecolors=cols, edgecolors="black", linewidths=0.15, alpha=0.9))
+    nocont = sel[~sel.index.isin(has.index)]
+    if len(nocont):
+        ax.scatter(nocont.x_um, nocont.y_um, s=6, c=[REACTION_COLORS.get(k, "#ffffff") for k in nocont.compartment],
+                   linewidths=0)
+    if (run.dir / "maps" / "parenchyma.tif").exists():
+        ax.contour(run.map("parenchyma").astype(float), levels=[0.5], colors="white", linewidths=0.6,
+                   extent=run.extent_um, origin="upper")
+    draw_outlines(ax, run, core=False, manual=False, lw=0.8)
+    ax.set_xlim(x0, x1)
+    ax.set_ylim(y1, y0)
+    counts = sel.groupby("compartment").size()
+    from matplotlib.patches import Patch
+
+    handles = [Patch(facecolor=REACTION_COLORS[k], edgecolor="black", label=f"{k} ({int(counts[k])})")
+               for k in REACTION_ORDER if k in counts.index]
+    handles.append(plt.Line2D([], [], marker=".", ls="", color="#898781", label="Pu.1⁺ not collected"))
+    ax.legend(handles=handles, loc="lower right", fontsize=8, framealpha=0.85)
+    name = run.sections.set_index("section_id").loc[section_id]
+    ax.set_title(f"{run.name} – {name.get('section_name', section_id)}: {len(sel)} cells collected", fontsize=10)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return ax
+
+
+def section_collection_table(plan: pd.DataFrame, section: str, cells_by_scene: dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """Reactions that draw from ``section``: plan numbers plus the per-slide split of selected cells."""
+    rows = plan[plan.sections.astype(str).str.split(";").apply(lambda s: section in s)].copy()
+    split = {}
+    for scene, c in cells_by_scene.items():
+        sub = c[(c.section_name.astype(str) == section) & (c.reaction_id > 0)]
+        split[scene] = sub.groupby("reaction_id").size()
+    for scene, s in split.items():
+        rows[f"n_{scene}"] = rows.reaction_id.map(s).fillna(0).astype(int)
+    cols = ["reaction_id", "reaction_name", "pool_type", "n_sections", "n_available", "n_selected",
+            "n_pu1_selected", "area_selected_um2", "shortfall"] + [f"n_{s}" for s in split]
+    return rows[[c for c in cols if c in rows]].reset_index(drop=True)
