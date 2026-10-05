@@ -558,8 +558,6 @@ def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: floa
                             cells: pd.DataFrame | None = None):
     """One section on one slide: collected cells as filled outlines coloured by reaction compartment;
     other Pu.1⁺ cells as faint dots; lesion outline and parenchyma boundary for orientation."""
-    from shapely import wkt
-
     c = cells if cells is not None else attach_reactions(run)
     x0, x1, y1, y0 = section_bbox_um(run, section_id)
     cx, cy, size = (x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0)
@@ -572,22 +570,11 @@ def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: floa
     other = sec[sec.pu1_pos & (sec.reaction_id == 0)]
     ax.scatter(other.x_um, other.y_um, s=1.5, c="#898781", alpha=0.5, linewidths=0)
     sel = sec[sec.reaction_id > 0]
-    # cells with a contour (Pu.1+) as polygons, VBO Pu.1- cells (no contour) as dots
-    has = sel.dropna(subset=["contour_wkt"]) if "contour_wkt" in sel else sel.iloc[:0]
-    if len(has):
-        geoms = [wkt.loads(w) for w in has.contour_wkt]
-        from matplotlib.collections import PolyCollection
-
-        verts, cols = [], []
-        for g, comp in zip(geoms, has.compartment, strict=True):
-            for p in (g.geoms if g.geom_type == "MultiPolygon" else [g]):
-                verts.append(np.asarray(p.exterior.coords))
-                cols.append(REACTION_COLORS.get(comp, "#ffffff"))
-        ax.add_collection(PolyCollection(verts, facecolors=cols, edgecolors="black", linewidths=0.15, alpha=0.9))
-    nocont = sel[~sel.index.isin(has.index)]
-    if len(nocont):
-        ax.scatter(nocont.x_um, nocont.y_um, s=6, c=[REACTION_COLORS.get(k, "#ffffff") for k in nocont.compartment],
-                   linewidths=0)
+    # at section scale a nucleus is ~1 px, so collected cells are drawn as visible markers
+    for comp in REACTION_ORDER:
+        s_ = sel[sel.compartment == comp]
+        if len(s_):
+            ax.scatter(s_.x_um, s_.y_um, s=16, c=REACTION_COLORS[comp], edgecolors="black", linewidths=0.3, zorder=3)
     if (run.dir / "maps" / "parenchyma.tif").exists():
         ax.contour(run.map("parenchyma").astype(float), levels=[0.5], colors="white", linewidths=0.6,
                    extent=run.extent_um, origin="upper")
