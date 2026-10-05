@@ -58,7 +58,7 @@ def test_end_to_end(synthetic, tmp_path):
     assert d["core"] < d["rim"] < 0 < d["peri"] < d["deep"]  # the single synthetic section is a lesion section
     # one tissue piece on the synthetic slide, everything attributed to it
     assert log["n_sections"] == 1
-    assert (cells["section_id"] == 1).mean() > 0.99
+    assert (cells["section_id"] == 1).mean() > 0.95  # a few edge cells fall outside the true surface
     sec = pd.read_csv(tmp_path / "section_summary.csv")
     assert len(sec) == 1 and sec.n_lesions.iloc[0] == 1
     # outputs exist

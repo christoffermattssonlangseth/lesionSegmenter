@@ -273,7 +273,16 @@ def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int]
     """
     if not keep:
         return res
-    allowed = np.isin(sections, list(keep))
+    return clip_lesions(res, np.isin(sections, list(keep)), maps)
+
+
+def clip_lesions(res: LesionResult, allowed: np.ndarray, maps: DensityMaps, *, meninges: np.ndarray | None = None,
+                 note: str | None = None) -> LesionResult:
+    """Keep only lesion bins inside ``allowed`` and recompute zones / distances.
+
+    ``meninges`` (bool grid) marks bins that are tissue but not parenchyma; they get the
+    ``meninges`` zone and never become core / rim / peri / deep.
+    """
     mask = res.lesion_mask & allowed
     labels = measure.label(mask, connectivity=1).astype(np.int32)
     bin_um = res.params["bin_um"]
@@ -287,6 +296,8 @@ def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int]
     core = (res.zones == ZONE_CODES["core"]) & mask
     zones = np.zeros(mask.shape, np.uint8)
     zones[tissue] = ZONE_CODES["distal"]
+    if meninges is not None:
+        tissue = tissue & ~meninges
     peri_w = res.peri_width_map
     if peri_w is None:
         peri_w = _width_map(res.params["peri_width_um"], mask.shape)
@@ -297,10 +308,13 @@ def restrict_to_sections(res: LesionResult, sections: np.ndarray, keep: set[int]
     zones[tissue & ~mask & (sdist <= peri_w)] = ZONE_CODES["peri"]
     zones[mask & ~core] = ZONE_CODES["rim"]
     zones[core] = ZONE_CODES["core"]
+    if meninges is not None:
+        zones[meninges & (res.zones > 0)] = ZONE_CODES["meninges"]
     lesions = _region_table(labels, maps, res.score, bin_um, core, "lesion_id")
     params = dict(res.params)
     params["n_lesions"] = int(labels.max())
-    params["restricted_to_sections"] = sorted(int(k) for k in keep)
+    if note:
+        params.setdefault("clips", []).append(note)
     out = LesionResult(res.score, mask, labels, zones, sdist, lesions, params, dense_nonmyeloid=res.dense_nonmyeloid,
                        dense_labels=res.dense_labels, dense_regions=res.dense_regions)
     out.rim_width_map, out.peri_width_map, out.deep_width_map = res.rim_width_map, peri_w, deep_w

@@ -1,6 +1,6 @@
-manual_annotation,distal,peri,rim,core,deep
-GM,7016,0,0,0,0
-WM,3287,0,0,0,0
-core,135,325,891,5364,100
-none,17570,6973,4509,4531,6022
-vbo,177,103,14,0,27
+manual_annotation,distal,peri,rim,core,deep,meninges
+GM,7012,0,0,0,0,4
+WM,3110,0,0,0,0,177
+core,153,239,617,5037,38,731
+none,15141,5537,2774,3925,4447,7781
+vbo,178,101,12,0,30,0

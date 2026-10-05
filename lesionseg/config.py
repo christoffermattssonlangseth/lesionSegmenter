@@ -35,6 +35,8 @@ DEFAULTS: dict = {
                "min_pu1_fraction": 0.15, "min_pu1_density": 0.0, "min_lesion_pu1_fraction": 0.2,
                "dense_nonmyeloid_z": 2.0},
     # separate tissue pieces on the slide (spinal-cord cross-sections) -> section_id
+    # parenchyma mask: sections opened with a 150 µm disk (removes meninges / roots) and eroded 20 µm
+    "parenchyma": {"enabled": True, "open_um": 150.0, "erode_um": 30.0},
     # focus: 'auto' = data-driven: a section is a lesion section when automatic lesions cover
     #   >= lesion_min_frac of it (and >= lesion_min_area_mm2); other sections are lesion-free controls.
     #   'manual' = sections with manual CORE polygons (comparison only); 'none' = no restriction.

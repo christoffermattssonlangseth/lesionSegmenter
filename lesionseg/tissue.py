@@ -96,3 +96,38 @@ def resample_mask(mask: np.ndarray, out_shape: tuple[int, int]) -> np.ndarray:
     zy = out_shape[0] / mask.shape[0]
     zx = out_shape[1] / mask.shape[1]
     return ndi.zoom(mask.astype(np.uint8), (zy, zx), order=0).astype(bool)[: out_shape[0], : out_shape[1]]
+
+
+def parenchyma_mask(sections: np.ndarray, bin_um: float, *, open_um: float = 150.0, erode_um: float = 20.0,
+                    min_area_um2: float = 2e5) -> np.ndarray:
+    """Parenchyma = each section opened with a disk of radius ``open_um`` (removes meninges, nerve
+    roots and other thin flaps attached to the surface) and eroded by ``erode_um`` (pial margin).
+
+    Returns a bool grid mask. Everything in a section but outside this mask is treated as
+    meninges / surface and is neither zoned nor collected.
+    """
+    out = np.zeros(sections.shape, bool)
+    r_open = int(round(open_um / bin_um))
+    r_er = int(round(erode_um / bin_um))
+    for sid in range(1, int(sections.max()) + 1):
+        m = sections == sid
+        if not m.any():
+            continue
+        if r_open > 0:
+            m = ndi.binary_opening(m, structure=disk(r_open))
+        if r_er > 0:
+            m = ndi.binary_erosion(m, structure=disk(r_er))
+        m = remove_small(m, int(min_area_um2 / bin_um ** 2))
+        out |= m
+    return out
+
+
+def surface_from_counts(counts: np.ndarray, bin_um: float, *, close_um: float = 60.0) -> np.ndarray:
+    """Tight tissue surface: bins that contain cells, with gaps up to ``close_um`` closed and all
+    interior holes filled – no smoothing or dilation, so the boundary runs through the outermost cells
+    (sparse white matter stays solid because every enclosed hole is filled)."""
+    m = counts > 0
+    r = int(round(close_um / bin_um))
+    if r > 0:
+        m = ndi.binary_closing(np.pad(m, r), structure=disk(r))[r:-r, r:-r]
+    return ndi.binary_fill_holes(m)

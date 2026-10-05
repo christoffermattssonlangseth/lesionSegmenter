@@ -13,7 +13,7 @@ from .lesion import LesionResult, zone_polygons
 
 ZONE_COLORS = {  # RGB for QuPath classes / figures
     "distal": (57, 135, 229), "deep": (144, 133, 233), "peri": (25, 158, 112), "rim": (201, 133, 0),
-    "core": (230, 103, 103),
+    "core": (230, 103, 103), "meninges": (195, 194, 183),
     "lesion": (255, 0, 0), "background": (0, 0, 0), "dense_nonmyeloid": (0, 160, 255),
 }
 

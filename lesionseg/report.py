@@ -18,8 +18,9 @@ from .density import Grid
 from .io import CziReader, SlideReader
 
 # validated palette (dataviz reference): zones are ordered categories with fixed hues
-ZONE_COLORS = {"distal": "#3987e5", "deep": "#9085e9", "peri": "#199e70", "rim": "#c98500", "core": "#e66767"}
-ZONE_ORDER = ["distal", "deep", "peri", "rim", "core"]
+ZONE_COLORS = {"distal": "#3987e5", "deep": "#9085e9", "peri": "#199e70", "rim": "#c98500", "core": "#e66767",
+               "meninges": "#c3c2b7"}
+ZONE_ORDER = ["distal", "deep", "peri", "rim", "core", "meninges"]
 GROUP_COLORS = {  # LMD well groups, fixed order
     "core": "#eb6834", "rim": "#eda100", "ring_0_10": "#1baf7a", "ring_10_20": "#2a78d6", "ring_20_40": "#4a3aa7",
     "ring_40_60": "#e87ba4", "ring_60_plus": "#008300",

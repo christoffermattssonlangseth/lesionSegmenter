@@ -42,7 +42,7 @@ def assign_cells(cells: pd.DataFrame, res: LesionResult, grid: Grid, *,
 
     cells["zone_code"] = zone.astype(np.uint8)
     cells["zone"] = pd.Categorical([ZONE_NAMES[int(z)] for z in zone],
-                                   categories=["background", "distal", "peri", "rim", "core", "deep"])
+                                   categories=["background", "distal", "peri", "rim", "core", "deep", "meninges"])
     cells["lesion_id"] = lid
     cells["dist_to_lesion_um"] = dist.astype(np.float32)
 

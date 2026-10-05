@@ -160,6 +160,12 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     else:
         sections = assign.label_sections(maps.tissue, grid.bin_um, **cfg.get("sections", {}))
         log["sections_from"] = "tissue pieces"
+    # true tissue surface: the curated outline clipped to where cells actually are. The hand-drawn
+    # polygons sit 50–150 µm outside the pia, so edge distances / meninges must be measured from here.
+    counts_all = density.count_map(cells["x_um"].to_numpy(), cells["y_um"].to_numpy(), grid)
+    surface = (sections > 0) & tissue.surface_from_counts(counts_all, grid.bin_um)
+    sections = np.where(surface, sections, 0).astype(sections.dtype)
+    maps.extra["surface"] = surface.astype(np.uint8)
     maps.extra["sections"] = sections
     if section_names:
         maps.extra["section_names"] = section_names
@@ -223,6 +229,16 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         lesion_sections = set(int(i) for i in sec_area.index)
     if focus != "none" and lesion_sections != set(int(i) for i in sec_area.index):
         res = lesion.restrict_to_sections(res, sections, lesion_sections, maps)
+    # parenchyma: the outer `erode_um` band of the true surface is meninges; thin flaps (< 2×open_um)
+    # fall off. Lesions and zones are clipped to the parenchyma; meningeal cells are never collected.
+    pcfg = dict(cfg.get("parenchyma") or {})
+    if pcfg.pop("enabled", True) and int(sections.max()) > 0:
+        paren = tissue.parenchyma_mask(sections, grid.bin_um, **pcfg)
+        meninges = (sections > 0) & ~paren
+        res = lesion.clip_lesions(res, paren, maps, meninges=meninges, note="parenchyma")
+        maps.extra["parenchyma"] = paren.astype(np.uint8)
+        log["parenchyma"] = {**pcfg, "meninges_area_mm2": float(meninges.sum() * grid.bin_area_mm2()),
+                             "parenchyma_area_mm2": float(paren.sum() * grid.bin_area_mm2())}
     log["section_focus"] = {"mode": focus, "lesion_sections": sorted(lesion_sections),
                             "lesion_area_frac": {int(k): round(float(v), 4) for k, v in les_frac.items()},
                             "manual_core_sections": sorted(core_sections)}
@@ -234,6 +250,7 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     if focus != "none":
         # control sections: no lesion context at all (peri zones must not bleed across the gap)
         ctrl = ~cells["section_has_lesion"].to_numpy(bool)
+        ctrl &= (cells["zone"].astype(str) != "meninges").to_numpy()  # meninges stay flagged everywhere
         cells.loc[ctrl, "zone"] = "distal"
         cells.loc[ctrl, "zone_code"] = 1
         cells.loc[ctrl, "lesion_id"] = 0

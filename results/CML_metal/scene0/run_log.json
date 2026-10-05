@@ -83,6 +83,11 @@
       "peri_width_rel": 0.15,
       "deep_width_rel": 0.15
     },
+    "parenchyma": {
+      "enabled": true,
+      "open_um": 150,
+      "erode_um": 30
+    },
     "sections": {
       "min_area_um2": 200000.0,
       "merge_um": 0.0,
@@ -278,7 +283,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_metal_shapes",
     "n_cells": 50627,
-    "seconds": 12.5
+    "seconds": 11.3
   },
   "segmentation": {
     "route": "spatialdata",
@@ -294,7 +299,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_metal_shapes",
     "n_cells": 50627,
-    "seconds": 12.5
+    "seconds": 11.3
   },
   "pu1": {
     "method": "mask",
@@ -332,15 +337,15 @@
     "smooth_um": 20,
     "rim_width_um": {
       "per_bin_um": true,
-      "median_um": 51.82258987426758
+      "median_um": 50.0
     },
     "peri_width_um": {
       "per_bin_um": true,
-      "median_um": 155.4677734375
+      "median_um": 150.0
     },
     "deep_width_um": {
       "per_bin_um": true,
-      "median_um": 155.4677734375
+      "median_um": 150.0
     },
     "core_method": "distance",
     "core_threshold": null,
@@ -360,12 +365,18 @@
       },
       "model": "probability map (0\u20131); use an absolute threshold"
     },
-    "n_lesions": 19,
+    "n_lesions": 17,
     "min_pu1_fraction": 0.0,
     "min_pu1_density": 0.0,
     "min_lesion_pu1_fraction": 0.0,
     "rejected_low_pu1": [],
     "n_dense_nonmyeloid": 0
+  },
+  "parenchyma": {
+    "open_um": 150,
+    "erode_um": 30,
+    "meninges_area_mm2": 2.0355000000000003,
+    "parenchyma_area_mm2": 23.0223
   },
   "section_focus": {
     "mode": "manual",
@@ -377,15 +388,15 @@
       9
     ],
     "lesion_area_frac": {
-      "1": 0.258,
-      "2": 0.0016,
-      "3": 0.0101,
-      "4": 0.0057,
+      "1": 0.2916,
+      "2": 0.0,
+      "3": 0.0083,
+      "4": 0.006,
       "5": 0.0,
-      "6": 0.0931,
+      "6": 0.0969,
       "7": 0.0,
-      "8": 0.1141,
-      "9": 0.0072
+      "8": 0.1239,
+      "9": 0.0051
     },
     "manual_core_sections": [
       1,
@@ -401,30 +412,30 @@
       "section_id": 1,
       "section_name": "P2_3_T",
       "is_lesion_section": true,
-      "lesion_area_frac_unrestricted": 0.258,
-      "area_mm2": 1.979,
-      "n_cells": 6329,
-      "n_pu1_pos": 2985,
-      "frac_pu1_pos": 0.4716384894928109,
-      "n_lesions": 2,
-      "lesion_area_mm2": 0.5105,
-      "lesion_frac_of_section": 0.2579585649317837,
-      "n_pu1_pos_core": 1360,
-      "n_pu1_pos_rim": 562,
-      "n_pu1_pos_peri": 384,
-      "n_pu1_pos_deep": 299,
-      "n_auto_lesions_unrestricted": 2,
+      "lesion_area_frac_unrestricted": 0.2916,
+      "area_mm2": 1.6566,
+      "n_cells": 6243,
+      "n_pu1_pos": 2971,
+      "frac_pu1_pos": 0.4758930001601794,
+      "n_lesions": 4,
+      "lesion_area_mm2": 0.4354,
+      "lesion_frac_of_section": 0.2628274779669202,
+      "n_pu1_pos_core": 1244,
+      "n_pu1_pos_rim": 378,
+      "n_pu1_pos_peri": 279,
+      "n_pu1_pos_deep": 220,
+      "n_auto_lesions_unrestricted": 3,
       "has_manual_core": true
     },
     {
       "section_id": 2,
       "section_name": "R1_3_C",
       "is_lesion_section": false,
-      "lesion_area_frac_unrestricted": 0.0016,
-      "area_mm2": 4.0136,
-      "n_cells": 5535,
-      "n_pu1_pos": 1968,
-      "frac_pu1_pos": 0.35555555555555557,
+      "lesion_area_frac_unrestricted": 0.0,
+      "area_mm2": 3.5253,
+      "n_cells": 5438,
+      "n_pu1_pos": 1948,
+      "frac_pu1_pos": 0.35821993379919087,
       "n_lesions": 0,
       "lesion_area_mm2": 0.0,
       "lesion_frac_of_section": 0.0,
@@ -432,37 +443,37 @@
       "n_pu1_pos_rim": 0,
       "n_pu1_pos_peri": 0,
       "n_pu1_pos_deep": 0,
-      "n_auto_lesions_unrestricted": 1,
+      "n_auto_lesions_unrestricted": 0,
       "has_manual_core": false
     },
     {
       "section_id": 3,
       "section_name": "R1_3_L",
       "is_lesion_section": true,
-      "lesion_area_frac_unrestricted": 0.0101,
-      "area_mm2": 2.7751,
-      "n_cells": 4839,
-      "n_pu1_pos": 1634,
-      "frac_pu1_pos": 0.3376730729489564,
-      "n_lesions": 3,
-      "lesion_area_mm2": 0.0279,
-      "lesion_frac_of_section": 0.010053691758855537,
+      "lesion_area_frac_unrestricted": 0.0083,
+      "area_mm2": 2.5536,
+      "n_cells": 4772,
+      "n_pu1_pos": 1626,
+      "frac_pu1_pos": 0.3407376362112322,
+      "n_lesions": 2,
+      "lesion_area_mm2": 0.0188,
+      "lesion_frac_of_section": 0.007362155388471178,
       "n_pu1_pos_core": 0,
-      "n_pu1_pos_rim": 100,
-      "n_pu1_pos_peri": 125,
-      "n_pu1_pos_deep": 151,
-      "n_auto_lesions_unrestricted": 3,
+      "n_pu1_pos_rim": 73,
+      "n_pu1_pos_peri": 96,
+      "n_pu1_pos_deep": 122,
+      "n_auto_lesions_unrestricted": 2,
       "has_manual_core": true
     },
     {
       "section_id": 4,
       "section_name": "OS1_2_L",
       "is_lesion_section": false,
-      "lesion_area_frac_unrestricted": 0.0057,
-      "area_mm2": 3.3748,
-      "n_cells": 3614,
-      "n_pu1_pos": 737,
-      "frac_pu1_pos": 0.20392916436081904,
+      "lesion_area_frac_unrestricted": 0.006,
+      "area_mm2": 2.9206,
+      "n_cells": 3533,
+      "n_pu1_pos": 728,
+      "frac_pu1_pos": 0.20605717520520803,
       "n_lesions": 0,
       "lesion_area_mm2": 0.0,
       "lesion_frac_of_section": 0.0,
@@ -478,10 +489,10 @@
       "section_name": "OS1_2_",
       "is_lesion_section": false,
       "lesion_area_frac_unrestricted": 0.0,
-      "area_mm2": 2.5446,
-      "n_cells": 2404,
-      "n_pu1_pos": 344,
-      "frac_pu1_pos": 0.14309484193011648,
+      "area_mm2": 2.0312,
+      "n_cells": 2303,
+      "n_pu1_pos": 336,
+      "frac_pu1_pos": 0.1458966565349544,
       "n_lesions": 0,
       "lesion_area_mm2": 0.0,
       "lesion_frac_of_section": 0.0,
@@ -496,19 +507,19 @@
       "section_id": 6,
       "section_name": "P2_3_C",
       "is_lesion_section": true,
-      "lesion_area_frac_unrestricted": 0.0931,
-      "area_mm2": 4.238,
-      "n_cells": 9217,
-      "n_pu1_pos": 3076,
-      "frac_pu1_pos": 0.3337311489638711,
-      "n_lesions": 4,
-      "lesion_area_mm2": 0.3947,
-      "lesion_frac_of_section": 0.0931335535630014,
-      "n_pu1_pos_core": 484,
-      "n_pu1_pos_rim": 814,
-      "n_pu1_pos_peri": 528,
-      "n_pu1_pos_deep": 442,
-      "n_auto_lesions_unrestricted": 4,
+      "lesion_area_frac_unrestricted": 0.0969,
+      "area_mm2": 3.8451,
+      "n_cells": 9106,
+      "n_pu1_pos": 3038,
+      "frac_pu1_pos": 0.3336261805403031,
+      "n_lesions": 3,
+      "lesion_area_mm2": 0.3276,
+      "lesion_frac_of_section": 0.085199344620426,
+      "n_pu1_pos_core": 408,
+      "n_pu1_pos_rim": 539,
+      "n_pu1_pos_peri": 371,
+      "n_pu1_pos_deep": 364,
+      "n_auto_lesions_unrestricted": 3,
       "has_manual_core": true
     },
     {
@@ -516,10 +527,10 @@
       "section_name": "OS1_2_C",
       "is_lesion_section": false,
       "lesion_area_frac_unrestricted": 0.0,
-      "area_mm2": 3.996,
-      "n_cells": 4476,
-      "n_pu1_pos": 883,
-      "frac_pu1_pos": 0.19727435210008937,
+      "area_mm2": 3.4083,
+      "n_cells": 4351,
+      "n_pu1_pos": 863,
+      "frac_pu1_pos": 0.19834520799816135,
       "n_lesions": 0,
       "lesion_area_mm2": 0.0,
       "lesion_frac_of_section": 0.0,
@@ -534,18 +545,18 @@
       "section_id": 8,
       "section_name": "P2_3_L",
       "is_lesion_section": true,
-      "lesion_area_frac_unrestricted": 0.1141,
-      "area_mm2": 3.0892,
-      "n_cells": 9549,
-      "n_pu1_pos": 2865,
-      "frac_pu1_pos": 0.30003141690229346,
+      "lesion_area_frac_unrestricted": 0.1239,
+      "area_mm2": 2.7926,
+      "n_cells": 9401,
+      "n_pu1_pos": 2805,
+      "frac_pu1_pos": 0.298372513562387,
       "n_lesions": 6,
-      "lesion_area_mm2": 0.3526,
-      "lesion_frac_of_section": 0.11413958306357634,
-      "n_pu1_pos_core": 722,
-      "n_pu1_pos_rim": 419,
-      "n_pu1_pos_peri": 509,
-      "n_pu1_pos_deep": 448,
+      "lesion_area_mm2": 0.31279999999999997,
+      "lesion_frac_of_section": 0.1120103129699921,
+      "n_pu1_pos_core": 684,
+      "n_pu1_pos_rim": 297,
+      "n_pu1_pos_peri": 413,
+      "n_pu1_pos_deep": 401,
       "n_auto_lesions_unrestricted": 6,
       "has_manual_core": true
     },
@@ -553,18 +564,18 @@
       "section_id": 9,
       "section_name": "R1_3_T",
       "is_lesion_section": true,
-      "lesion_area_frac_unrestricted": 0.0072,
-      "area_mm2": 2.5767,
-      "n_cells": 4152,
-      "n_pu1_pos": 993,
-      "frac_pu1_pos": 0.23916184971098267,
+      "lesion_area_frac_unrestricted": 0.0051,
+      "area_mm2": 2.3245,
+      "n_cells": 4075,
+      "n_pu1_pos": 985,
+      "frac_pu1_pos": 0.24171779141104294,
       "n_lesions": 2,
-      "lesion_area_mm2": 0.0186,
-      "lesion_frac_of_section": 0.007218535335894748,
+      "lesion_area_mm2": 0.0055,
+      "lesion_frac_of_section": 0.0023661002366100236,
       "n_pu1_pos_core": 0,
-      "n_pu1_pos_rim": 100,
-      "n_pu1_pos_peri": 97,
-      "n_pu1_pos_deep": 139,
+      "n_pu1_pos_rim": 16,
+      "n_pu1_pos_peri": 53,
+      "n_pu1_pos_deep": 73,
       "n_auto_lesions_unrestricted": 2,
       "has_manual_core": true
     }
@@ -572,33 +583,39 @@
   "zone_summary": [
     {
       "zone": "distal",
-      "n_cells": 28980,
-      "n_pu1_pos": 7819,
-      "frac_pu1_pos": 0.2698067632850242
+      "n_cells": 25964,
+      "n_pu1_pos": 7034,
+      "frac_pu1_pos": 0.27091357263903865
     },
     {
       "zone": "peri",
-      "n_cells": 6404,
-      "n_pu1_pos": 1643,
-      "frac_pu1_pos": 0.2565584009993754
+      "n_cells": 4577,
+      "n_pu1_pos": 1212,
+      "frac_pu1_pos": 0.26480227223071884
     },
     {
       "zone": "rim",
-      "n_cells": 4426,
-      "n_pu1_pos": 1995,
-      "frac_pu1_pos": 0.45074559421599636
+      "n_cells": 3046,
+      "n_pu1_pos": 1303,
+      "frac_pu1_pos": 0.427774130006566
     },
     {
       "zone": "core",
-      "n_cells": 5246,
-      "n_pu1_pos": 2566,
-      "frac_pu1_pos": 0.4891345787266489
+      "n_cells": 4873,
+      "n_pu1_pos": 2336,
+      "frac_pu1_pos": 0.4793761543197209
     },
     {
       "zone": "deep",
-      "n_cells": 5571,
-      "n_pu1_pos": 1479,
-      "frac_pu1_pos": 0.26548196015078085
+      "n_cells": 4507,
+      "n_pu1_pos": 1180,
+      "frac_pu1_pos": 0.2618149545151986
+    },
+    {
+      "zone": "meninges",
+      "n_cells": 7660,
+      "n_pu1_pos": 2437,
+      "frac_pu1_pos": 0.31814621409921673
     }
   ],
   "pu1_counts": {
@@ -607,64 +624,71 @@
   },
   "validation": {
     "core_vs_lesion": {
-      "auto_area_mm2": 1.3043,
+      "auto_area_mm2": 1.1001,
       "manual_area_mm2": 0.4394,
-      "iou": 0.2814727713676784,
-      "manual_covered_by_auto": 0.8716431497496586,
-      "auto_inside_manual": 0.29364410028367705
+      "iou": 0.3076531045612843,
+      "manual_covered_by_auto": 0.8243058716431497,
+      "auto_inside_manual": 0.32924279610944457
     },
     "core_vs_core": {
-      "auto_area_mm2": 0.635,
+      "auto_area_mm2": 0.5911000000000001,
       "manual_area_mm2": 0.4394,
-      "iou": 0.3688367944961142,
-      "manual_covered_by_auto": 0.6588529813381885,
-      "auto_inside_manual": 0.4559055118110236
+      "iou": 0.36652963797904786,
+      "manual_covered_by_auto": 0.6290395994538006,
+      "auto_inside_manual": 0.4676027744882423
     },
     "n_manual_cores": 33,
-    "manual_cores_detected_frac": 0.7272727272727273,
+    "manual_cores_detected_frac": 0.48484848484848486,
     "cell_confusion": {
       "distal": {
         "GM": 5341,
-        "WM": 2236,
-        "core": 256,
-        "none": 21030,
-        "vbo": 117
+        "WM": 2077,
+        "core": 152,
+        "none": 18273,
+        "vbo": 121
       },
       "peri": {
         "GM": 0,
         "WM": 0,
-        "core": 189,
-        "none": 6215,
+        "core": 161,
+        "none": 4416,
         "vbo": 0
       },
       "rim": {
         "GM": 0,
         "WM": 0,
-        "core": 824,
-        "none": 3602,
+        "core": 682,
+        "none": 2364,
         "vbo": 0
       },
       "core": {
         "GM": 0,
         "WM": 0,
-        "core": 2538,
-        "none": 2708,
+        "core": 2432,
+        "none": 2441,
         "vbo": 0
       },
       "deep": {
         "GM": 0,
         "WM": 0,
-        "core": 43,
-        "none": 5513,
-        "vbo": 15
+        "core": 34,
+        "none": 4462,
+        "vbo": 11
+      },
+      "meninges": {
+        "GM": 0,
+        "WM": 159,
+        "core": 389,
+        "none": 7112,
+        "vbo": 0
       }
     }
   },
   "wells": {
-    "n_groups": 41,
-    "n_cells": 3186,
+    "n_groups": 39,
+    "n_cells": 3090,
     "target_area_um2": 3000
   },
   "cell_geojson": 15502,
-  "seconds_total": 22.1
+  "seconds_total": 24.7
 }

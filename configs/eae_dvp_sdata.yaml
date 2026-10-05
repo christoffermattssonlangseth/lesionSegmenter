@@ -38,6 +38,13 @@ lesion:
 
 # Only sections with manually annotated lesions carry lesions; the rest are lesion-free controls.
 sections: {focus: manual}
+
+# Parenchyma: the section outline is clipped to the outermost cells (true surface), opened with a
+# 150 µm disk (thin meningeal flaps / roots fall off) and eroded by erode_um – that outer band is the
+# meninges. Lesions and zones are clipped to the parenchyma; meningeal cells are never collected.
+# Trade-off (results/cohort/meninges_band_sweep.csv): the manual cores reach to ~25 µm from the
+# outermost cells; 30 µm removes the surface layer and loses <7 % of manual-core cells, 75 µm loses ~36 %.
+parenchyma: {enabled: true, open_um: 150, erode_um: 30}
 assign: {distance_bins_um: [-100, -50, 0, 50, 100, 150, 300]}
 export: {cell_geojson: pu1}
 

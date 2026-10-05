@@ -21,5 +21,6 @@ ZONE_CODES = {
     "rim": 3,         # inside lesion, within rim_width of the lesion edge
     "core": 4,        # inside lesion, deeper than rim_width
     "deep": 5,        # outside the peri band, a further deep_width outward ("additional step" for DVP)
+    "meninges": 6,    # inside the section outline but outside the parenchyma mask (surface / meninges)
 }
 ZONE_NAMES = {v: k for k, v in ZONE_CODES.items()}

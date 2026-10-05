@@ -32,6 +32,7 @@ All distances are measured from the lesion boundary in µm and are configurable.
 | **peri** | outside lesion, within `peri_width_um` of the edge | 0–150 µm outside |
 | **deep** | outside the peri band, a further `deep_width_um` outward (the "additional step" captured for DVP) | 150–300 µm |
 | **distal** | everything farther out, and all tissue of lesion-free control sections | > 300 µm |
+| **meninges** | outer band of the true tissue surface (`parenchyma.erode_um`, default 30 µm) and thin surface flaps; never zoned or collected | – |
 
 Slides carry several cross-sections (nine per slide here). Sections come from the curated
 `Sample_category` polygons when present, otherwise connected tissue pieces are labelled
