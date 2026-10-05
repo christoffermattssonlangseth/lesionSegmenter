@@ -187,7 +187,7 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a sec
 | max_reactions | 60 |
 | within budget | True |
 | target cells per reaction | 250 |
-| reactions with shortfall | 20 |
+| reactions with shortfall | 24 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | True |
 | control pooling level (0 none, 1 by prefix, 2 all) | 1 |
@@ -201,51 +201,51 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a sec
 
 | reaction_id | reaction_name | pool_type | compartment | sections | n_sections | n_available | n_selected | shortfall |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 1137 | 250 | False |
-| 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 993 | 250 | False |
-| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1191 | 250 | False |
-| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 1059 | 250 | False |
-| 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1726 | 250 | False |
-| 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 501 | 250 | False |
-| 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 736 | 250 | False |
-| 8 | P2_3_L|deep | lesion | deep | P2_3_L | 1 | 681 | 250 | False |
-| 9 | P2_3_T|core | lesion | core | P2_3_T | 1 | 2894 | 250 | False |
-| 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 596 | 250 | False |
-| 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 628 | 250 | False |
-| 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 538 | 250 | False |
-| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 1712 | 250 | False |
-| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 2447 | 250 | False |
-| 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 1054 | 250 | False |
-| 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 915 | 250 | False |
-| 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 564 | 250 | False |
-| 18 | P3_1_T|rim | lesion | rim | P3_1_T | 1 | 708 | 250 | False |
-| 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 543 | 250 | False |
-| 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 350 | 250 | False |
-| 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 2865 | 250 | False |
-| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 4240 | 250 | False |
-| 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 2828 | 250 | False |
-| 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 1393 | 250 | False |
-| 25 | R1_3_L|core | lesion | core | R1_3_L | 1 | 28 | 28 | True |
-| 26 | R1_3_L|rim | lesion | rim | R1_3_L | 1 | 143 | 143 | True |
-| 27 | R1_3_L|peri | lesion | peri | R1_3_L | 1 | 223 | 223 | False |
-| 28 | R1_3_L|deep | lesion | deep | R1_3_L | 1 | 294 | 250 | False |
-| 29 | R1_3_T|core | lesion | core | R1_3_T | 1 | 13 | 13 | True |
-| 30 | R1_3_T|rim | lesion | rim | R1_3_T | 1 | 85 | 85 | True |
-| 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 116 | 116 | True |
-| 32 | R1_3_T|deep | lesion | deep | R1_3_T | 1 | 202 | 202 | False |
-| 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1626 | 250 | False |
-| 34 | OS(pooled)|GM | GM | GM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 1618 | 250 | False |
+| 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 663 | 250 | False |
+| 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 719 | 250 | False |
+| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1037 | 250 | False |
+| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 841 | 250 | False |
+| 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1318 | 250 | False |
+| 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 361 | 250 | False |
+| 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 602 | 250 | False |
+| 8 | P2_3_L|deep | lesion | deep | P2_3_L | 1 | 611 | 250 | False |
+| 9 | P2_3_T|core | lesion | core | P2_3_T | 1 | 1890 | 250 | False |
+| 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 397 | 250 | False |
+| 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 518 | 250 | False |
+| 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 460 | 250 | False |
+| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 670 | 250 | False |
+| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 864 | 250 | False |
+| 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 641 | 250 | False |
+| 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 729 | 250 | False |
+| 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 435 | 250 | False |
+| 18 | P3_1_T|rim | lesion | rim | P3_1_T | 1 | 305 | 250 | False |
+| 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 294 | 250 | False |
+| 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 258 | 250 | False |
+| 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 1907 | 250 | False |
+| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 1430 | 250 | False |
+| 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 1787 | 250 | False |
+| 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 1100 | 250 | False |
+| 25 | R1_3_L|core | lesion | core | R1_3_L | 1 | 15 | 15 | True |
+| 26 | R1_3_L|rim | lesion | rim | R1_3_L | 1 | 125 | 125 | True |
+| 27 | R1_3_L|peri | lesion | peri | R1_3_L | 1 | 179 | 179 | True |
+| 28 | R1_3_L|deep | lesion | deep | R1_3_L | 1 | 190 | 190 | True |
+| 29 | R1_3_T|core | lesion | core | R1_3_T | 1 | 8 | 8 | True |
+| 30 | R1_3_T|rim | lesion | rim | R1_3_T | 1 | 15 | 15 | True |
+| 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 56 | 56 | True |
+| 32 | R1_3_T|deep | lesion | deep | R1_3_T | 1 | 124 | 124 | True |
+| 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1568 | 250 | False |
+| 34 | OS(pooled)|GM | GM | GM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 1600 | 250 | False |
 | 35 | P3_1_L|GM | GM | GM | P3_1_L | 1 | 437 | 250 | False |
-| 36 | R1_2_L|GM | GM | GM | R1_2_L | 1 | 601 | 250 | False |
-| 37 | R1_3_C|GM | GM | GM | R1_3_C | 1 | 1886 | 250 | False |
-| 38 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 221 | 221 | False |
-| 39 | OS(pooled)|WM | WM | WM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 304 | 250 | False |
-| 40 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 381 | 250 | False |
-| 41 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 547 | 250 | False |
-| 42 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 422 | 250 | False |
+| 36 | R1_2_L|GM | GM | GM | R1_2_L | 1 | 592 | 250 | False |
+| 37 | R1_3_C|GM | GM | GM | R1_3_C | 1 | 1878 | 250 | False |
+| 38 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 131 | 131 | True |
+| 39 | OS(pooled)|WM | WM | WM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 209 | 209 | False |
+| 40 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 280 | 250 | False |
+| 41 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 355 | 250 | False |
+| 42 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 318 | 250 | False |
 | 43 | CFA_L2_C|VBO | VBO | VBO | CFA_L2_C | 1 | 50 | 50 | True |
 | 44 | CFA_L2_L|VBO | VBO | VBO | CFA_L2_L | 1 | 100 | 100 | True |
-| 45 | CFA_L2_T|VBO | VBO | VBO | CFA_L2_T | 1 | 34 | 34 | True |
+| 45 | CFA_L2_T|VBO | VBO | VBO | CFA_L2_T | 1 | 30 | 30 | True |
 | 46 | OS1_2_C|VBO | VBO | VBO | OS1_2_C | 1 | 127 | 127 | True |
 | 47 | OS1_2_L|VBO | VBO | VBO | OS1_2_L | 1 | 53 | 53 | True |
 | 48 | P2_3_L|VBO | VBO | VBO | P2_3_L | 1 | 95 | 95 | True |
@@ -272,7 +272,7 @@ Alternative pooling of the non-CFA control GM/WM (the other setting of `pool_oth
 | max_reactions | 60 |
 | within budget | False |
 | target cells per reaction | 250 |
-| reactions with shortfall | 23 |
+| reactions with shortfall | 27 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | False |
 | control pooling level (0 none, 1 by prefix, 2 all) | 0 |
@@ -302,6 +302,10 @@ Segmented Pu.1⁺ cells filled by zone, largest lesions:
 
 ![CML_2_rescan scene 0](CML_2_rescan/scene0/overview.png)
 
+Zone polygons (core / rim / peri / deep) as exported to GeoJSON / LMD:
+
+![CML_2_rescan scene 0 zone polygons](CML_2_rescan/scene0/zone_polygons.png)
+
 Segmented Pu.1⁺ cells filled by zone, largest lesions:
 
 ![CML_2_rescan scene 0 cells](CML_2_rescan/scene0/lesion_cells.png)
@@ -310,6 +314,10 @@ Segmented Pu.1⁺ cells filled by zone, largest lesions:
 
 ![CML_metal scene 0](CML_metal/scene0/overview.png)
 
+Zone polygons (core / rim / peri / deep) as exported to GeoJSON / LMD:
+
+![CML_metal scene 0 zone polygons](CML_metal/scene0/zone_polygons.png)
+
 Segmented Pu.1⁺ cells filled by zone, largest lesions:
 
 ![CML_metal scene 0 cells](CML_metal/scene0/lesion_cells.png)
@@ -317,6 +325,10 @@ Segmented Pu.1⁺ cells filled by zone, largest lesions:
 ### CML_metal scene 1
 
 ![CML_metal scene 1](CML_metal/scene1/overview.png)
+
+Zone polygons (core / rim / peri / deep) as exported to GeoJSON / LMD:
+
+![CML_metal scene 1 zone polygons](CML_metal/scene1/zone_polygons.png)
 
 Segmented Pu.1⁺ cells filled by zone, largest lesions:
 

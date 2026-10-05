@@ -40,6 +40,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", default="outputs/sdata")
     ap.add_argument("--config", default=None, help="YAML with a `reactions:` block (defaults otherwise)")
+    ap.add_argument("--no-figures", action="store_true", help="skip the per-lesion / per-section figures")
     a = ap.parse_args()
     root = Path(a.run_dir)
     out = root / "cohort"

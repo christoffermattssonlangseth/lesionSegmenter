@@ -7,7 +7,7 @@ reactions: total,57
 max_reactions,60
 within budget,True
 target cells per reaction,250
-reactions with shortfall,20
+reactions with shortfall,24
 CFA GM/WM pooled,True
 other control GM/WM pooled,True
 "control pooling level (0 none, 1 by prefix, 2 all)",1
