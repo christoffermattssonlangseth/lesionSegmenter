@@ -175,7 +175,7 @@ Per section and per animal: `results/cohort/capture_sites_by_section.csv`, `capt
 
 ## Mass-spec reaction plan (important-info.md)
 
-Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a section are pooled; lesion sections give one reaction per section per compartment (core, rim, peri, deep = remaining tissue outward of peri); control sections give GM and WM per section (CFA sections pooled together; other controls pooled only if the budget is exceeded); VBO gives one reaction per section that has VBO cells. Manual GM/WM/VBO polygons define those compartments; lesion compartments come from the automatic zones.
+Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells or more (every eligible cell is collected; 250 is the target, not a cap); the two replicate slides of a section are pooled; lesion sections give one reaction per section per compartment (core, rim, peri, deep = remaining tissue outward of peri); control sections give GM and WM per section (CFA sections pooled together; other controls pooled only if the budget is exceeded); VBO gives one reaction per section that has VBO cells. Manual GM/WM/VBO polygons define those compartments; lesion compartments come from the automatic zones.
 
 | item | value |
 |---|---|
@@ -187,6 +187,7 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a sec
 | max_reactions | 60 |
 | within budget | True |
 | target cells per reaction | 250 |
+| max cells per reaction | all |
 | reactions with shortfall | 24 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | True |
@@ -201,30 +202,30 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a sec
 
 | reaction_id | reaction_name | pool_type | compartment | sections | n_sections | n_available | n_selected | shortfall |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 663 | 250 | False |
-| 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 719 | 250 | False |
-| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1037 | 250 | False |
-| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 841 | 250 | False |
-| 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1318 | 250 | False |
-| 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 361 | 250 | False |
-| 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 602 | 250 | False |
-| 8 | P2_3_L|deep | lesion | deep | P2_3_L | 1 | 611 | 250 | False |
-| 9 | P2_3_T|core | lesion | core | P2_3_T | 1 | 1890 | 250 | False |
-| 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 397 | 250 | False |
-| 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 518 | 250 | False |
-| 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 460 | 250 | False |
-| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 670 | 250 | False |
-| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 864 | 250 | False |
-| 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 641 | 250 | False |
-| 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 729 | 250 | False |
-| 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 435 | 250 | False |
-| 18 | P3_1_T|rim | lesion | rim | P3_1_T | 1 | 305 | 250 | False |
-| 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 294 | 250 | False |
-| 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 258 | 250 | False |
-| 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 1907 | 250 | False |
-| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 1430 | 250 | False |
-| 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 1787 | 250 | False |
-| 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 1100 | 250 | False |
+| 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 663 | 663 | False |
+| 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 719 | 719 | False |
+| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1037 | 1037 | False |
+| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 841 | 841 | False |
+| 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1318 | 1318 | False |
+| 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 361 | 361 | False |
+| 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 602 | 602 | False |
+| 8 | P2_3_L|deep | lesion | deep | P2_3_L | 1 | 611 | 611 | False |
+| 9 | P2_3_T|core | lesion | core | P2_3_T | 1 | 1890 | 1890 | False |
+| 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 397 | 397 | False |
+| 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 518 | 518 | False |
+| 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 460 | 460 | False |
+| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 670 | 670 | False |
+| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 864 | 864 | False |
+| 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 641 | 641 | False |
+| 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 729 | 729 | False |
+| 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 435 | 435 | False |
+| 18 | P3_1_T|rim | lesion | rim | P3_1_T | 1 | 305 | 305 | False |
+| 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 294 | 294 | False |
+| 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 258 | 258 | False |
+| 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 1907 | 1907 | False |
+| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 1430 | 1430 | False |
+| 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 1787 | 1787 | False |
+| 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 1100 | 1100 | False |
 | 25 | R1_3_L|core | lesion | core | R1_3_L | 1 | 15 | 15 | True |
 | 26 | R1_3_L|rim | lesion | rim | R1_3_L | 1 | 125 | 125 | True |
 | 27 | R1_3_L|peri | lesion | peri | R1_3_L | 1 | 179 | 179 | True |
@@ -233,16 +234,16 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a sec
 | 30 | R1_3_T|rim | lesion | rim | R1_3_T | 1 | 15 | 15 | True |
 | 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 56 | 56 | True |
 | 32 | R1_3_T|deep | lesion | deep | R1_3_T | 1 | 124 | 124 | True |
-| 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1568 | 250 | False |
-| 34 | OS(pooled)|GM | GM | GM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 1600 | 250 | False |
-| 35 | P3_1_L|GM | GM | GM | P3_1_L | 1 | 437 | 250 | False |
-| 36 | R1_2_L|GM | GM | GM | R1_2_L | 1 | 592 | 250 | False |
-| 37 | R1_3_C|GM | GM | GM | R1_3_C | 1 | 1878 | 250 | False |
+| 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1568 | 1568 | False |
+| 34 | OS(pooled)|GM | GM | GM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 1600 | 1600 | False |
+| 35 | P3_1_L|GM | GM | GM | P3_1_L | 1 | 437 | 437 | False |
+| 36 | R1_2_L|GM | GM | GM | R1_2_L | 1 | 592 | 592 | False |
+| 37 | R1_3_C|GM | GM | GM | R1_3_C | 1 | 1878 | 1878 | False |
 | 38 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 131 | 131 | True |
 | 39 | OS(pooled)|WM | WM | WM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 209 | 209 | False |
-| 40 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 280 | 250 | False |
-| 41 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 355 | 250 | False |
-| 42 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 318 | 250 | False |
+| 40 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 280 | 280 | False |
+| 41 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 355 | 355 | False |
+| 42 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 318 | 318 | False |
 | 43 | CFA_L2_C|VBO | VBO | VBO | CFA_L2_C | 1 | 50 | 50 | True |
 | 44 | CFA_L2_L|VBO | VBO | VBO | CFA_L2_L | 1 | 100 | 100 | True |
 | 45 | CFA_L2_T|VBO | VBO | VBO | CFA_L2_T | 1 | 30 | 30 | True |
@@ -272,6 +273,7 @@ Alternative pooling of the non-CFA control GM/WM (the other setting of `pool_oth
 | max_reactions | 60 |
 | within budget | False |
 | target cells per reaction | 250 |
+| max cells per reaction | all |
 | reactions with shortfall | 27 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | False |

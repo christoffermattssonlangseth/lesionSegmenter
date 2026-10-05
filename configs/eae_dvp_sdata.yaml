@@ -48,11 +48,12 @@ parenchyma: {enabled: true, open_um: 150, erode_um: 30}
 assign: {distance_bins_um: [-100, -50, 0, 50, 100, 150, 300]}
 export: {cell_geojson: pu1}
 
-# Mass-spec reaction plan (important-info.md): ≤60 reactions, ~250 Pu.1+ cells each (VBO: all cells); replicate slides of a
+# Mass-spec reaction plan (important-info.md): ≤60 reactions, ~250 Pu.1+ cells each or more (VBO: all cells); replicate slides of a
 # section are pooled; lesion sections -> core/rim/peri/deep per section; controls -> GM/WM per section
 # (CFA pooled; other controls pooled only if over budget); VBO -> one reaction per section.
 reactions:
-  target_cells: 250
+  target_cells: 250           # general target (reactions below 0.8 x target are flagged as shortfall), not a cap
+  max_cells: null             # null = collect every eligible cell; set a number to cap each reaction
   max_reactions: 60
   pool_cfa: true
   pool_other_gm_wm: auto      # auto (least pooling that fits) | prefix | true | false
@@ -60,9 +61,8 @@ reactions:
   lesion_compartments: [core, rim, peri, deep]
   vbo_per_section: true
   vbo_all_cells: true         # VBO reactions capture every cell in the polygons, not only Pu.1+
-  order: random               # cells per reaction: stratified over the two replicate slides, random within a slide
+  order: random               # only with max_cells: stratified over the two replicate slides, random within a slide
   edge_exclusion_um: 100
-  order: spatial
 
 # LMD wells: rings as fractions of the section radius (0.1 ≈ 100 µm at R = 1 mm).
 # To capture more material raise target_area_um2 (µm² of Pu.1+ nuclei per well) – the capture_sites

@@ -13,6 +13,9 @@ Rules (important-info.md, agreed with Ting):
   GM / WM reactions unless the budget is exceeded (``pool_other_gm_wm: auto``); then the smallest pooling
   that fits is applied: first sections sharing a control prefix (``control_prefixes``, default OS) are
   pooled, and only if still over budget all remaining control sections are pooled.
+* Every eligible cell of a pool is collected by default: ``target_cells`` (~250) is the general
+  target used to flag shortfalls, not a cap. Set ``max_cells`` to cap a reaction; the cells are then
+  picked by ``order`` and stratified across replicate slides.
 * ``VBO`` (vascular barrier niche, manual polygons) → one reaction per section that has VBO cells,
   pooled across replicate slides only. VBO reactions take **every cell** inside the polygons (Pu.1⁺ and
   Pu.1⁻; ``vbo_all_cells: true``) and ignore the edge exclusion.
@@ -51,12 +54,12 @@ def _compartment(cells: pd.DataFrame, edge_exclusion_um: float) -> pd.Series:
     return pd.Series(comp, index=cells.index)
 
 
-def _select(df: pd.DataFrame, n: int, order: str, rng: np.random.Generator) -> pd.Index:
-    """Pick up to ``n`` rows, stratified across replicate slides (``scene``) in proportion to what
-    each slide offers, so a pooled reaction never comes from one slide only. Within a slide:
+def _select(df: pd.DataFrame, n: int | None, order: str, rng: np.random.Generator) -> pd.Index:
+    """Pick up to ``n`` rows (all rows if ``n`` is None), stratified across replicate slides
+    (``scene``) in proportion to what each slide offers, so a pooled reaction never comes from one slide only. Within a slide:
     ``random`` (default, seeded), ``spatial`` (x/y order – compact for cutting but biased to one
     corner) or ``central`` (closest to / deepest in the lesion first)."""
-    if len(df) <= n:
+    if n is None or len(df) <= n:
         return df.index
     scenes = df["scene"].astype(str).to_numpy() if "scene" in df else np.array(["_"] * len(df))
     uniq, counts = np.unique(scenes, return_counts=True)
@@ -95,6 +98,8 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
     """
     cfg = dict(cfg or {})
     target = int(cfg.get("target_cells", 250))
+    max_cells = cfg.get("max_cells")
+    max_cells = None if max_cells is None else int(max_cells)
     max_rx = int(cfg.get("max_reactions", 60))
     pool_cfa = bool(cfg.get("pool_cfa", True))
     pool_other = cfg.get("pool_other_gm_wm", "auto")
@@ -202,7 +207,7 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
               for scene, c in cells_by_scene.items()}
     for rid, p in enumerate(pools, start=1):
         avail = pos[p["mask"]]
-        chosen = _select(avail, target, order, rng)
+        chosen = _select(avail, max_cells, order, rng)
         sel = avail.loc[chosen]
         for scene, grp in sel.groupby("scene"):
             ids, names = assign[scene]
@@ -235,6 +240,7 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
         {"item": "max_reactions", "value": max_rx},
         {"item": "within budget", "value": bool(len(plan) <= max_rx)},
         {"item": "target cells per reaction", "value": target},
+        {"item": "max cells per reaction", "value": "all" if max_cells is None else max_cells},
         {"item": "reactions with shortfall", "value": int(plan["shortfall"].sum()) if len(plan) else 0},
         {"item": "CFA GM/WM pooled", "value": pool_cfa},
         {"item": "other control GM/WM pooled", "value": use_pooled},

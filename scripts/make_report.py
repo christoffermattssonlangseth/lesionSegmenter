@@ -113,7 +113,7 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
         plan = pd.read_csv(rp)
         budget = pd.read_csv(rb)
         out.append("\n\n## Mass-spec reaction plan (important-info.md)\n")
-        out.append("Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells; the two replicate slides of a section are pooled; lesion sections "
+        out.append("Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells or more (every eligible cell is collected; 250 is the target, not a cap); the two replicate slides of a section are pooled; lesion sections "
                    "give one reaction per section per compartment (core, rim, peri, deep = remaining tissue outward of peri); "
                    "control sections give GM and WM per section (CFA sections pooled together; other controls pooled only if "
                    "the budget is exceeded); VBO gives one reaction per section that has VBO cells. Manual GM/WM/VBO polygons "

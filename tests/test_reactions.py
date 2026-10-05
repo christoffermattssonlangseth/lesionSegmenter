@@ -39,7 +39,7 @@ def test_plan_pools_replicates_and_cfa():
     assert set(les.compartment) == {"core", "rim", "peri", "deep"}
     assert (les.scenes == "A;B").all()
     core = les[les.compartment == "core"].iloc[0]
-    assert core.n_available == 400 and core.n_selected == 250 and not core.shortfall
+    assert core.n_available == 400 and core.n_selected == 400 and not core.shortfall  # 250 is a target, not a cap
     peri = les[les.compartment == "peri"].iloc[0]
     assert peri.n_available == 180 and peri.shortfall  # < 0.8 * 250
     # CFA pooled into one GM + one WM; OS keeps its own (budget not exceeded)
@@ -57,6 +57,15 @@ def test_plan_pools_replicates_and_cfa():
     assert set(a.loc[a.in_vbo & (a.reaction_id > 0), "reaction_name"]) == {"P1_T|VBO"}
     assert budget.set_index("item").loc["reactions: total", "value"] == len(plan)
     assert budget.set_index("item").loc["within budget", "value"]
+
+
+def test_max_cells_caps_and_stratifies():
+    cells = {"A": _scene("A", 0), "B": _scene("B", 100)}
+    plan, out, _ = plan_reactions(cells, {"target_cells": 250, "max_cells": 250, "max_reactions": 60})
+    core = plan[plan.reaction_name == "P1_T|core"].iloc[0]
+    assert core.n_available == 400 and core.n_selected == 250
+    per_scene = [int((o.reaction_name == "P1_T|core").sum()) for o in out.values()]
+    assert sum(per_scene) == 250 and min(per_scene) > 0  # drawn from both replicate slides
 
 
 def test_budget_auto_pooling():

@@ -388,7 +388,8 @@ def nb_collection(run_dir):
 For every section (animal × spinal level) on both replicate slides: **which cells are collected and
 into which reaction**. Filled outlines are collected cells coloured by compartment (core, rim, peri,
 deep, GM, WM, VBO); grey dots are Pu.1⁺ cells in that section that are *not* collected (outside the
-eligible compartments, within the edge exclusion, in the meninges, or beyond the per-reaction target).
+eligible compartments, within the edge exclusion, or in the meninges). Every eligible cell is collected:
+~250 per reaction is a general target, not a cap (reactions below 80 % of it are flagged as shortfall).
 White line = parenchyma boundary; yellow = automatic lesion. The table under each section lists its
 reactions and how the selected cells split between the two slides. Aggregates at the end.
 """), code(SETUP.format(run_dir=run_dir)), code('''
@@ -434,7 +435,7 @@ display(sel.pivot_table(index=["animal", "level"], columns="compartment", values
 display(Markdown("### Collected cells by manual annotation (sanity check)"))
 display(pd.crosstab(sel.compartment, sel.manual_annotation.fillna("none")))
 '''), code('''
-# cells per reaction vs the 250-cell target, and area per reaction
+# cells per reaction vs the 250-cell target (a minimum to aim for, not a cap), and area per reaction
 fig, axes = plt.subplots(1, 2, figsize=(16, 0.28 * len(plan) + 1.5))
 d = plan.sort_values(["pool_type", "n_selected"])
 col = [R.REACTION_COLORS.get(c, "#898781") for c in d.compartment]
