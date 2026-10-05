@@ -52,11 +52,37 @@ def _compartment(cells: pd.DataFrame, edge_exclusion_um: float) -> pd.Series:
 
 
 def _select(df: pd.DataFrame, n: int, order: str, rng: np.random.Generator) -> pd.Index:
-    if order == "random":
-        return df.index[rng.permutation(len(df))[:n]]
-    if order == "central" and "dist_to_lesion_um" in df:
-        return df.sort_values("dist_to_lesion_um").index[:n]
-    return df.sort_values(["scene", "x_um", "y_um"]).index[:n]
+    """Pick up to ``n`` rows, stratified across replicate slides (``scene``) in proportion to what
+    each slide offers, so a pooled reaction never comes from one slide only. Within a slide:
+    ``random`` (default, seeded), ``spatial`` (x/y order – compact for cutting but biased to one
+    corner) or ``central`` (closest to / deepest in the lesion first)."""
+    if len(df) <= n:
+        return df.index
+    scenes = df["scene"].astype(str).to_numpy() if "scene" in df else np.array(["_"] * len(df))
+    uniq, counts = np.unique(scenes, return_counts=True)
+    quota = np.floor(n * counts / counts.sum()).astype(int)
+    for i in np.argsort(-(n * counts / counts.sum() - quota))[: n - quota.sum()]:
+        quota[i] += 1
+    quota = np.minimum(quota, counts)
+    short = n - quota.sum()  # redistribute if a slide cannot fill its share
+    while short > 0:
+        room = counts - quota
+        if room.sum() == 0:
+            break
+        i = int(np.argmax(room))
+        quota[i] += 1
+        short -= 1
+    chosen = []
+    for sc, q in zip(uniq, quota, strict=True):
+        sub = df[scenes == sc]
+        if order == "spatial":
+            sub = sub.sort_values(["x_um", "y_um"])
+        elif order == "central" and "dist_to_lesion_um" in sub:
+            sub = sub.sort_values("dist_to_lesion_um")
+        else:
+            sub = sub.iloc[rng.permutation(len(sub))]
+        chosen.append(sub.index[: int(q)])
+    return pd.Index(np.concatenate(chosen)) if chosen else df.index[:0]
 
 
 def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = None
@@ -76,7 +102,7 @@ def plan_reactions(cells_by_scene: dict[str, pd.DataFrame], cfg: dict | None = N
     lesion_comps = tuple(cfg.get("lesion_compartments", LESION_COMPARTMENTS))
     vbo_per_section = bool(cfg.get("vbo_per_section", True))
     edge = float(cfg.get("edge_exclusion_um", 100.0))
-    order = cfg.get("order", "spatial")
+    order = cfg.get("order", "random")
     shortfall_frac = float(cfg.get("shortfall_frac", 0.8))
     rng = np.random.default_rng(int(cfg.get("seed", 0)))
     vbo_all = bool(cfg.get("vbo_all_cells", True))

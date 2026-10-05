@@ -60,6 +60,7 @@ reactions:
   lesion_compartments: [core, rim, peri, deep]
   vbo_per_section: true
   vbo_all_cells: true         # VBO reactions capture every cell in the polygons, not only Pu.1+
+  order: random               # cells per reaction: stratified over the two replicate slides, random within a slide
   edge_exclusion_um: 100
   order: spatial
 

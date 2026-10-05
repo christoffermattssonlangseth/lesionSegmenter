@@ -1,62 +1,62 @@
 reaction_id,reaction_name,pool_type,compartment,sections,scenes,n_sections,n_available,n_selected,n_pu1_available,n_pu1_selected,area_selected_um2,shortfall,priority
-1,P2_3_C|core,lesion,core,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,663,250,663,250,6691.436505809363,False,1
-2,P2_3_C|rim,lesion,rim,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,719,250,719,250,6780.214587165164,False,1
-3,P2_3_C|peri,lesion,peri,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,1037,250,1037,250,6996.2412517976145,False,1
-4,P2_3_C|deep,lesion,deep,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,841,250,841,250,7496.25208857654,False,1
-5,P2_3_L|core,lesion,core,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,1318,250,1318,250,7739.863371344543,False,1
-6,P2_3_L|rim,lesion,rim,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,361,250,361,250,7370.800204565425,False,1
-7,P2_3_L|peri,lesion,peri,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,602,250,602,250,8041.391783377997,False,1
-8,P2_3_L|deep,lesion,deep,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,611,250,611,250,8337.213033038579,False,1
-9,P2_3_T|core,lesion,core,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,1890,250,1890,250,6512.612084792676,False,1
-10,P2_3_T|rim,lesion,rim,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,397,250,397,250,6406.289763549895,False,1
-11,P2_3_T|peri,lesion,peri,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,518,250,518,250,6510.181256374601,False,1
-12,P2_3_T|deep,lesion,deep,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,460,250,460,250,6603.3982417981915,False,1
-13,P3_1_C|core,lesion,core,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,670,250,670,250,8157.01466552472,False,1
-14,P3_1_C|rim,lesion,rim,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,864,250,864,250,7908.118973152204,False,1
-15,P3_1_C|peri,lesion,peri,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,641,250,641,250,8056.399506654811,False,1
-16,P3_1_C|deep,lesion,deep,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,729,250,729,250,8721.706675862872,False,1
-17,P3_1_T|core,lesion,core,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,435,250,435,250,7698.9620410056195,False,1
-18,P3_1_T|rim,lesion,rim,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,305,250,305,250,7535.99084880247,False,1
-19,P3_1_T|peri,lesion,peri,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,294,250,294,250,7649.182902531117,False,1
-20,P3_1_T|deep,lesion,deep,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,258,250,258,250,8346.7249703267,False,1
-21,R1_2_T|core,lesion,core,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1907,250,1907,250,8120.446551061497,False,1
-22,R1_2_T|rim,lesion,rim,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1430,250,1430,250,7748.635491288032,False,1
-23,R1_2_T|peri,lesion,peri,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1787,250,1787,250,8173.3963352987075,False,1
-24,R1_2_T|deep,lesion,deep,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1100,250,1100,250,8482.217232586388,False,1
-25,R1_3_L|core,lesion,core,R1_3_L,CML_1 scene 0,1,15,15,15,15,356.48627192037935,True,1
+1,P2_3_C|core,lesion,core,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,663,250,663,250,6827.351520837411,False,1
+2,P2_3_C|rim,lesion,rim,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,719,250,719,250,6757.597314057853,False,1
+3,P2_3_C|peri,lesion,peri,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,1037,250,1037,250,6813.71774405777,False,1
+4,P2_3_C|deep,lesion,deep,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,841,250,841,250,7887.298399310427,False,1
+5,P2_3_L|core,lesion,core,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,1318,250,1318,250,7154.456475356703,False,1
+6,P2_3_L|rim,lesion,rim,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,361,250,361,250,7228.332521627781,False,1
+7,P2_3_L|peri,lesion,peri,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,602,250,602,250,8064.85456202203,False,1
+8,P2_3_L|deep,lesion,deep,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,611,250,611,250,8456.42931371637,False,1
+9,P2_3_T|core,lesion,core,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,1890,250,1890,250,6710.354692193515,False,1
+10,P2_3_T|rim,lesion,rim,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,397,250,397,250,6557.740942815209,False,1
+11,P2_3_T|peri,lesion,peri,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,518,250,518,250,6633.625064736001,False,1
+12,P2_3_T|deep,lesion,deep,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,460,250,460,250,6796.807633323331,False,1
+13,P3_1_C|core,lesion,core,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,670,250,670,250,6955.656986034963,False,1
+14,P3_1_C|rim,lesion,rim,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,864,250,864,250,7373.12534479141,False,1
+15,P3_1_C|peri,lesion,peri,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,641,250,641,250,8018.985886654867,False,1
+16,P3_1_C|deep,lesion,deep,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,729,250,729,250,8831.939460212992,False,1
+17,P3_1_T|core,lesion,core,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,435,250,435,250,7459.895350497498,False,1
+18,P3_1_T|rim,lesion,rim,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,305,250,305,250,7517.918167955038,False,1
+19,P3_1_T|peri,lesion,peri,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,294,250,294,250,7567.168865469091,False,1
+20,P3_1_T|deep,lesion,deep,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,258,250,258,250,8347.570475863422,False,1
+21,R1_2_T|core,lesion,core,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1907,250,1907,250,7742.188511570528,False,1
+22,R1_2_T|rim,lesion,rim,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1430,250,1430,250,7254.22612868989,False,1
+23,R1_2_T|peri,lesion,peri,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1787,250,1787,250,8146.974287276147,False,1
+24,R1_2_T|deep,lesion,deep,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1100,250,1100,250,8337.107344846489,False,1
+25,R1_3_L|core,lesion,core,R1_3_L,CML_1 scene 0,1,15,15,15,15,356.4862719203794,True,1
 26,R1_3_L|rim,lesion,rim,R1_3_L,CML_1 scene 0;CML_metal scene 0,1,125,125,125,125,3066.014452537861,True,1
 27,R1_3_L|peri,lesion,peri,R1_3_L,CML_1 scene 0;CML_metal scene 0,1,179,179,179,179,4858.486190388331,True,1
 28,R1_3_L|deep,lesion,deep,R1_3_L,CML_1 scene 0;CML_metal scene 0,1,190,190,190,190,5872.987146262545,True,1
 29,R1_3_T|core,lesion,core,R1_3_T,CML_1 scene 0,1,8,8,8,8,200.2791240110047,True,1
-30,R1_3_T|rim,lesion,rim,R1_3_T,CML_1 scene 0,1,15,15,15,15,393.8998919203243,True,1
-31,R1_3_T|peri,lesion,peri,R1_3_T,CML_1 scene 0;CML_metal scene 0,1,56,56,56,56,1747.765632596298,True,1
-32,R1_3_T|deep,lesion,deep,R1_3_T,CML_1 scene 0;CML_metal scene 0,1,124,124,124,124,3573.7405273393742,True,1
-33,CFA(pooled)|GM,GM,GM,CFA_L2_C;CFA_L2_L;CFA_L2_T,CML_2_rescan scene 0;CML_metal scene 1,3,1568,250,1568,250,8305.295199027325,False,2
-34,OS1_2_|GM,GM,GM,OS1_2_,CML_1 scene 0;CML_metal scene 0,1,314,250,314,250,8135.34858614622,False,3
-35,OS1_2_C|GM,GM,GM,OS1_2_C,CML_1 scene 0;CML_metal scene 0,1,910,250,910,250,7247.356396204024,False,3
-36,OS1_2_L|GM,GM,GM,OS1_2_L,CML_1 scene 0;CML_metal scene 0,1,376,250,376,250,7762.797709028124,False,3
-37,P3_1_L|GM,GM,GM,P3_1_L,CML_2_rescan scene 0;CML_metal scene 1,1,437,250,437,250,8457.380507445181,False,3
-38,R1_2_L|GM,GM,GM,R1_2_L,CML_2_rescan scene 0;CML_metal scene 1,1,592,250,592,250,8468.689143998838,False,3
-39,R1_3_C|GM,GM,GM,R1_3_C,CML_1 scene 0;CML_metal scene 0,1,1878,250,1878,250,6817.6282071651085,False,3
-40,CFA(pooled)|WM,WM,WM,CFA_L2_C;CFA_L2_L;CFA_L2_T,CML_2_rescan scene 0;CML_metal scene 1,3,131,131,131,131,4338.39459711226,True,2
+30,R1_3_T|rim,lesion,rim,R1_3_T,CML_1 scene 0,1,15,15,15,15,393.89989192032436,True,1
+31,R1_3_T|peri,lesion,peri,R1_3_T,CML_1 scene 0;CML_metal scene 0,1,56,56,56,56,1747.7656325962982,True,1
+32,R1_3_T|deep,lesion,deep,R1_3_T,CML_1 scene 0;CML_metal scene 0,1,124,124,124,124,3573.740527339374,True,1
+33,CFA(pooled)|GM,GM,GM,CFA_L2_C;CFA_L2_L;CFA_L2_T,CML_2_rescan scene 0;CML_metal scene 1,3,1568,250,1568,250,8444.592236202265,False,2
+34,OS1_2_|GM,GM,GM,OS1_2_,CML_1 scene 0;CML_metal scene 0,1,314,250,314,250,8317.555029309795,False,3
+35,OS1_2_C|GM,GM,GM,OS1_2_C,CML_1 scene 0;CML_metal scene 0,1,910,250,910,250,8245.792746880521,False,3
+36,OS1_2_L|GM,GM,GM,OS1_2_L,CML_1 scene 0;CML_metal scene 0,1,376,250,376,250,8262.068728462418,False,3
+37,P3_1_L|GM,GM,GM,P3_1_L,CML_2_rescan scene 0;CML_metal scene 1,1,437,250,437,250,8706.381888009786,False,3
+38,R1_2_L|GM,GM,GM,R1_2_L,CML_2_rescan scene 0;CML_metal scene 1,1,592,250,592,250,8596.466168235936,False,3
+39,R1_3_C|GM,GM,GM,R1_3_C,CML_1 scene 0;CML_metal scene 0,1,1878,250,1878,250,7037.988087673259,False,3
+40,CFA(pooled)|WM,WM,WM,CFA_L2_C;CFA_L2_L;CFA_L2_T,CML_2_rescan scene 0;CML_metal scene 1,3,131,131,131,131,4338.394597112261,True,2
 41,OS1_2_|WM,WM,WM,OS1_2_,CML_1 scene 0;CML_metal scene 0,1,45,45,45,45,1396.3523938962505,True,3
 42,OS1_2_C|WM,WM,WM,OS1_2_C,CML_1 scene 0;CML_metal scene 0,1,96,96,96,96,2772.624031295355,True,3
 43,OS1_2_L|WM,WM,WM,OS1_2_L,CML_1 scene 0;CML_metal scene 0,1,68,68,68,68,1813.6093762685177,True,3
-44,P3_1_L|WM,WM,WM,P3_1_L,CML_2_rescan scene 0;CML_metal scene 1,1,280,250,280,250,6636.161581346167,False,3
-45,R1_2_L|WM,WM,WM,R1_2_L,CML_2_rescan scene 0;CML_metal scene 1,1,355,250,355,250,7392.360595751834,False,3
-46,R1_3_C|WM,WM,WM,R1_3_C,CML_1 scene 0;CML_metal scene 0,1,318,250,318,250,6299.016248578301,False,3
-47,CFA_L2_C|VBO,VBO,VBO,CFA_L2_C,CML_2_rescan scene 0;CML_metal scene 1,1,50,50,3,3,2082.057384177727,True,4
-48,CFA_L2_L|VBO,VBO,VBO,CFA_L2_L,CML_2_rescan scene 0;CML_metal scene 1,1,100,100,2,2,3342.283386661748,True,4
+44,P3_1_L|WM,WM,WM,P3_1_L,CML_2_rescan scene 0;CML_metal scene 1,1,280,250,280,250,6760.76795982056,False,3
+45,R1_2_L|WM,WM,WM,R1_2_L,CML_2_rescan scene 0;CML_metal scene 1,1,355,250,355,250,7637.87426597746,False,3
+46,R1_3_C|WM,WM,WM,R1_3_C,CML_1 scene 0;CML_metal scene 0,1,318,250,318,250,6384.517995979306,False,3
+47,CFA_L2_C|VBO,VBO,VBO,CFA_L2_C,CML_2_rescan scene 0;CML_metal scene 1,1,50,50,3,3,2082.0573841777273,True,4
+48,CFA_L2_L|VBO,VBO,VBO,CFA_L2_L,CML_2_rescan scene 0;CML_metal scene 1,1,100,100,2,2,3342.2833866617475,True,4
 49,CFA_L2_T|VBO,VBO,VBO,CFA_L2_T,CML_2_rescan scene 0;CML_metal scene 1,1,30,30,4,4,1040.6059393205026,True,4
 50,OS1_2_C|VBO,VBO,VBO,OS1_2_C,CML_1 scene 0;CML_metal scene 0,1,127,127,11,11,3213.132415927475,True,4
 51,OS1_2_L|VBO,VBO,VBO,OS1_2_L,CML_1 scene 0,1,53,53,2,2,1537.1290657604497,True,4
-52,P2_3_L|VBO,VBO,VBO,P2_3_L,CML_1 scene 0,1,95,95,28,28,2585.7673076798105,True,4
-53,P2_3_T|VBO,VBO,VBO,P2_3_T,CML_1 scene 0,1,39,39,10,10,1048.0041127668194,True,4
+52,P2_3_L|VBO,VBO,VBO,P2_3_L,CML_1 scene 0,1,95,95,28,28,2585.76730767981,True,4
+53,P2_3_T|VBO,VBO,VBO,P2_3_T,CML_1 scene 0,1,39,39,10,10,1048.0041127668192,True,4
 54,P3_1_C|VBO,VBO,VBO,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,104,104,22,22,3023.3164229334043,True,4
-55,P3_1_L|VBO,VBO,VBO,P3_1_L,CML_2_rescan scene 0,1,13,13,2,2,413.24083107283826,True,4
+55,P3_1_L|VBO,VBO,VBO,P3_1_L,CML_2_rescan scene 0,1,13,13,2,2,413.24083107283815,True,4
 56,P3_1_T|VBO,VBO,VBO,P3_1_T,CML_2_rescan scene 0,1,46,46,3,3,1572.3232337264997,True,4
 57,R1_2_L|VBO,VBO,VBO,R1_2_L,CML_2_rescan scene 0,1,45,45,8,8,1550.7628425400908,True,4
 58,R1_2_T|VBO,VBO,VBO,R1_2_T,CML_2_rescan scene 0,1,63,63,14,14,1757.1718816923296,True,4
-59,R1_3_C|VBO,VBO,VBO,R1_3_C,CML_1 scene 0;CML_metal scene 0,1,83,83,18,18,2062.927821409394,True,4
-60,R1_3_L|VBO,VBO,VBO,R1_3_L,CML_metal scene 0,1,15,15,0,0,418.94799344571123,True,4
-61,R1_3_T|VBO,VBO,VBO,R1_3_T,CML_1 scene 0;CML_metal scene 0,1,41,41,8,8,1007.842599772528,True,4
+59,R1_3_C|VBO,VBO,VBO,R1_3_C,CML_1 scene 0;CML_metal scene 0,1,83,83,18,18,2062.9278214093933,True,4
+60,R1_3_L|VBO,VBO,VBO,R1_3_L,CML_metal scene 0,1,15,15,0,0,418.9479934457112,True,4
+61,R1_3_T|VBO,VBO,VBO,R1_3_T,CML_1 scene 0;CML_metal scene 0,1,41,41,8,8,1007.8425997725282,True,4

@@ -51,7 +51,7 @@ DEFAULTS: dict = {
     "reactions": {"target_cells": 250, "max_reactions": 60, "pool_cfa": True, "pool_other_gm_wm": "auto",
                   "lesion_compartments": ["core", "rim", "peri", "deep"],
                   "vbo_per_section": True, "vbo_all_cells": True, "control_prefixes": ["OS"],
-                  "edge_exclusion_um": 100.0, "order": "spatial", "shortfall_frac": 0.8},
+                  "edge_exclusion_um": 100.0, "order": "random", "shortfall_frac": 0.8},
     "samples": [],
 }
 
