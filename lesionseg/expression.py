@@ -211,3 +211,141 @@ def plot_section_map(run, df: pd.DataFrame, section: str, ax, value: str = "Pu1_
     ax.set_yticks([])
     ax.set_title(f"{run.name} – {section}: Pu.1⁺ cells by Pu.1 level", loc="left", fontsize=10)
     return sc
+
+
+# --------------------------------------------------------------------------
+# notebook 08: by animal / spinal level, and per-cell expression vs composition
+# --------------------------------------------------------------------------
+def animal_level(section: pd.Series) -> pd.DataFrame:
+    """``P2_3_T`` → animal ``P2_3``, spinal level ``T`` (C cervical, T thoracic, L lumbar)."""
+    s = section.astype(str)
+    return pd.DataFrame({"animal": s.str.rsplit("_", n=1).str[0], "level": s.str.rsplit("_", n=1).str[-1]},
+                        index=section.index)
+
+
+def section_effects(df: pd.DataFrame, value: str = "Pu1_mean", comps=("core", "rim", "peri", "deep", "meninges"),
+                    min_cells: int = 20) -> pd.DataFrame:
+    """log2(compartment / distal) of Pu.1⁺ cells per slide × section, with animal and level."""
+    med = section_medians(df, value, min_cells=min_cells)
+    eff = (med[med["compartment"].isin(comps)].pivot_table(index=["scene", "section"], columns="compartment",
+                                                           values="log2_vs_ref", observed=True)
+           .reindex(columns=list(comps)).reset_index())
+    eff = pd.concat([eff, animal_level(eff["section"])], axis=1)
+    return eff.sort_values(["animal", "level", "scene"]).reset_index(drop=True)
+
+
+def gradient_by(df: pd.DataFrame, value: str, by: str, edges_um=(-300, -150, -75, 0, 75, 150, 300, 500, 800)):
+    """Median ``value`` of Pu.1⁺ cells per signed-distance bin and ``by`` (animal / level; slides pooled)."""
+    d = df[df["pu1_pos"] & df["dist_to_lesion_um"].notna() & df["compartment"].isin(LESION_ORDER)].copy()
+    d = pd.concat([d, animal_level(d["section"])], axis=1)
+    b = pd.cut(d["dist_to_lesion_um"], list(edges_um))
+    g = d.groupby([by, b], observed=True)[value].agg(median="median", n="size").reset_index()
+    g["mid_um"] = g["dist_to_lesion_um"].map(lambda iv: iv.mid).astype(float)
+    return g[g["n"] >= 30]
+
+
+CELL_TYPE_ORDER = ["round", "elongated", "small"]
+CELL_TYPE_COLORS = {"round": "#2a78d6", "elongated": "#1baf7a", "small": "#eda100"}
+
+
+def cell_types(df: pd.DataFrame, k: int = 3, seed: int = 0, n_fit: int = 40000):
+    """Gaussian mixture on Pu.1⁺ cells over log2 Iba1 (vs control level), log2 nuclear area and
+    eccentricity (standardised). With k = 3 the components are named from their means: smallest nuclei →
+    ``small``, of the other two the rounder → ``round``, the other → ``elongated``.
+
+    Returns (df with ``cell_type`` for Pu.1⁺ cells, profile table, BIC per k for 1–5).
+    """
+    from sklearn.mixture import GaussianMixture
+
+    pos = df["pu1_pos"] & df["Iba1_mean_norm"].notna()
+    X = np.c_[np.log2(df.loc[pos, "Iba1_mean_norm"].clip(lower=0.05)), np.log2(df.loc[pos, "area_um2"]),
+              df.loc[pos, "eccentricity"]]
+    Z = (X - X.mean(0)) / X.std(0)
+    rng = np.random.default_rng(seed)
+    fit = Z[rng.choice(len(Z), min(n_fit, len(Z)), replace=False)]
+    bic = {kk: GaussianMixture(kk, random_state=seed, n_init=3).fit(fit).bic(fit) for kk in range(1, 6)}
+    gm = GaussianMixture(k, random_state=seed, n_init=3).fit(fit)
+    lab = gm.predict(Z)
+    out = df.copy()
+    out["cell_type"] = None
+    out.loc[pos, "cell_type"] = lab
+    prof = (out[pos].groupby("cell_type").agg(n=("cell_type", "size"), iba1_vs_control=("Iba1_mean_norm", "median"),
+                                              area_um2=("area_um2", "median"), eccentricity=("eccentricity", "median"),
+                                              pu1_vs_control=("Pu1_mean_norm", "median")))
+    names = {i: f"type {i}" for i in prof.index}
+    if k == 3:
+        small = prof["area_um2"].idxmin()
+        rest = prof.drop(index=small)
+        names = {small: "small", rest["eccentricity"].idxmin(): "round", rest["eccentricity"].idxmax(): "elongated"}
+    out["cell_type"] = out["cell_type"].map(names)
+    prof.index = prof.index.map(names)
+    prof["share"] = prof["n"] / prof["n"].sum()
+    if k == 3:
+        prof = prof.reindex(CELL_TYPE_ORDER)
+    return out, prof, pd.Series(bic, name="BIC")
+
+
+def composition(df: pd.DataFrame, comps=LESION_ORDER) -> pd.DataFrame:
+    """Share of each cell type among Pu.1⁺ cells per slide × section × compartment."""
+    d = df[df["cell_type"].notna() & df["compartment"].isin(comps)]
+    t = d.groupby(["scene", "section", "compartment", "cell_type"], observed=True).size().unstack("cell_type",
+                                                                                                fill_value=0)
+    return (t.div(t.sum(axis=1), axis=0)).reset_index()
+
+
+def composition_vs_expression(df: pd.DataFrame, value: str = "Pu1_mean", ref: str = "distal",
+                              comps=("core", "rim", "peri", "deep"), min_cells: int = 10) -> pd.DataFrame:
+    """Split the difference in *mean* ``value`` between a compartment and ``ref`` (same section and slide)
+    into a composition part and a per-cell part:
+
+        observed  = Σ_t w_c,t·m_c,t − Σ_t w_ref,t·m_ref,t
+        per-cell  = Σ_t w_ref,t·(m_c,t − m_ref,t)     (ref composition, compartment expression)
+        composition = observed − per-cell
+
+    Averaged over slide × section pairs; ``share_per_cell`` = per-cell / observed."""
+    d = df[df["cell_type"].notna()]
+    rows = []
+    for (scene, sec), s in d.groupby(["scene", "section"]):
+        r = s[s["compartment"] == ref]
+        if len(r) < min_cells:
+            continue
+        w_r = r["cell_type"].value_counts(normalize=True)
+        m_r = r.groupby("cell_type")[value].mean()
+        for c in comps:
+            x = s[s["compartment"] == c]
+            if len(x) < min_cells:
+                continue
+            m_c = x.groupby("cell_type")[value].mean()
+            types = [t for t in w_r.index if t in m_c.index]
+            obs = x[value].mean() - r[value].mean()
+            per_cell = float(sum(w_r[t] * (m_c[t] - m_r[t]) for t in types) / w_r[types].sum())
+            rows.append({"scene": scene, "section": sec, "compartment": c, "observed": obs, "per_cell": per_cell,
+                         "composition": obs - per_cell})
+    out = pd.DataFrame(rows)
+    summ = out.groupby("compartment")[["observed", "per_cell", "composition"]].median().reindex(list(comps))
+    summ["share_per_cell"] = summ["per_cell"] / summ["observed"]
+    return summ, out
+
+
+def plot_effect_heatmap(eff: pd.DataFrame, ax, title: str, comps=("core", "rim", "peri", "deep", "meninges"),
+                        vmax: float = 0.6, row_labels: bool = True):
+    """Rows = slide × section (grouped by animal), columns = compartment, colour = log2 vs distal
+    (diverging: blue lower, grey equal, orange higher)."""
+    from matplotlib.colors import LinearSegmentedColormap
+
+    cmap = LinearSegmentedColormap.from_list("div", ["#2a78d6", "#e1e0d9", "#eb6834"])
+    M = eff[list(comps)].to_numpy(float)
+    im = ax.imshow(M, cmap=cmap, vmin=-vmax, vmax=vmax, aspect="auto")
+    for i in range(M.shape[0]):
+        for j in range(M.shape[1]):
+            if np.isfinite(M[i, j]):
+                ax.text(j, i, f"{M[i, j]:+.2f}", ha="center", va="center", fontsize=8, color="#0b0b0b")
+    labels = [f"{r.section} · {r.scene.replace(' scene ', ' s')}" for r in eff.itertuples()]
+    ax.set_yticks(range(len(labels)), labels if row_labels else [], fontsize=8)
+    ax.set_xticks(range(len(comps)), comps)
+    # separators between animals
+    an = eff["animal"].to_numpy()
+    for i in np.flatnonzero(an[1:] != an[:-1]):
+        ax.axhline(i + 0.5, color="white", lw=2)
+    ax.set_title(title, loc="left")
+    return im
