@@ -146,6 +146,7 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
 4. `04_manual_vs_automatic` – model report, threshold baseline, missed manual cores and automatic lesions without a manual core, cell-level confusion
 5. `05_capture_sites_and_wells` – capture-site tables (pooled, per section, per animal), wells, selected-cell maps, overlap with the collaborator's selection, LMD export demo
 6. `06_collection_by_section` – section by section on both slides: which cells are collected into which reaction, with per-section tables and cohort aggregates
+7. `07_expression_by_zone` – exploratory: Pu.1 / Iba1 levels and nuclear size of Pu.1⁺ cells by lesion compartment and distance to the edge, paired per section, with a crowding check
 
 ## Open decisions
 
