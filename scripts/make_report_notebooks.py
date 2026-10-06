@@ -1104,6 +1104,140 @@ display(pd.concat({"elongated %": el.median(), "Pu.1⁺ %": pu.median()}, axis=1
 """)]
 
 
+def nb_swelling(run_dir):
+    return [md("""
+# 11 · Meningeal swelling along the surface
+
+Each section's outer surface is traced and cut into **100 µm segments**. Every surface-meninges nucleus
+(≤ 80 µm deep; flaps / roots excluded) is assigned to its nearest surface point, giving per segment:
+
+* **cellularity** – meningeal nuclei per 100 µm of surface (the main swelling measure: a swollen
+  meninges has more cells stacked over the same stretch of surface);
+* **Pu.1⁺ per 100 µm** – the myeloid part of it;
+* **thickness** – 90th percentile depth of its meningeal nuclei. Secondary: the meninges boundary always
+  includes the outer 10 µm and only grows into very compact tissue, so thickness has a floor at ~10 µm
+  and responds less than cellularity;
+* **distance to the nearest automatic lesion** from the segment midpoint.
+
+A segment counts as **swollen** when its cellularity exceeds the 95th percentile of control-section
+segments (what an uninflamed surface looks like). Statistics use the section as the unit (replicate slides
+averaged).
+
+**Caveat – manual cores cap the meninges.** The meninges boundary never enters a manual lesion core
+(notebook 05). Where an annotated core reaches the surface there are no meningeal nuclei by construction,
+so swelling next to annotated lesions is *under*-estimated (e.g. R1_3_L below).
+"""), code(SETUP.format(run_dir=run_dir) + '''
+from scipy.stats import mannwhitneyu, wilcoxon
+from lesionseg import expression as E, morphology as M, swelling as S
+seg = pd.concat([S.surface_segments(r) for r in runs], ignore_index=True)
+seg["cls"] = S.segment_class(seg)
+THR = float(np.percentile(seg.loc[~seg.lesion_section, "cells_per_100um"], 95))
+seg["swollen"] = seg.cells_per_100um > THR
+print(f"{len(seg):,} segments of 100 µm in {seg.groupby(['scene', 'section']).ngroups} slide × sections; "
+      f"swollen = more than {THR:.1f} meningeal nuclei per 100 µm (control p95)")
+CLS = ["control section", "far from lesion", "near lesion"]
+CCOL = {"control section": "#898781", "far from lesion": "#3987e5", "near lesion": "#e66767"}
+summ = seg.groupby("cls").agg(segments=("segment", "size"), cells_per_100um=("cells_per_100um", "median"),
+                              pu1_per_100um=("pu1_per_100um", "median"), thickness_um=("thickness_um", "median"),
+                              swollen_pct=("swollen", lambda v: 100 * v.mean())).reindex(CLS)
+summ.round(2)
+'''), md("## Cellularity against distance to the nearest lesion (lesion sections; median per slide)"), code('''
+les = seg[seg.lesion_section].copy()
+edges = [0, 50, 100, 200, 400, 800, 1600]
+les["db"] = pd.cut(les.dist_to_lesion_um.clip(lower=0), edges, include_lowest=True)
+g = les.groupby(["scene", "db"], observed=True).cells_per_100um.median().reset_index()
+g["mid"] = g.db.map(lambda iv: iv.mid).astype(float)
+ctrl = seg[~seg.lesion_section].cells_per_100um.median()
+fig, axes = plt.subplots(1, 2, figsize=(16, 4.6))
+for (scene, d), col in zip(g.groupby("scene"), E.SCENE_COLORS):
+    axes[0].plot(d.mid, d.cells_per_100um, color=col, lw=2, marker="o", ms=4, label=scene)
+axes[0].axhline(ctrl, color="#898781", lw=1, ls=":"); axes[0].text(edges[-1], ctrl, " control sections", va="bottom", ha="right", fontsize=8, color="#52514e")
+axes[0].set_xscale("symlog", linthresh=100); axes[0].set_xlabel("distance from segment to nearest lesion (µm)")
+axes[0].set_ylabel("meningeal nuclei per 100 µm"); axes[0].set_title("cellularity falls with distance from lesions", loc="left")
+axes[0].legend(fontsize=8, frameon=False)
+sw = seg.groupby("cls").swollen.mean().reindex(CLS) * 100
+axes[1].barh(CLS, sw, color=[CCOL[c] for c in CLS], height=0.6)
+for i, v in enumerate(sw):
+    axes[1].text(v + 0.5, i, f"{v:.0f} %", va="center", fontsize=9)
+axes[1].set_xlabel("swollen segments (%)"); axes[1].set_title("share of swollen surface", loc="left"); axes[1].invert_yaxis()
+plt.tight_layout(); plt.show()
+'''), md("## Per section: near vs far from lesions (paired), lesion vs control sections"), code('''
+fig, axes = plt.subplots(1, 3, figsize=(18, 4.6))
+tests = []
+for ax, v, lab in zip(axes, ["cells_per_100um", "pu1_per_100um", "thickness_um"],
+                      ["meningeal nuclei / 100 µm", "Pu.1⁺ meningeal nuclei / 100 µm", "thickness (µm)"]):
+    p = S.paired_near_far(seg, v)
+    for _, r in p.iterrows():
+        ax.plot([0, 1], [r["far from lesion"], r["near lesion"]], color="#c3c2b7", lw=1)
+    ax.scatter(np.zeros(len(p)), p["far from lesion"], color=CCOL["far from lesion"], s=40, zorder=3)
+    ax.scatter(np.ones(len(p)), p["near lesion"], color=CCOL["near lesion"], s=40, zorder=3)
+    sec = seg.groupby(["scene", "section", "lesion_section"])[v].median().groupby(["section", "lesion_section"]).mean().reset_index()
+    cv = sec[~sec.lesion_section][v]
+    ax.scatter(np.full(len(cv), 2) + np.linspace(-0.1, 0.1, len(cv)), cv, color=CCOL["control section"], s=40, zorder=3)
+    ax.set_xticks([0, 1, 2], ["far from lesion", "near lesion", "control sections"]); ax.set_ylabel(lab)
+    ax.set_title(lab, loc="left", fontsize=10)
+    lv = sec[sec.lesion_section][v]
+    tests.append({"measure": lab, "sections_paired": len(p), "near_higher": int((p.delta > 0).sum()),
+                  "median_near_minus_far": p.delta.median(), "wilcoxon_p_near_far": wilcoxon(p.delta).pvalue if len(p) >= 6 else np.nan,
+                  "lesion_sections_median": lv.median(), "control_sections_median": cv.median(),
+                  "mannwhitney_p_lesion_vs_control": mannwhitneyu(lv, cv).pvalue})
+plt.tight_layout(); plt.show()
+pd.DataFrame(tests).round(4)
+'''), md("## Per section, animal and level"), code('''
+st = S.section_table(seg.assign(cells_per_100um=seg.cells_per_100um), THR)
+sw_sec = seg.groupby(["scene", "section"]).swollen.mean().mul(100).rename("swollen_cellularity_pct")
+st = st.merge(sw_sec.reset_index(), on=["scene", "section"]).drop(columns="swollen_pct")
+display(st.round(2))
+display(st.groupby(["animal"])[["cells_per_100um", "pu1_per_100um", "swollen_cellularity_pct"]].median().round(2))
+display(st.groupby(["level", "lesion_section"])[["cells_per_100um", "pu1_per_100um", "swollen_cellularity_pct"]].median().round(2))
+'''), md("## Maps: surface segments coloured by cellularity (light = more meningeal nuclei)"), code('''
+vmax = float(np.nanpercentile(seg.cells_per_100um, 98))
+for sec in ["R1_2_T", "P2_3_T", "P3_1_C", "OS1_2_C"]:
+    hits = [r for r in runs if sec in set(seg[seg.scene == r.name].section)]
+    if not hits:
+        continue
+    fig, axes = plt.subplots(1, len(hits), figsize=(9 * len(hits), 9), squeeze=False)
+    for ax, r in zip(axes.ravel(), hits):
+        sc = S.plot_section_swelling(ax, r, seg, sec, "cells_per_100um", vmax=vmax)
+    fig.colorbar(sc, ax=axes.ravel().tolist(), shrink=0.6, label="meningeal nuclei per 100 µm")
+    plt.show()
+'''), md("""
+## The most swollen spots (150 µm zoom-ins)
+
+The six segments with the highest cellularity, at most one per section and slide. Meningeal nuclei at full
+strength (filled by elongation class as in notebook 09), everything else faded; meninges / buffer edges
+drawn.
+"""), code('''
+top = seg.sort_values("cells_per_100um", ascending=False).drop_duplicates(["scene", "section"]).head(6)
+byname = {r.name: r for r in runs}
+fig, axes = plt.subplots(2, 3, figsize=(20, 13.5))
+for ax, row in zip(axes.ravel(), top.itertuples()):
+    r = byname[row.scene]
+    comp = M.window_compartments(r.cells, E.compartment(r.cells))
+    st_ = M.plot_nuclei(ax, r, r.cells, row.x_um, row.y_um, 150, comp=comp, focus="meninges")
+    ax.set_title(f"{row.section} · {row.scene.replace(' scene ', ' s')} · {row.cells_per_100um:.0f} nuclei/100 µm · "
+                 f"{100 * st_['pu1_focus']:.0f} % Pu.1⁺ · {row.dist_to_lesion_um:.0f} µm to lesion", loc="left", fontsize=9)
+M.class_legend(axes.ravel()[-1])
+plt.tight_layout(); plt.show()
+display(top[["scene", "section", "cells_per_100um", "pu1_per_100um", "thickness_um", "dist_to_lesion_um"]].round(1))
+'''), md("""
+## Reading
+
+* Meningeal cellularity is a usable swelling measure: it rises toward lesions, is about twice as high in
+  lesion sections as in control sections, and a much larger share of the near-lesion surface is swollen.
+* With 8 lesion sections the paired near-vs-far test has little power; the consistency over sections and
+  slides is the stronger evidence. Sections where a manual core reaches the surface (R1_3_L) show *less*
+  meninges near the lesion – that is the protection rule, not biology.
+* By animal, swelling separates disease from control: the adjuvant-only (CFA_L2) and OS1_2 animals have
+  almost no swollen surface, the EAE animals 6–18 % – including EAE sections without lesions of their own
+  (e.g. R1_2_L), so meningeal swelling is not confined to lesion sections.
+* Thickness responds less because of how the boundary is built (10 µm floor, very strict growth); a
+  dedicated meninges marker or annotation (option 1 earlier) would make thickness itself measurable.
+* The traced surface follows tears in the section (e.g. CML_metal scene 1, R1_2_T); segments along a tear
+  have little meninges and slightly dilute the far-from-lesion values.
+""")]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", default="outputs/sdata")
@@ -1115,7 +1249,7 @@ def main():
              "04_manual_vs_automatic": nb_manual, "05_capture_sites_and_wells": nb_wells,
              "06_collection_by_section": nb_collection, "07_expression_by_zone": nb_expression,
              "08_expression_by_animal_and_cell_type": nb_expression_split, "09_nuclear_elongation": nb_elongation,
-             "10_meninges_elongation_reliability": nb_meninges_reliability}
+             "10_meninges_elongation_reliability": nb_meninges_reliability, "11_meningeal_swelling": nb_swelling}
     if a.only:
         books = {k: v for k, v in books.items() if any(k.startswith(o) for o in a.only)}
     for name, fn in books.items():
