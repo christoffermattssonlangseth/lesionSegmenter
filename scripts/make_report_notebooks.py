@@ -941,6 +941,169 @@ for comp in ["core", "rim", "distal", "meninges"]:
 """)]
 
 
+def nb_meninges_reliability(run_dir):
+    return [md("""
+# 10 · Are meningeal nuclei really more elongated? Random examples and statistics
+
+Notebook 09 showed *typical* windows – still a choice. Here the evidence is built so that it does not
+depend on choices:
+
+1. **Statistics with the section as the unit.** Every section has meninges, so all sections are used
+   (lesion and control, 17 sections from 6 animals), each compared with its *own* parenchyma (distal in
+   lesion sections, GM / WM in control sections); replicate slides are averaged. Tests: sign test and
+   Wilcoxon over sections, and a **hierarchical bootstrap** (resample animals, then sections) for a 95 %
+   confidence interval that respects that sections from one animal are not independent.
+2. **Robustness checks.** The effect has to survive other cut-offs, the continuous median eccentricity,
+   well-segmented nuclei only (solidity ≥ 0.9: merged nuclei look elongated), size-matched nuclei,
+   Pu.1⁻ and Pu.1⁺ separately, and an **edge-artefact control** – parenchyma 20–80 µm under the surface
+   instead of distal tissue (nuclei at a cut edge can be squashed or partly cut).
+3. **Depth profile.** Elongated share against depth below the surface, per slide – no compartment
+   boundary involved.
+4. **Random galleries.** Windows drawn at random (fixed seed) among surface-meninges nuclei and, for
+   comparison, distal nuclei – nothing selected on elongation – with a tally of how many random meninges
+   windows beat their slide's parenchyma.
+
+Meninges here = surface meninges (≤ 80 µm deep; flaps / roots excluded). As in notebook 09, *meninges
+is a place*: meningeal cells plus infiltrate.
+"""), code(SETUP.format(run_dir=run_dir) + '''
+from lesionseg import expression as E, morphology as M
+df = E.expression_table(runs)
+rob = M.robustness_table(df)
+rob.round(4)
+'''), md("## Effect under every check (mean Δ meninges − parenchyma, 95 % hierarchical-bootstrap CI)"), code('''
+fig, ax = plt.subplots(figsize=(10, 5.2))
+y = np.arange(len(rob))[::-1]
+ax.hlines(y, rob.ci95_low, rob.ci95_high, color="#2a78d6", lw=3)
+ax.scatter(rob.mean_delta, y, s=60, color="#0b0b0b", zorder=3)
+for yi, r in zip(y, rob.itertuples()):
+    ax.text(r.ci95_high + 0.4, yi, f"{r.sections_higher}/{r.sections} sections higher", va="center", fontsize=8, color="#52514e")
+ax.axvline(0, color="#898781", lw=0.8, ls=":")
+ax.set_yticks(y, rob.check, fontsize=9)
+ax.set_xlabel("meninges − parenchyma (percentage points; median eccentricity ×100)")
+ax.set_title("meningeal elongation: one row per check", loc="left")
+ax.set_xlim(left=min(-1, rob.ci95_low.min() - 1), right=rob.ci95_high.max() + 9)
+plt.tight_layout(); plt.show()
+'''), md("## Per section: meninges vs the section's own parenchyma (replicate slides averaged)"), code('''
+per = M.meninges_effect(df).sort_values(["animal", "section"])
+animals = sorted(per.animal.unique())
+acol = dict(zip(animals, ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#4a3aa7"]))
+fig, ax = plt.subplots(figsize=(13, 4.8))
+x = np.arange(len(per))
+for xi, r in zip(x, per.itertuples()):
+    ax.plot([xi, xi], [r.parenchyma, r.meninges], color="#c3c2b7", lw=2, zorder=1)
+ax.scatter(x, per.parenchyma, s=40, color="#898781", label="parenchyma", zorder=2)
+ax.scatter(x, per.meninges, s=60, color=[acol[a] for a in per.animal], edgecolors="#0b0b0b", linewidths=0.5,
+           label="meninges (colour = animal)", zorder=3)
+ax.set_xticks(x, per.section, rotation=45, ha="right", fontsize=8)
+ax.set_ylabel("elongated nuclei (%)"); ax.set_title("elongated share per section", loc="left")
+ax.legend(fontsize=8, frameon=False)
+plt.tight_layout(); plt.show()
+display(per.round(2))
+'''), md("## Depth profile: elongated share against depth below the surface"), code('''
+dp = M.depth_profile(df)
+fig, ax = plt.subplots(figsize=(10, 4.5))
+for (scene, d), col in zip(dp.groupby("scene"), E.SCENE_COLORS):
+    ax.plot(d.mid_um, d["mean"], color=col, lw=2, marker="o", ms=4, label=scene)
+ax.axvspan(0, 10, color="#c3c2b7", alpha=0.3, lw=0)
+ax.text(1, ax.get_ylim()[1], "outer 10 µm", va="top", fontsize=8, color="#52514e")
+ax.set_xlabel("depth below the surface (µm)"); ax.set_ylabel("elongated nuclei (%)")
+ax.set_title("elongation is a surface property", loc="left"); ax.legend(fontsize=8, frameon=False)
+plt.tight_layout(); plt.show()
+'''), md("""
+## Random gallery: meninges (6 random windows per slide, 120 µm)
+
+Window centres are random surface-meninges nuclei (seed 0), kept if the window holds ≥ 15 meningeal
+nuclei and lies ≥ 300 µm from earlier draws. Meningeal nuclei at full strength, all others faded; the line
+above each panel counts the meningeal nuclei.
+"""), code('''
+SIZE, N = 120, 6
+comp_by_scene = {r.name: M.window_compartments(r.cells, E.compartment(r.cells)) for r in runs}
+ref_share = (df[M.reference_compartment(df) == "parenchyma"].assign(el=lambda d: d.eccentricity >= M.ELONG_MIN)
+             .groupby("scene")["el"].mean())
+tally = []
+def gallery(target, n, seed=0):
+    rows = []
+    for r in runs:
+        for w in M.random_windows(r.cells, comp_by_scene[r.name], target, n, size_um=SIZE, seed=seed):
+            rows.append((r, w))
+    ncol = 6
+    nrow = int(np.ceil(len(rows) / ncol))
+    fig, axes = plt.subplots(nrow, ncol, figsize=(4 * ncol, 4.3 * nrow), squeeze=False)
+    for ax, (r, (x, y)) in zip(axes.ravel(), rows):
+        st = M.plot_nuclei(ax, r, r.cells, x, y, SIZE, comp=comp_by_scene[r.name], focus=target)
+        ax.set_title(f"{r.name.replace(' scene ', ' s')} · {st['n_focus']} nuclei · {100 * st['elongated_focus']:.0f} % elong · {100 * st['pu1_focus']:.0f} % Pu.1⁺",
+                     loc="left", fontsize=8)
+        tally.append({"target": target, "scene": r.name, "x": x, "y": y, **st,
+                      "slide_parenchyma_elongated": ref_share[r.name]})
+    for ax in axes.ravel()[len(rows):]:
+        ax.axis("off")
+    M.class_legend(axes.ravel()[len(rows) - 1])
+    plt.tight_layout(); plt.show()
+gallery("meninges", N)
+'''), md("## Random gallery: distal parenchyma for comparison (3 random windows per slide)"), code('''
+gallery("distal", 3)
+'''), md("## Tally: random windows vs their slide's parenchyma"), code('''
+t = pd.DataFrame(tally)
+t["higher_than_parenchyma"] = t.elongated_focus > t.slide_parenchyma_elongated
+display(t.groupby("target").agg(windows=("x", "size"), median_elongated=("elongated_focus", "median"),
+                                 slide_parenchyma=("slide_parenchyma_elongated", "median"),
+                                 windows_higher=("higher_than_parenchyma", "sum")).round(3))
+display(t.round(3))
+'''), md("""
+### Why single random windows disagree: the thin surface layer vs swollen meninges
+
+One 120 µm window holds 20–130 meningeal nuclei – too few for a stable share (± ~8 points at 30 nuclei) –
+and the meninges are not uniform. The section-level test below splits the meningeal nuclei by depth below
+the surface: the thin outer layer against the deeper, swollen part.
+"""), code('''
+from scipy.stats import wilcoxon
+lay = M.meninges_layers(df)
+el = lay.pivot_table(index="section", columns="layer", values="el", observed=True)
+pu = lay.pivot_table(index="section", columns="layer", values="pu1", observed=True)
+cols = list(el.columns)
+fig, axes = plt.subplots(1, 2, figsize=(15, 4.6))
+for ax, tab, lab in ((axes[0], el, "elongated nuclei (%)"), (axes[1], pu, "Pu.1⁺ nuclei (%)")):
+    x = np.arange(len(cols))
+    for _, row in tab.iterrows():
+        ax.plot(x, row.to_numpy(float), color="#c3c2b7", lw=1)
+    for i, c in enumerate(cols):
+        v = tab[c].dropna()
+        ax.scatter(np.full(len(v), i), v, s=36, color="#eb6834" if tab is el else "#c98500", edgecolors="white", linewidths=0.8, zorder=3)
+        ax.plot([i - 0.25, i + 0.25], [v.median()] * 2, color="#0b0b0b", lw=2)
+    ax.set_xticks(x, cols); ax.set_xlabel("depth within the meninges"); ax.set_ylabel(lab)
+axes[0].axhline(100 * ref_share.median(), color="#898781", lw=1, ls=":")
+axes[0].text(len(cols) - 1, 100 * ref_share.median(), " parenchyma", va="bottom", fontsize=8, color="#52514e")
+axes[0].set_title("elongation by meningeal layer (one line per section)", loc="left")
+axes[1].set_title("Pu.1⁺ share by meningeal layer", loc="left")
+plt.tight_layout(); plt.show()
+rows = []
+for c in cols[1:]:
+    dd = (el[cols[0]] - el[c]).dropna()
+    rows.append({"outer layer vs": c, "sections": len(dd), "median_delta_pp": dd.median(),
+                 "sections_outer_higher": int((dd > 0).sum()), "wilcoxon_p": wilcoxon(dd).pvalue})
+display(pd.DataFrame(rows).round(4))
+display(pd.concat({"elongated %": el.median(), "Pu.1⁺ %": pu.median()}, axis=1).round(1))
+'''), md("""
+## Reading
+
+* **Reliable, at the right unit.** Pooled per section, meninges carry more elongated nuclei than their own
+  parenchyma in 16 of 17 sections from 6 animals (+13 points, 95 % hierarchical-bootstrap CI ~10–17), and
+  the effect survives every check – including the edge control: parenchyma right under the surface is
+  not equally elongated, so this is not a cut-edge or squashing artefact.
+* **It is the thin surface layer.** Split by depth, the outer ≤ 10 µm of the meninges is strongly
+  elongated and ~80 % Pu.1⁻ (flattened nuclei along the pia – the best proxy here for meningeal cells),
+  while deeper meninges fall back to parenchyma levels of elongation. Their Pu.1⁺ share varies a lot
+  between sections (median ~25 %, up to 70–85 % where the meninges are swollen with infiltrate), so
+  "deeper = infiltrate" holds only in the swollen sections. Single random windows mix the layers, which
+  is why many do *not* beat the parenchyma – the tally shows that heterogeneity, it does not contradict
+  the section-level result.
+* Cell identity still needs a marker (fibroblast / leptomeningeal); this panel can only say *where* the
+  elongated nuclei are.
+* What this cannot establish: cell identity. The compartment mixes meningeal cells and infiltrate; a
+  fibroblast / leptomeningeal marker would be needed to say *which* cells are elongated.
+""")]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", default="outputs/sdata")
@@ -951,7 +1114,8 @@ def main():
     books = {"01_cohort_overview": nb_overview, "02_judge_lesions": nb_judge, "03_zones_relative_distance": nb_zones,
              "04_manual_vs_automatic": nb_manual, "05_capture_sites_and_wells": nb_wells,
              "06_collection_by_section": nb_collection, "07_expression_by_zone": nb_expression,
-             "08_expression_by_animal_and_cell_type": nb_expression_split, "09_nuclear_elongation": nb_elongation}
+             "08_expression_by_animal_and_cell_type": nb_expression_split, "09_nuclear_elongation": nb_elongation,
+             "10_meninges_elongation_reliability": nb_meninges_reliability}
     if a.only:
         books = {k: v for k, v in books.items() if any(k.startswith(o) for o in a.only)}
     for name, fn in books.items():

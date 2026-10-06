@@ -149,6 +149,7 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
 7. `07_expression_by_zone` – exploratory: Pu.1 / Iba1 levels and nuclear size of Pu.1⁺ cells by lesion compartment and distance to the edge, paired per section, with a crowding check
 8. `08_expression_by_animal_and_cell_type` – the same comparison per section / slide, animal and spinal level, and split by morphological Pu.1⁺ cell type: per-cell expression vs composition
 9. `09_nuclear_elongation` – round vs elongated nuclei (eccentricity classes) per compartment, all / Pu.1⁺ / Pu.1⁻, with representative zoom-ins showing every segmented nucleus outline
+10. `10_meninges_elongation_reliability` – is the meningeal elongation reliable? Section-level tests over all 17 sections / 6 animals, hierarchical bootstrap, robustness checks incl. an edge-artefact control, depth profile, random galleries
 
 ## Open decisions
 

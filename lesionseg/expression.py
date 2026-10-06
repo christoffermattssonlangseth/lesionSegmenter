@@ -67,6 +67,8 @@ def expression_table(runs, radius_um: float = 15.0) -> pd.DataFrame:
                                    else np.nan),
             f"n_nb_{radius_um:g}um": n_nb, f"n_pu1_nb_{radius_um:g}um": n_pos_nb,
             **{k: c[k].to_numpy(float) for k in MARKERS if k in c},
+            **{k: c[k].to_numpy(float) for k in ("solidity", "depth_um") if k in c},
+            "label": c["label"].to_numpy() if "label" in c else np.arange(len(c)),
         })
         d = d[d["compartment"].notna()]
         # scene baseline: Pu.1⁺ cells of the control sections (GM + WM)

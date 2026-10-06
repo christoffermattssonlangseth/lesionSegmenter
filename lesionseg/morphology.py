@@ -202,3 +202,145 @@ def class_shares(df: pd.DataFrame, pu1: str = "all") -> pd.DataFrame:
                                                                                                  fill_value=0)
     t = t.reindex(columns=CLASS_ORDER, fill_value=0)
     return t.div(t.sum(axis=1), axis=0).reset_index()
+
+
+# --------------------------------------------------------------------------
+# notebook 10: is the meningeal elongation reliable?
+# --------------------------------------------------------------------------
+def random_windows(cells: pd.DataFrame, comp: pd.Series, target: str, n: int, *, size_um: float = 120.0,
+                   min_target: int = 15, seed: int = 0, min_sep_um: float = 300.0,
+                   max_tries: int = 5000) -> list[tuple[float, float]]:
+    """``n`` window centres drawn at random among ``target`` nuclei (no selection on elongation): a draw is
+    kept if the window holds ≥ ``min_target`` target nuclei and is ≥ ``min_sep_um`` from earlier draws."""
+    xy = cells[["x_um", "y_um"]].to_numpy(float)
+    is_t = (comp == target).to_numpy()
+    idx = np.flatnonzero(is_t)
+    if not len(idx):
+        return []
+    tree = cKDTree(xy[is_t])
+    rng = np.random.default_rng(seed)
+    picks: list[tuple[float, float]] = []
+    for i in rng.permutation(idx)[:max_tries]:
+        p = xy[i]
+        if any(np.hypot(p[0] - q[0], p[1] - q[1]) < min_sep_um for q in picks):
+            continue
+        if len(tree.query_ball_point(p, r=size_um / 2)) < min_target:
+            continue
+        picks.append((float(p[0]), float(p[1])))
+        if len(picks) == n:
+            break
+    return picks
+
+
+def reference_compartment(df: pd.DataFrame, near_surface_um: tuple[float, float] = (20.0, 80.0)) -> pd.Series:
+    """Per cell: ``meninges`` (surface meninges, depth ≤ 80 µm), ``parenchyma`` (the section's own
+    reference: distal in lesion sections, GM / WM in control sections) and ``near_surface`` (parenchyma
+    20–80 µm below the surface – the edge-artefact control); everything else None."""
+    comp = df["compartment"].astype(str)
+    depth = df["depth_um"].to_numpy(float) if "depth_um" in df else np.full(len(df), np.nan)
+    out = pd.Series(None, index=df.index, dtype=object)
+    out[(comp == "meninges").to_numpy() & (depth <= 80)] = "meninges"
+    ref = comp.isin(["distal", "GM", "WM"]).to_numpy()
+    out[ref] = "parenchyma"
+    par = comp.isin(["core", "rim", "peri", "deep", "distal", "GM", "WM"]).to_numpy()
+    lo, hi = near_surface_um
+    out[par & (depth >= lo) & (depth <= hi)] = "near_surface"
+    return out
+
+
+def meninges_effect(df: pd.DataFrame, ref: str = "parenchyma", metric: str = "elongated", thr: float = ELONG_MIN,
+                    subset: pd.Series | None = None, min_cells: int = 20) -> pd.DataFrame:
+    """Per section (replicate slides averaged): meninges − ``ref`` for ``metric`` = ``elongated`` (share
+    with eccentricity ≥ ``thr``, in percentage points) or ``median`` (median eccentricity). ``subset``
+    restricts the nuclei (e.g. solidity ≥ 0.9). Adds ``animal``."""
+    d = df.assign(group=reference_compartment(df))
+    if subset is not None:
+        d = d[subset.reindex(d.index).fillna(False).to_numpy(bool)]
+    d = d[d["group"].isin(["meninges", ref])]
+    if metric == "elongated":
+        d = d.assign(v=(d["eccentricity"] >= thr).astype(float) * 100)
+        agg = "mean"
+    else:
+        d = d.assign(v=d["eccentricity"])
+        agg = "median"
+    g = d.groupby(["scene", "section", "group"])["v"].agg([agg, "size"]).reset_index()
+    g = g[g["size"] >= min_cells].pivot_table(index=["scene", "section"], columns="group", values=agg)
+    if not {"meninges", ref} <= set(g.columns):
+        return pd.DataFrame(columns=["section", "meninges", ref, "delta", "animal"])
+    g = g.dropna(subset=["meninges", ref])
+    g["delta"] = g["meninges"] - g[ref]
+    per = g.groupby("section")[["meninges", ref, "delta"]].mean().reset_index()
+    per["animal"] = per["section"].str.rsplit("_", n=1).str[0]
+    return per
+
+
+def hierarchical_bootstrap(per: pd.DataFrame, col: str = "delta", n_boot: int = 4000, seed: int = 0):
+    """95 % CI of the mean ``col`` resampling animals, then sections within each drawn animal."""
+    rng = np.random.default_rng(seed)
+    groups = [g[col].to_numpy(float) for _, g in per.groupby("animal")]
+    if not groups:
+        return np.nan, np.nan
+    means = np.empty(n_boot)
+    for b in range(n_boot):
+        pick = rng.integers(0, len(groups), len(groups))
+        vals = np.concatenate([rng.choice(groups[i], len(groups[i]), replace=True) for i in pick])
+        means[b] = vals.mean()
+    return tuple(np.percentile(means, [2.5, 97.5]))
+
+
+def robustness_table(df: pd.DataFrame) -> pd.DataFrame:
+    """The meninges − parenchyma effect under every check, one row each: sections, animals, median Δ,
+    mean Δ with hierarchical-bootstrap 95 % CI, sections higher, sign-test and Wilcoxon p."""
+    from scipy.stats import binomtest, wilcoxon
+
+    pos = df["pu1_pos"].astype(bool)
+    solid = df["solidity"] >= 0.9 if "solidity" in df else pd.Series(True, index=df.index)
+    area = df["area_um2"].between(15, 45)
+    checks = [
+        ("elongated share (ecc ≥ 0.85), all nuclei", dict()),
+        ("elongated share, ecc ≥ 0.80", dict(thr=0.80)),
+        ("elongated share, ecc ≥ 0.90", dict(thr=0.90)),
+        ("median eccentricity (×100)", dict(metric="median")),
+        ("well-segmented nuclei only (solidity ≥ 0.9)", dict(subset=solid)),
+        ("size-matched nuclei (15–45 µm²)", dict(subset=area)),
+        ("Pu.1⁻ nuclei only", dict(subset=~pos)),
+        ("Pu.1⁺ nuclei only", dict(subset=pos)),
+        ("vs parenchyma 20–80 µm under the surface (edge control)", dict(ref="near_surface")),
+    ]
+    rows = []
+    for name, kw in checks:
+        per = meninges_effect(df, **kw)
+        if not len(per):
+            continue
+        v = per["delta"].to_numpy(float) * (100 if kw.get("metric") == "median" else 1)
+        per = per.assign(delta=v)
+        lo, hi = hierarchical_bootstrap(per)
+        k = int((v > 0).sum())
+        rows.append({"check": name, "sections": len(v), "animals": per["animal"].nunique(),
+                     "median_delta": np.median(v), "mean_delta": v.mean(), "ci95_low": lo, "ci95_high": hi,
+                     "sections_higher": k, "sign_test_p": binomtest(k, len(v)).pvalue,
+                     "wilcoxon_p": wilcoxon(v).pvalue if len(v) >= 6 else np.nan})
+    return pd.DataFrame(rows)
+
+
+def depth_profile(df: pd.DataFrame, edges=(0, 10, 20, 30, 40, 60, 80, 120, 160, 200, 300)) -> pd.DataFrame:
+    """Elongated share (%) per depth bin below the surface, per slide (cells with a depth only)."""
+    d = df[df["depth_um"].notna()]
+    b = pd.cut(d["depth_um"], list(edges))
+    g = d.assign(el=(d["eccentricity"] >= ELONG_MIN) * 100.0).groupby(["scene", b], observed=True)["el"].agg(
+        ["mean", "size"]).reset_index()
+    g["mid_um"] = g["depth_um"].map(lambda iv: iv.mid).astype(float)
+    return g[g["size"] >= 50]
+
+
+def meninges_layers(df: pd.DataFrame, edges=(0, 10, 30, 80), min_cells: int = 15) -> pd.DataFrame:
+    """Elongated share (%) of surface-meninges nuclei per depth layer, per section (replicate slides
+    averaged): is the elongation a property of the thin surface layer or of the whole meninges?"""
+    d = df[reference_compartment(df) == "meninges"]
+    labels = [f"{a}–{b} µm" for a, b in zip(edges[:-1], edges[1:], strict=False)]
+    d = d.assign(layer=pd.cut(d["depth_um"], list(edges), labels=labels, include_lowest=True),
+                 el=(d["eccentricity"] >= ELONG_MIN) * 100.0, pu1=d["pu1_pos"].astype(float) * 100)
+    g = d.groupby(["scene", "section", "layer"], observed=True).agg(el=("el", "mean"), pu1=("pu1", "mean"),
+                                                                      n=("el", "size")).reset_index()
+    g = g[g["n"] >= min_cells]
+    return g.groupby(["section", "layer"], observed=True)[["el", "pu1", "n"]].mean().reset_index()
