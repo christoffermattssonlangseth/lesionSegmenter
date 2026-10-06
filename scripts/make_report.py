@@ -148,6 +148,7 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
 6. `06_collection_by_section` – section by section on both slides: which cells are collected into which reaction, with per-section tables and cohort aggregates
 7. `07_expression_by_zone` – exploratory: Pu.1 / Iba1 levels and nuclear size of Pu.1⁺ cells by lesion compartment and distance to the edge, paired per section, with a crowding check
 8. `08_expression_by_animal_and_cell_type` – the same comparison per section / slide, animal and spinal level, and split by morphological Pu.1⁺ cell type: per-cell expression vs composition
+9. `09_nuclear_elongation` – round vs elongated nuclei (eccentricity classes) per compartment, all / Pu.1⁺ / Pu.1⁻, with representative zoom-ins showing every segmented nucleus outline
 
 ## Open decisions
 

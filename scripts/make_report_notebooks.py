@@ -770,6 +770,135 @@ plt.tight_layout(); plt.show()
 """)]
 
 
+def nb_elongation(run_dir):
+    return [md("""
+# 09 · Nuclear elongation: round vs elongated nuclei in core, rim, distal tissue and meninges
+
+Every segmented nucleus has an **eccentricity**: that of the ellipse with the same second moments as the
+Cellpose nucleus mask, √(1 − (b/a)²) – 0 is a circle, 1 a line. It describes the *nucleus*, not the
+cell's processes. Classes used here:
+
+| class | eccentricity | long : short axis |
+|---|---|---|
+| round | < 0.6 | < 1.25 |
+| intermediate | 0.6 – 0.85 | 1.25 – 1.9 |
+| elongated | ≥ 0.85 | ≥ 1.9 |
+
+Outlines are drawn from the label image (every QC-passed nucleus, Pu.1⁺ and Pu.1⁻; faint nuclei that
+Cellpose filtered out have no outline). Compartments as in notebook 07: `core`, `rim`, `peri`, `deep`,
+`distal` (lesion sections, parenchyma), `meninges`, control `GM` / `WM`.
+"""), code(SETUP.format(run_dir=run_dir) + '''
+from lesionseg import expression as E, morphology as M
+df = E.expression_table(runs)
+cells_by_scene = {r.name: r.cells for r in runs}
+# windows: surface meninges only (flaps / roots deeper than 80 µm are often sparse or artefact-ridden)
+comp_by_scene = {r.name: M.window_compartments(r.cells, E.compartment(r.cells)) for r in runs}
+SIZE = 120  # µm per zoom-in
+'''), md("## Side by side: one typical window per compartment (same scale, 120 µm)"), code('''
+order = ["core", "rim", "distal", "meninges"]
+fig, axes = plt.subplots(2, 4, figsize=(22, 11.5))
+for j, comp in enumerate(order):
+    for r in runs:
+        w = M.representative_windows(r.cells, comp_by_scene[r.name], comp, size_um=SIZE, n=1,
+                                     min_frac=0.5 if comp == "meninges" else 0.8)
+        if w:
+            break
+    x, y = w[0]
+    M.plot_nuclei(axes[0, j], r, r.cells, x, y, SIZE, raw=True)
+    M.plot_nuclei(axes[1, j], r, r.cells, x, y, SIZE)
+    axes[0, j].set_title(f"{comp} · {r.name} @ ({x:.0f}, {y:.0f}) µm", loc="left", fontsize=10)
+M.class_legend(axes[1, -1])
+plt.tight_layout(); plt.show()
+'''), md("""
+## How common are elongated and round nuclei per compartment?
+
+Share of each class per slide × section (median over slide × sections), for all nuclei, Pu.1⁺ and Pu.1⁻.
+"""), code('''
+comps = ["core", "rim", "peri", "deep", "distal", "meninges", "GM", "WM"]
+fig, axes = plt.subplots(1, 3, figsize=(20, 4.8), sharey=True)
+tabs = {}
+for ax, (label, which) in zip(axes, (("all nuclei", "all"), ("Pu.1⁺", "pos"), ("Pu.1⁻", "neg"))):
+    sh = M.class_shares(df, which).groupby("compartment", observed=True)[M.CLASS_ORDER].median().reindex(comps)
+    sh = sh.div(sh.sum(axis=1), axis=0)
+    tabs[label] = sh
+    left = np.zeros(len(sh))
+    for k in M.CLASS_ORDER:
+        ax.barh(sh.index, sh[k], left=left, color=M.CLASS_COLORS[k], edgecolor="white", linewidth=2, label=k)
+        for i, (l, v) in enumerate(zip(left, sh[k])):
+            if v > 0.06:
+                ax.text(l + v / 2, i, f"{100 * v:.0f} %", ha="center", va="center", fontsize=8, color="#0b0b0b")
+        left += sh[k].to_numpy()
+    ax.set_xlim(0, 1); ax.set_title(label, loc="left"); ax.set_xlabel("share of nuclei")
+axes[0].invert_yaxis(); axes[-1].legend(fontsize=8, frameon=False, ncol=3, loc="lower right", bbox_to_anchor=(1, 1))
+plt.tight_layout(); plt.show()
+for label, sh in tabs.items():
+    display(Markdown(f"**{label}**")); display((100 * sh).round(1))
+'''), md("### Eccentricity distributions (all nuclei, pooled – descriptive)"), code('''
+fig, axes = plt.subplots(1, 2, figsize=(16, 4.5), sharey=True)
+bins = np.linspace(0, 1, 41)
+for ax, group in ((axes[0], ["core", "rim", "peri", "distal", "meninges"]), (axes[1], ["distal", "GM", "WM", "meninges"])):
+    for c in group:
+        v = df.loc[df.compartment == c, "eccentricity"].dropna()
+        ax.hist(v, bins=bins, histtype="step", lw=2, density=True, color=E.COLORS[c], label=f"{c} (median {v.median():.2f})")
+    for t in (M.ROUND_MAX, M.ELONG_MIN):
+        ax.axvline(t, color="#898781", lw=0.8, ls=":")
+    ax.set_xlabel("eccentricity"); ax.legend(fontsize=8, frameon=False, loc="upper left")
+axes[0].set_ylabel("density"); axes[0].set_title("lesion compartments vs meninges", loc="left"); axes[1].set_title("control tissue vs meninges", loc="left")
+plt.tight_layout(); plt.show()
+'''), md("### Elongated share vs the same section's distal tissue (paired; one line per section)"), code('''
+sh = M.class_shares(df, "all")
+ref = sh[sh.compartment == "distal"].set_index(["scene", "section"])["elongated"]
+sh["d_elongated"] = sh["elongated"] - sh.set_index(["scene", "section"]).index.map(ref).to_numpy()
+per = sh.groupby(["section", "compartment"], observed=True)["d_elongated"].mean().unstack("compartment")
+cols = ["core", "rim", "peri", "deep", "distal", "meninges"]
+per = per.reindex(columns=cols)
+fig, ax = plt.subplots(figsize=(9, 4.8))
+x = np.arange(len(cols))
+for _, row in per.iterrows():
+    ax.plot(x, 100 * row.to_numpy(float), color="#c3c2b7", lw=1)
+for i, c in enumerate(cols):
+    v = 100 * per[c].dropna()
+    ax.scatter(np.full(len(v), i), v, s=36, color=E.COLORS[c], edgecolors="white", linewidths=0.8, zorder=3)
+    ax.plot([i - 0.25, i + 0.25], [v.median()] * 2, color="#0b0b0b", lw=2)
+ax.axhline(0, color="#898781", lw=0.8, ls=":"); ax.set_xticks(x, cols)
+ax.set_ylabel("elongated share − distal (percentage points)"); ax.set_title("elongated nuclei, paired per section", loc="left")
+plt.tight_layout(); plt.show()
+display((100 * per).round(1))
+'''), md("""
+## Representative zoom-ins per compartment
+
+Three typical windows per compartment, from different slides where possible: the compartment covers most
+of the window (≥ 80 %, meninges ≥ 50 % since the band is thin), the window holds ≥ 40 nuclei, and its
+median eccentricity is close to the compartment's own median (not the most extreme spots). Meninges
+windows come from the surface meninges only, not from thin flaps or roots. Top = image, bottom = every nucleus filled by class; white edge = Pu.1⁺.
+"""), code('''
+for comp in ["core", "rim", "distal", "meninges"]:
+    picks = []
+    for r in runs:
+        for w in M.representative_windows(r.cells, comp_by_scene[r.name], comp, size_um=SIZE, n=1,
+                                          min_frac=0.5 if comp == "meninges" else 0.8):
+            picks.append((r, w))
+    picks = picks[:3]
+    fig, axes = plt.subplots(2, len(picks), figsize=(6.5 * len(picks), 13), squeeze=False)
+    for j, (r, (x, y)) in enumerate(picks):
+        M.plot_nuclei(axes[0, j], r, r.cells, x, y, SIZE, raw=True)
+        M.plot_nuclei(axes[1, j], r, r.cells, x, y, SIZE)
+        axes[0, j].set_title(f"{comp} · {r.name} @ ({x:.0f}, {y:.0f}) µm", loc="left", fontsize=10)
+    M.class_legend(axes[1, -1])
+    fig.suptitle(comp, x=0.01, ha="left", fontsize=14)
+    plt.tight_layout(); plt.show()
+'''), md("""
+## Reading
+
+* The meninges carry the most elongated nuclei – flattened meningeal / pial cells lying along the surface
+  (visible in the zoom-ins), in Pu.1⁺ and Pu.1⁻ cells alike.
+* Lesion compartments differ little from distal tissue in nuclear shape; what changes near lesions is
+  Pu.1 / Iba1 level and nuclear size (notebooks 07–08).
+* Eccentricity says nothing about orientation; a next step could measure whether elongated nuclei lie
+  parallel to the surface (meninges) or along fibre tracts / vessels (white matter, perivascular cuffs).
+""")]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", default="outputs/sdata")
@@ -780,7 +909,7 @@ def main():
     books = {"01_cohort_overview": nb_overview, "02_judge_lesions": nb_judge, "03_zones_relative_distance": nb_zones,
              "04_manual_vs_automatic": nb_manual, "05_capture_sites_and_wells": nb_wells,
              "06_collection_by_section": nb_collection, "07_expression_by_zone": nb_expression,
-             "08_expression_by_animal_and_cell_type": nb_expression_split}
+             "08_expression_by_animal_and_cell_type": nb_expression_split, "09_nuclear_elongation": nb_elongation}
     if a.only:
         books = {k: v for k, v in books.items() if any(k.startswith(o) for o in a.only)}
     for name, fn in books.items():
