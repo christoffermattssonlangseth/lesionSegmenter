@@ -69,15 +69,15 @@ reactions:
   vbo_per_section: true
   vbo_all_cells: true         # VBO reactions capture every cell in the polygons, not only Pu.1+
   order: random               # only with max_cells: stratified over the two replicate slides, random within a slide
-  edge_exclusion_um: 25       # meninges + buffer are excluded per cell (parenchyma.method adaptive); this only keeps
-                              # off the damaged cut edge (was 100 µm, which also dropped ~9.5k subpial lesion Pu.1+)
+  edge_exclusion_um: 40       # meninges + buffer are excluded per cell (parenchyma.method adaptive); this keeps off
+                              # the damaged cut edge (100 µm dropped ~9.5k subpial lesion Pu.1+; 25 µm looked ragged)
 
 # LMD wells: rings as fractions of the section radius (0.1 ≈ 100 µm at R = 1 mm).
 # To capture more material raise target_area_um2 (µm² of Pu.1+ nuclei per well) – the capture_sites
 # table lists how much is available per compartment.
 wells:
   target_area_um2: 3000
-  edge_exclusion_um: 25         # collaborator's protocol used 100 µm; meninges / buffer are now excluded per cell
+  edge_exclusion_um: 40         # collaborator's protocol used 100 µm; meninges / buffer are now excluded per cell
   groups:
     - {name: core, zone: [core]}
     - {name: rim, zone: [rim]}

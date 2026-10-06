@@ -354,7 +354,8 @@ The meninges boundary is placed per location (`lesionseg.meninges`, `parenchyma.
 Lesion zones, wells and reactions are clipped to the parenchyma. On top of that, wells and reactions
 skip cells within `edge_exclusion_um` of the section edge. That margin used to be 100 µm (the
 collaborator's well protocol) and was the main thing keeping subpial lesion cells out; with meninges and
-buffer excluded per cell it is now 25 µm, only keeping off the damaged cut edge. The table below shows
+buffer excluded per cell it is now 40 µm, keeping off the damaged cut edge (25 µm let collected cells run
+ragged up to the surface). The table below shows
 what each margin would make available.
 """), code('''
 surf = R.surface_summary(runs)
@@ -436,7 +437,8 @@ general target, not a cap (reactions below 80 % of it are flagged as shortfall).
 (`lesionseg.meninges`): the outer 10 µm of the surface plus very compact, surface-connected meningeal
 infiltrate. Light-grey markers are Pu.1⁺ cells in the meninges, white rings Pu.1⁺ cells in the 10 µm
 buffer inward of it; neither is ever collected, so meninges and lesion pools never touch. Solid grey line
-= inner edge of the meninges, dashed white = inner edge of the buffer; yellow = automatic lesion. The
+= inner edge of the meninges, dashed white = inner edge of the buffer, dotted cyan = edge exclusion (no
+cell outside it is collected); yellow = automatic lesion. Every line is in the legend. The
 collaborator's manual lesion cores are protected: no cell inside them is ever meninges or buffer (checked
 below). The table under each section lists its reactions and how the selected cells split between the two
 slides. Aggregates at the end.

@@ -19,9 +19,9 @@ the notebooks in `notebooks/` hold the image evidence behind every number.
 
 | scene | cells | Pu.1+ | Pu.1+ frac | lesions | lesion sections | sections | auto lesion mm² | manual core mm² | manual cores | cores ≥50% covered | manual area covered | wells |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CML_1 scene 0 | 57044 | 17315 | 0.30 | 22 | 5 | 9 | 1.66 | 0.69 | 34 | 0.71 | 0.89 | 42 |
-| CML_2_rescan scene 0 | 60095 | 13214 | 0.22 | 36 | 3 | 9 | 1.53 | 0.97 | 25 | 0.84 | 0.85 | 31 |
-| CML_metal scene 0 | 50627 | 15502 | 0.31 | 17 | 5 | 9 | 1.06 | 0.44 | 33 | 0.64 | 0.85 | 42 |
+| CML_1 scene 0 | 57044 | 17315 | 0.30 | 22 | 5 | 9 | 1.66 | 0.69 | 34 | 0.71 | 0.89 | 41 |
+| CML_2_rescan scene 0 | 60095 | 13214 | 0.22 | 36 | 3 | 9 | 1.53 | 0.97 | 25 | 0.84 | 0.85 | 30 |
+| CML_metal scene 0 | 50627 | 15502 | 0.31 | 17 | 5 | 9 | 1.06 | 0.44 | 33 | 0.64 | 0.85 | 41 |
 | CML_metal scene 1 | 50980 | 17992 | 0.35 | 35 | 3 | 9 | 1.46 | 0.36 | 20 | 0.90 | 0.90 | 30 |
 
 
@@ -145,27 +145,27 @@ Pooled over all sections. `n_pu1_eligible` excludes cells within 100 µm of the 
 
 | lesion_section | compartment | n_sections | n_cells_all | n_pu1_raw | n_pu1_eligible | area_pu1_eligible_um2 | n_selected | area_selected_um2 |
 |---|---|---|---|---|---|---|---|---|
-| False | GM | 10 | 27357 | 6163 | 6162 | 201572 | 1666 | 53014 |
-| False | WM | 10 | 12954 | 1830 | 1825 | 52045 | 989 | 26469 |
-| True | core | 8 | 22157 | 10353 | 10202 | 289067 | 1300 | 36289 |
-| True | rim | 8 | 18443 | 7929 | 7598 | 222896 | 1437 | 39854 |
-| True | ring_0_10 | 8 | 31403 | 10638 | 5290 | 157590 | 1464 | 40853 |
-| True | ring_10_20 | 8 | 14592 | 4382 | 3703 | 114112 | 1286 | 37179 |
-| True | ring_20_40 | 8 | 22844 | 7323 | 6339 | 202967 | 1580 | 47625 |
-| True | ring_40_60 | 8 | 15088 | 4602 | 4018 | 127777 | 1553 | 45994 |
-| True | ring_60_plus | 8 | 12041 | 3362 | 2703 | 79184 | 861 | 24308 |
+| False | GM | 10 | 27357 | 6163 | 6159 | 201488 | 1666 | 53038 |
+| False | WM | 10 | 12954 | 1830 | 1772 | 50597 | 976 | 26131 |
+| True | core | 8 | 22157 | 10353 | 9962 | 283413 | 1291 | 36281 |
+| True | rim | 8 | 18443 | 7929 | 6805 | 199653 | 1401 | 39305 |
+| True | ring_0_10 | 8 | 31403 | 10638 | 4786 | 143171 | 1390 | 39382 |
+| True | ring_10_20 | 8 | 14592 | 4382 | 3534 | 109729 | 1234 | 36228 |
+| True | ring_20_40 | 8 | 22844 | 7323 | 6152 | 197963 | 1547 | 47324 |
+| True | ring_40_60 | 8 | 15088 | 4602 | 3905 | 124942 | 1545 | 45926 |
+| True | ring_60_plus | 8 | 12041 | 3362 | 2483 | 74008 | 816 | 23564 |
 
 
 By manual annotation compartment (collaborator's GM / WM / VBO / core polygons):
 
 | lesion_section | compartment | n_sections | n_cells_all | n_pu1_raw | n_pu1_eligible | area_pu1_eligible_um2 | n_selected | area_selected_um2 |
 |---|---|---|---|---|---|---|---|---|
-| False | manual:GM | 10 | 27387 | 6168 | 6164 | 201636 | 1666 | 53014 |
-| False | manual:WM | 10 | 13926 | 1935 | 1838 | 52436 | 994 | 26573 |
-| False | manual:unannotated | 10 | 35601 | 6551 | 4177 | 124850 | 10 | 201 |
+| False | manual:GM | 10 | 27387 | 6168 | 6161 | 201552 | 1666 | 53038 |
+| False | manual:WM | 10 | 13926 | 1935 | 1778 | 50721 | 976 | 26131 |
+| False | manual:unannotated | 10 | 35601 | 6551 | 3773 | 113888 | 0 | 0 |
 | False | manual:vbo | 10 | 501 | 50 | 0 | 0 | 0 | 0 |
-| True | manual:core | 8 | 21898 | 10677 | 10304 | 298859 | 1887 | 52708 |
-| True | manual:unannotated | 8 | 114262 | 37827 | 29566 | 895193 | 7574 | 218825 |
+| True | manual:core | 8 | 21898 | 10677 | 9368 | 273617 | 1705 | 48659 |
+| True | manual:unannotated | 8 | 114262 | 37827 | 28263 | 859344 | 7503 | 218884 |
 | True | manual:vbo | 8 | 403 | 85 | 0 | 0 | 0 | 0 |
 
 
@@ -188,7 +188,7 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells or more (every eligible cell is co
 | within budget | True |
 | target cells per reaction | 250 |
 | max cells per reaction | all |
-| reactions with shortfall | 20 |
+| reactions with shortfall | 22 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | True |
 | control pooling level (0 none, 1 by prefix, 2 all) | 1 |
@@ -202,48 +202,48 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells or more (every eligible cell is co
 
 | reaction_id | reaction_name | pool_type | compartment | sections | n_sections | n_available | n_selected | shortfall |
 |---|---|---|---|---|---|---|---|---|
-| 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 1058 | 1058 | False |
-| 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 1140 | 1140 | False |
-| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1258 | 1258 | False |
-| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 1024 | 1024 | False |
-| 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1898 | 1898 | False |
-| 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 664 | 664 | False |
-| 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 772 | 772 | False |
-| 8 | P2_3_L|deep | lesion | deep | P2_3_L | 1 | 692 | 692 | False |
-| 9 | P2_3_T|core | lesion | core | P2_3_T | 1 | 2867 | 2867 | False |
-| 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 659 | 659 | False |
-| 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 618 | 618 | False |
-| 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 499 | 499 | False |
-| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 1211 | 1211 | False |
-| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 1622 | 1622 | False |
-| 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 1024 | 1024 | False |
-| 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 826 | 826 | False |
-| 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 553 | 553 | False |
-| 18 | P3_1_T|rim | lesion | rim | P3_1_T | 1 | 576 | 576 | False |
-| 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 401 | 401 | False |
-| 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 284 | 284 | False |
-| 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 2579 | 2579 | False |
-| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 2693 | 2693 | False |
-| 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 2452 | 2452 | False |
-| 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 1220 | 1220 | False |
+| 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 1035 | 1035 | False |
+| 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 1037 | 1037 | False |
+| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1234 | 1234 | False |
+| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 1010 | 1010 | False |
+| 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1809 | 1809 | False |
+| 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 550 | 550 | False |
+| 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 737 | 737 | False |
+| 8 | P2_3_L|deep | lesion | deep | P2_3_L | 1 | 679 | 679 | False |
+| 9 | P2_3_T|core | lesion | core | P2_3_T | 1 | 2760 | 2760 | False |
+| 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 552 | 552 | False |
+| 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 572 | 572 | False |
+| 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 484 | 484 | False |
+| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 1208 | 1208 | False |
+| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 1509 | 1509 | False |
+| 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 937 | 937 | False |
+| 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 795 | 795 | False |
+| 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 538 | 538 | False |
+| 18 | P3_1_T|rim | lesion | rim | P3_1_T | 1 | 484 | 484 | False |
+| 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 368 | 368 | False |
+| 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 282 | 282 | False |
+| 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 2576 | 2576 | False |
+| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 2472 | 2472 | False |
+| 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 2296 | 2296 | False |
+| 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 1209 | 1209 | False |
 | 25 | R1_3_L|core | lesion | core | R1_3_L | 1 | 15 | 15 | True |
-| 26 | R1_3_L|rim | lesion | rim | R1_3_L | 1 | 146 | 146 | True |
-| 27 | R1_3_L|peri | lesion | peri | R1_3_L | 1 | 248 | 248 | False |
-| 28 | R1_3_L|deep | lesion | deep | R1_3_L | 1 | 269 | 269 | False |
+| 26 | R1_3_L|rim | lesion | rim | R1_3_L | 1 | 139 | 139 | True |
+| 27 | R1_3_L|peri | lesion | peri | R1_3_L | 1 | 214 | 214 | False |
+| 28 | R1_3_L|deep | lesion | deep | R1_3_L | 1 | 241 | 241 | False |
 | 29 | R1_3_T|core | lesion | core | R1_3_T | 1 | 21 | 21 | True |
-| 30 | R1_3_T|rim | lesion | rim | R1_3_T | 1 | 98 | 98 | True |
-| 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 180 | 180 | True |
-| 32 | R1_3_T|deep | lesion | deep | R1_3_T | 1 | 213 | 213 | False |
-| 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1624 | 1624 | False |
+| 30 | R1_3_T|rim | lesion | rim | R1_3_T | 1 | 62 | 62 | True |
+| 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 127 | 127 | True |
+| 32 | R1_3_T|deep | lesion | deep | R1_3_T | 1 | 193 | 193 | True |
+| 33 | CFA(pooled)|GM | GM | GM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 1621 | 1621 | False |
 | 34 | OS(pooled)|GM | GM | GM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 1616 | 1616 | False |
 | 35 | P3_1_L|GM | GM | GM | P3_1_L | 1 | 437 | 437 | False |
 | 36 | R1_2_L|GM | GM | GM | R1_2_L | 1 | 601 | 601 | False |
 | 37 | R1_3_C|GM | GM | GM | R1_3_C | 1 | 1886 | 1886 | False |
-| 38 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 212 | 212 | False |
-| 39 | OS(pooled)|WM | WM | WM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 288 | 288 | False |
-| 40 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 374 | 374 | False |
-| 41 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 529 | 529 | False |
-| 42 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 435 | 435 | False |
+| 38 | CFA(pooled)|WM | WM | WM | CFA_L2_C;CFA_L2_L;CFA_L2_T | 3 | 197 | 197 | True |
+| 39 | OS(pooled)|WM | WM | WM | OS1_2_;OS1_2_C;OS1_2_L | 3 | 285 | 285 | False |
+| 40 | P3_1_L|WM | WM | WM | P3_1_L | 1 | 360 | 360 | False |
+| 41 | R1_2_L|WM | WM | WM | R1_2_L | 1 | 510 | 510 | False |
+| 42 | R1_3_C|WM | WM | WM | R1_3_C | 1 | 426 | 426 | False |
 | 43 | CFA_L2_C|VBO | VBO | VBO | CFA_L2_C | 1 | 50 | 50 | True |
 | 44 | CFA_L2_L|VBO | VBO | VBO | CFA_L2_L | 1 | 100 | 100 | True |
 | 45 | CFA_L2_T|VBO | VBO | VBO | CFA_L2_T | 1 | 30 | 30 | True |
@@ -274,7 +274,7 @@ Alternative pooling of the non-CFA control GM/WM (the other setting of `pool_oth
 | within budget | False |
 | target cells per reaction | 250 |
 | max cells per reaction | all |
-| reactions with shortfall | 23 |
+| reactions with shortfall | 25 |
 | CFA GM/WM pooled | True |
 | other control GM/WM pooled | False |
 | control pooling level (0 none, 1 by prefix, 2 all) | 0 |

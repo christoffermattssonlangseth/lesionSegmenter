@@ -127,7 +127,7 @@
       "target_area_um2": 3000,
       "size_filter_sd": 1.0,
       "order": "spatial",
-      "edge_exclusion_um": 25,
+      "edge_exclusion_um": 40,
       "exclude_vbo": true,
       "inward_only": false,
       "groups": [
@@ -215,7 +215,7 @@
       "control_prefixes": [
         "OS"
       ],
-      "edge_exclusion_um": 25,
+      "edge_exclusion_um": 40,
       "order": "random",
       "shortfall_frac": 0.8
     },
@@ -294,7 +294,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_1.czi_shapes",
     "n_cells": 57044,
-    "seconds": 12.0
+    "seconds": 12.3
   },
   "segmentation": {
     "route": "spatialdata",
@@ -310,7 +310,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_1.czi_shapes",
     "n_cells": 57044,
-    "seconds": 12.0
+    "seconds": 12.3
   },
   "pu1": {
     "method": "mask",
@@ -726,10 +726,10 @@
     }
   },
   "wells": {
-    "n_groups": 42,
-    "n_cells": 3760,
+    "n_groups": 41,
+    "n_cells": 3627,
     "target_area_um2": 3000
   },
   "cell_geojson": 17315,
-  "seconds_total": 52.6
+  "seconds_total": 52.2
 }

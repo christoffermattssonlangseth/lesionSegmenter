@@ -556,6 +556,17 @@ def attach_reactions(run: SceneRun) -> pd.DataFrame:
 
 # meninges | buffer | parenchyma (lesionseg.meninges): meninges keep the zone colour, buffer is a white ring
 SURFACE_COLORS = {"meninges": ZONE_COLORS["meninges"], "buffer": "#ffffff"}
+C_EDGE = "#5fd4e6"   # edge-exclusion line (light cyan: not used by any compartment)
+
+
+def edge_exclusion_um(run: SceneRun) -> float:
+    """Edge exclusion of the reactions (falls back to the wells') recorded in the run's config."""
+    cfg = run.log.get("config", {})
+    for key in ("reactions", "wells"):
+        v = (cfg.get(key) or {}).get("edge_exclusion_um")
+        if v is not None:
+            return float(v)
+    return 0.0
 TIER_CODES = {"outside": 0, "parenchyma": 1, "buffer": 2, "meninges": 3}
 
 
@@ -619,7 +630,7 @@ def surface_summary(runs: list[SceneRun], edge_exclusion_um: float = 100.0) -> p
     return pd.DataFrame(rows)
 
 
-def edge_exclusion_sweep(runs: list[SceneRun], edges=(100, 75, 50, 25, 0)) -> pd.DataFrame:
+def edge_exclusion_sweep(runs: list[SceneRun], edges=(100, 75, 50, 40, 25, 0)) -> pd.DataFrame:
     """Pu.1⁺ parenchyma cells per lesion compartment that the reactions could draw from at each edge
     exclusion (meninges and buffer are excluded regardless)."""
     rows = []
@@ -658,7 +669,8 @@ def thickest_meninges_spots(run: SceneRun, n: int = 3, min_sep_um: float = 400.0
     return picks
 
 
-def plot_surface_zoom(run: SceneRun, x_um: float, y_um: float, size_um: float = 250.0, ax=None, raw: bool = False):
+def plot_surface_zoom(run: SceneRun, x_um: float, y_um: float, size_um: float = 250.0, ax=None, raw: bool = False,
+                      legend: bool = True):
     """Full-resolution crop: image, Pu.1⁺ cells by surface tier, meninges / buffer edges, lesion and
     manual-core outlines. ``raw`` shows the image only."""
     if ax is None:
@@ -678,6 +690,16 @@ def plot_surface_zoom(run: SceneRun, x_um: float, y_um: float, size_um: float = 
         ax.scatter(buf.x_um, buf.y_um, s=40, facecolors="none", edgecolors=SURFACE_COLORS["buffer"], linewidths=0.8)
         draw_surface(ax, run, view, lw=1.0)
         draw_outlines(ax, run, core=False, manual=True, lw=1.0)
+        if legend:
+            ax.legend(handles=[
+                plt.Line2D([], [], marker="o", ls="", mfc=SURFACE_COLORS["meninges"], mec="black", label="meninges"),
+                plt.Line2D([], [], marker="o", ls="", mfc="none", mec=SURFACE_COLORS["buffer"], label="buffer"),
+                plt.Line2D([], [], marker="o", ls="", mfc="#898781", mec="none", label="parenchyma"),
+                plt.Line2D([], [], color=SURFACE_COLORS["meninges"], lw=1.2, label="inner edge of meninges"),
+                plt.Line2D([], [], color=SURFACE_COLORS["buffer"], lw=1.2, ls="--", label="inner edge of buffer"),
+                plt.Line2D([], [], color=C_LESION, lw=1.2, label="automatic lesion"),
+                plt.Line2D([], [], color=C_MANUAL, lw=1.2, ls="--", label="manual CORE (protected)")],
+                loc="lower right", fontsize=7, framealpha=0.85)
     ax.set_xlim(view[0], view[1])
     ax.set_ylim(view[3], view[2])
     ax.set_xticks([])
@@ -718,6 +740,14 @@ def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: floa
     if not has_surface and (run.dir / "maps" / "parenchyma.tif").exists():
         ax.contour(run.map("parenchyma").astype(float), levels=[0.5], colors="white", linewidths=0.6,
                    extent=run.extent_um, origin="upper")
+    # edge exclusion: same distance map the reactions use (dist_to_section_edge_um)
+    edge = edge_exclusion_um(run)
+    if edge > 0:
+        from scipy import ndimage as ndi
+
+        d_edge = ndi.distance_transform_edt(run.map("sections") > 0) * run.grid.bin_um
+        ax.contour(d_edge, levels=[edge], colors=C_EDGE, linewidths=0.8, linestyles=":", extent=run.extent_um,
+                   origin="upper")
     draw_outlines(ax, run, core=False, manual=False, lw=0.8)
     ax.set_xlim(x0, x1)
     ax.set_ylim(y1, y0)
@@ -730,7 +760,16 @@ def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: floa
                            label=f"meninges Pu.1⁺ ({len(men)}, not collected)"),
                 plt.Line2D([], [], marker="o", ls="", mfc="none", mec=SURFACE_COLORS["buffer"], ms=4,
                            label=f"buffer Pu.1⁺ ({len(buf)}, never collected)"),
-                plt.Line2D([], [], marker=".", ls="", color="#898781", label="Pu.1⁺ not collected")]
+                plt.Line2D([], [], marker=".", ls="", color="#898781", label="Pu.1⁺ not collected"),
+                plt.Line2D([], [], color=C_LESION, lw=1.2, label="automatic lesion")]
+    if has_surface:
+        handles += [plt.Line2D([], [], color=SURFACE_COLORS["meninges"], lw=1.2, label="inner edge of meninges"),
+                    plt.Line2D([], [], color=SURFACE_COLORS["buffer"], lw=1.2, ls="--", label="inner edge of buffer")]
+    else:
+        handles.append(plt.Line2D([], [], color="white", lw=1.2, label="parenchyma boundary"))
+    if edge > 0:
+        handles.append(plt.Line2D([], [], color=C_EDGE, lw=1.2, ls=":",
+                                  label=f"edge exclusion ({edge:g} µm; nothing collected outside)"))
     ax.legend(handles=handles, loc="lower right", fontsize=8, framealpha=0.85)
     name = run.sections.set_index("section_id").loc[section_id]
     ax.set_title(f"{run.name} – {name.get('section_name', section_id)}: {len(sel)} cells collected", fontsize=10)
