@@ -786,7 +786,15 @@ cell's processes. Classes used here:
 
 Outlines are drawn from the label image (every QC-passed nucleus, Pu.1⁺ and Pu.1⁻; faint nuclei that
 Cellpose filtered out have no outline). Compartments as in notebook 07: `core`, `rim`, `peri`, `deep`,
-`distal` (lesion sections, parenchyma), `meninges`, control `GM` / `WM`.
+`distal` (lesion sections, parenchyma), `meninges`, control `GM` / `WM`. In every zoom-in the nuclei of
+the window's compartment are drawn at full strength and all others faded, with the inner edges of the
+meninges (solid grey) and buffer (dashed white); the line above each panel counts the nuclei.
+
+**`meninges` is a place, not a cell type.** The compartment is the outer surface layer plus the compact
+infiltrate attached to it (notebook 05), so it holds true meningeal cells (flattened pial / arachnoid
+fibroblasts) *and* immune cells piled up in the swollen subarachnoid space. There is no meningeal marker
+in this panel (SytoG, Pu.1, Iba1, DAPI); Pu.1⁻ meningeal nuclei are the better proxy for meningeal cells,
+Pu.1⁺ ones are infiltrating myeloid cells – both are shown separately below.
 """), code(SETUP.format(run_dir=run_dir) + '''
 from lesionseg import expression as E, morphology as M
 df = E.expression_table(runs)
@@ -805,8 +813,9 @@ for j, comp in enumerate(order):
             break
     x, y = w[0]
     M.plot_nuclei(axes[0, j], r, r.cells, x, y, SIZE, raw=True)
-    M.plot_nuclei(axes[1, j], r, r.cells, x, y, SIZE)
+    st = M.plot_nuclei(axes[1, j], r, r.cells, x, y, SIZE, comp=comp_by_scene[r.name], focus=comp)
     axes[0, j].set_title(f"{comp} · {r.name} @ ({x:.0f}, {y:.0f}) µm", loc="left", fontsize=10)
+    axes[1, j].set_title(M.stats_line(comp, st), loc="left", fontsize=9)
 M.class_legend(axes[1, -1])
 plt.tight_layout(); plt.show()
 '''), md("""
@@ -865,6 +874,33 @@ ax.set_ylabel("elongated share − distal (percentage points)"); ax.set_title("e
 plt.tight_layout(); plt.show()
 display((100 * per).round(1))
 '''), md("""
+### Meninges split: Pu.1⁻ (proxy for meningeal cells) vs Pu.1⁺ (infiltrating myeloid cells)
+
+Elongated share per slide × section in the meninges, against the same section's distal tissue of the same
+Pu.1 status (percentage points; one dot per section, replicate slides averaged).
+"""), code('''
+rows = []
+for which, label in (("neg", "Pu.1⁻"), ("pos", "Pu.1⁺")):
+    sh = M.class_shares(df, which)
+    ref = sh[sh.compartment == "distal"].set_index(["scene", "section"])["elongated"]
+    m = sh[sh.compartment == "meninges"].copy()
+    m["distal"] = m.set_index(["scene", "section"]).index.map(ref).to_numpy()
+    per = m.groupby("section")[["elongated", "distal"]].mean().dropna()
+    per["delta_pp"] = 100 * (per["elongated"] - per["distal"])
+    per["group"] = label
+    rows.append(per)
+men = pd.concat(rows)
+fig, ax = plt.subplots(figsize=(6.5, 4.5))
+for k, (label, d) in enumerate(men.groupby("group", sort=False)):
+    ax.scatter(np.full(len(d), k) + np.linspace(-0.12, 0.12, len(d)), d.delta_pp, s=40, color="#c3c2b7",
+               edgecolors="#0b0b0b", linewidths=0.5, zorder=3)
+    ax.plot([k - 0.25, k + 0.25], [d.delta_pp.median()] * 2, color="#0b0b0b", lw=2)
+ax.axhline(0, color="#898781", lw=0.8, ls=":"); ax.set_xticks([0, 1], ["Pu.1⁻ meninges", "Pu.1⁺ meninges"])
+ax.set_ylabel("elongated share − distal (pp)"); ax.set_title("meninges vs distal, by Pu.1 status", loc="left")
+plt.tight_layout(); plt.show()
+display(men.groupby("group", sort=False).agg(meninges_elongated=("elongated", "median"), distal_elongated=("distal", "median"),
+        delta_pp=("delta_pp", "median"), sections_higher=("delta_pp", lambda v: int((v > 0).sum())), n=("delta_pp", "size")).round(3))
+'''), md("""
 ## Representative zoom-ins per compartment
 
 Three typical windows per compartment, from different slides where possible: the compartment covers most
@@ -882,16 +918,22 @@ for comp in ["core", "rim", "distal", "meninges"]:
     fig, axes = plt.subplots(2, len(picks), figsize=(6.5 * len(picks), 13), squeeze=False)
     for j, (r, (x, y)) in enumerate(picks):
         M.plot_nuclei(axes[0, j], r, r.cells, x, y, SIZE, raw=True)
-        M.plot_nuclei(axes[1, j], r, r.cells, x, y, SIZE)
+        st = M.plot_nuclei(axes[1, j], r, r.cells, x, y, SIZE, comp=comp_by_scene[r.name], focus=comp)
         axes[0, j].set_title(f"{comp} · {r.name} @ ({x:.0f}, {y:.0f}) µm", loc="left", fontsize=10)
+        axes[1, j].set_title(M.stats_line(comp, st), loc="left", fontsize=9)
     M.class_legend(axes[1, -1])
     fig.suptitle(comp, x=0.01, ha="left", fontsize=14)
     plt.tight_layout(); plt.show()
 '''), md("""
 ## Reading
 
-* The meninges carry the most elongated nuclei – flattened meningeal / pial cells lying along the surface
-  (visible in the zoom-ins), in Pu.1⁺ and Pu.1⁻ cells alike.
+* The meningeal compartment carries the most elongated nuclei. Where it is a thin surface layer the
+  window is mostly Pu.1⁻ flattened nuclei lying along the surface – the classic meningeal layer; where it
+  is swollen it is mostly Pu.1⁺ infiltrate.
+* Relative to their own distal baseline, Pu.1⁻ and Pu.1⁺ meningeal nuclei are elongated by a similar
+  margin (~10 percentage points each). Pu.1⁻ nuclei are more elongated in absolute terms everywhere, so
+  raw shares overstate the difference between the two. Identifying meningeal cells properly needs a marker
+  (e.g. a fibroblast / leptomeningeal marker).
 * Lesion compartments differ little from distal tissue in nuclear shape; what changes near lesions is
   Pu.1 / Iba1 level and nuclear size (notebooks 07–08).
 * Eccentricity says nothing about orientation; a next step could measure whether elongated nuclei lie

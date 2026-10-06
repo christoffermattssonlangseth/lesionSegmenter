@@ -118,16 +118,24 @@ def representative_windows(cells: pd.DataFrame, comp: pd.Series, target: str, *,
 
 
 def plot_nuclei(ax, run, cells: pd.DataFrame, x_um: float, y_um: float, size_um: float = 120.0, *,
-                raw: bool = False, alpha: float = 0.6):
+                raw: bool = False, alpha: float = 0.6, comp: pd.Series | None = None, focus: str | None = None,
+                surface: bool = True) -> dict:
     """Raw image (``raw``) or every segmented nucleus as a polygon filled by elongation class; Pu.1⁺
-    nuclei get a white edge."""
+    nuclei get a white edge. With ``comp`` (compartment per cell, aligned to ``cells``) and ``focus``,
+    nuclei of the focus compartment are drawn at full strength and all others faded. ``surface`` draws
+    the inner edges of the meninges (solid grey) and buffer (dashed white).
+
+    Returns counts for the window: nuclei in / outside the focus compartment, and the elongated and
+    Pu.1⁺ shares of the focus nuclei."""
     from matplotlib.collections import PolyCollection
 
-    from .report import read_crop_um
+    from .report import draw_surface, read_crop_um
 
     rgb, ext = read_crop_um(run, x_um, y_um, size_um, scale=1.0)
     if rgb is not None:
         ax.imshow(np.clip(rgb * (1.3 if raw else 0.55), 0, 1), extent=ext)
+    half = size_um / 2
+    stats: dict = {}
     if not raw:
         lab, lext = label_crop(run, x_um, y_um, size_um)
         polys = nucleus_polygons(lab, lext)
@@ -135,28 +143,54 @@ def plot_nuclei(ax, run, cells: pd.DataFrame, x_um: float, y_um: float, size_um:
         ids = [i for i in polys if i in c.index]
         cls = ecc_class(c.loc[ids, "eccentricity"])
         pos = c.loc[ids, "pu1_pos"].to_numpy(bool)
+        if comp is not None and focus is not None:
+            cmap = pd.Series(np.asarray(comp, dtype=object), index=cells["label"].to_numpy())
+            infocus = (cmap.reindex(ids).to_numpy() == focus)
+        else:
+            infocus = np.ones(len(ids), bool)
         for k in CLASS_ORDER:
             sel = cls == k
-            for edge, lw, m in (("#0b0b0b", 0.4, sel & ~pos), ("#ffffff", 1.3, sel & pos)):
+            for edge, lw, m, a in (("#0b0b0b", 0.4, sel & ~pos & infocus, alpha),
+                                   ("#ffffff", 1.3, sel & pos & infocus, alpha),
+                                   ("#52514e", 0.3, sel & ~infocus, 0.15)):
                 verts = [polys[i] for i, mm in zip(ids, m, strict=True) if mm]
                 if verts:
                     ax.add_collection(PolyCollection(verts, facecolors=CLASS_COLORS[k], edgecolors=edge,
-                                                     linewidths=lw, alpha=alpha))
-    half = size_um / 2
+                                                     linewidths=lw, alpha=a))
+        n_f = int(infocus.sum())
+        stats = {"n_focus": n_f, "n_other": int((~infocus).sum()),
+                 "elongated_focus": float((cls[infocus] == "elongated").mean()) if n_f else np.nan,
+                 "pu1_focus": float(pos[infocus].mean()) if n_f else np.nan}
+        if surface:
+            draw_surface(ax, run, (x_um - half, x_um + half, y_um - half, y_um + half), lw=1.2)
     ax.set_xlim(x_um - half, x_um + half)
     ax.set_ylim(y_um + half, y_um - half)
     ax.set_xticks([])
     ax.set_yticks([])
-    return ax
+    return stats
 
 
-def class_legend(ax, loc="lower right"):
+def stats_line(focus: str, st: dict) -> str:
+    """'62 meninges nuclei (31 % elongated, 18 % Pu.1⁺) · 40 other (faded)'."""
+    if not st:
+        return ""
+    return (f"{st['n_focus']} {focus} nuclei ({100 * st['elongated_focus']:.0f} % elongated, "
+            f"{100 * st['pu1_focus']:.0f} % Pu.1⁺) · {st['n_other']} other (faded)")
+
+
+def class_legend(ax, loc="lower right", surface: bool = True):
     from matplotlib.patches import Patch
 
     h = [Patch(facecolor=CLASS_COLORS["round"], edgecolor="#0b0b0b", label=f"round (ecc < {ROUND_MAX})"),
          Patch(facecolor=CLASS_COLORS["intermediate"], edgecolor="#0b0b0b", label="intermediate"),
          Patch(facecolor=CLASS_COLORS["elongated"], edgecolor="#0b0b0b", label=f"elongated (ecc ≥ {ELONG_MIN})"),
-         Patch(facecolor="none", edgecolor="#ffffff", linewidth=1.3, label="white edge = Pu.1⁺")]
+         Patch(facecolor="none", edgecolor="#ffffff", linewidth=1.3, label="white edge = Pu.1⁺"),
+         Patch(facecolor="#c3c2b7", alpha=0.15, edgecolor="#52514e", label="faded = other compartment")]
+    if surface:
+        from matplotlib.lines import Line2D
+
+        h += [Line2D([], [], color="#c3c2b7", lw=1.2, label="inner edge of meninges"),
+              Line2D([], [], color="#ffffff", lw=1.2, ls="--", label="inner edge of buffer")]
     ax.legend(handles=h, loc=loc, fontsize=7, framealpha=0.85)
 
 
