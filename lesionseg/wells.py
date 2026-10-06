@@ -110,6 +110,8 @@ def select_wells(cells: pd.DataFrame, *, groups: list[dict] | None = None, targe
         base &= cells["dist_to_section_edge_um"].to_numpy(float) >= edge_exclusion_um
     if exclude_vbo and "in_vbo" in cells:
         base &= ~cells["in_vbo"].to_numpy(bool)
+    if "surface_tier" in cells:  # meninges / buffer never go into wells
+        base &= (cells["surface_tier"].astype(str) == "parenchyma").to_numpy()
     if inward_only:
         base &= _inward(cells, lesions, sections_xy or {})
     if section_col not in cells:
@@ -186,6 +188,8 @@ def capture_site_summary(cells: pd.DataFrame, groups: list[dict] | None = None, 
         elig &= cells["dist_to_section_edge_um"].to_numpy(float) >= edge_exclusion_um
     if exclude_vbo and "in_vbo" in cells:
         elig &= ~cells["in_vbo"].to_numpy(bool)
+    if "surface_tier" in cells:
+        elig &= (cells["surface_tier"].astype(str) == "parenchyma").to_numpy()
     sel = cells["well_group"].to_numpy() > 0 if "well_group" in cells else np.zeros(len(cells), bool)
     area = cells["area_um2"].to_numpy(float)
     has_les = cells["section_has_lesion"].to_numpy(bool) if "section_has_lesion" in cells else np.ones(len(cells), bool)

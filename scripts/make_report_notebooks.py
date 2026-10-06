@@ -319,6 +319,8 @@ Compartments: in lesion sections `core`, `rim`, and rings outside the lesion edg
 20–40 %, 40–60 % and >60 % of the section radius (the last two reach deep into the tissue); in control
 sections the manual `GM` / `WM` regions. Manual
 annotation compartments (GM, WM, vbo, manual core, unannotated) are listed for every section as well.
+Meningeal cells and the buffer around them are never captured (see *Meninges, buffer and the edge
+exclusion*).
 """), code(SETUP.format(run_dir=run_dir)), md("## Pooled over all sections"), code('''
 coh = Path(RUN_DIR) / "cohort"
 pooled = pd.read_csv(coh / "capture_sites_pooled.csv")
@@ -333,6 +335,43 @@ display(ma.pivot_table(index=["sample", "scene", "section", "lesion_section"], c
 '''), md("## Per animal"), code('''
 ba = pd.read_csv(coh / "capture_sites_by_animal.csv")
 ba[ba.compartment != "all"].pivot_table(index=["animal", "lesion_section"], columns="compartment", values="n_pu1_eligible", aggfunc="sum", fill_value=0).astype(int)
+'''), md("""
+## Meninges, buffer and the edge exclusion
+
+The meninges boundary is placed per location (`lesionseg.meninges`, `parenchyma.method: adaptive`):
+
+* **meninges** – the outer 10 µm of the true surface (outermost nuclei), thin flaps / roots, and very
+  compact surface-connected infiltrate (nuclei touching; nuclear area fraction above the 99.9th percentile
+  of deep tissue), up to 80 µm deep;
+* **buffer** – 10 µm inward of the meninges (and any cell within 6 µm of a meningeal cell): never
+  collected, so meninges and lesion pools never touch;
+* **manual lesion cores are protected** – nothing inside the collaborator's CORE polygons is ever
+  meninges or buffer; where a core meets the meninges the buffer is carved from the meningeal side.
+  Calibration on these scenes: without this, nuclear packing alone would call 7 % (99.9th percentile) to
+  23 % (99th) of manual-core cells meninges – dense lymphocyte-rich subpial lesion looks like swollen
+  meninges.
+
+Lesion zones, wells and reactions are clipped to the parenchyma. Separately, wells and reactions skip
+every cell within `edge_exclusion_um` (100 µm) of the section edge – with meninges and buffer handled
+explicitly, that blanket margin is now the main thing keeping subpial lesion cells out.
+"""), code('''
+surf = R.surface_summary(runs)
+display(Markdown(f"**Manual-core cells in meninges or buffer: {int(surf.manual_core_cells_in_meninges_or_buffer.sum())}** (must be 0)"))
+display(surf.groupby("lesion_section")[[c for c in surf.columns if c.startswith("pu1_")]].sum())
+display(surf.set_index(["scene", "section"]))
+'''), md("### What the edge exclusion costs: Pu.1⁺ parenchyma cells available per lesion compartment"), code('''
+display(R.edge_exclusion_sweep(runs))
+'''), md("### Where the meninges are thickest (raw image left, tiers right)"), code('''
+for r in runs:
+    spots = R.thickest_meninges_spots(r, n=2)
+    if not spots:
+        continue
+    fig, axes = plt.subplots(len(spots), 2, figsize=(12, 6 * len(spots)), squeeze=False)
+    for (x, y), row in zip(spots, axes):
+        R.plot_surface_zoom(r, x, y, ax=row[0], raw=True)
+        R.plot_surface_zoom(r, x, y, ax=row[1])
+        row[0].set_title(f"{r.name} @ ({x:.0f}, {y:.0f}) µm · 250 µm", loc="left", fontsize=9)
+    plt.tight_layout(); plt.show()
 '''), md("## Wells actually formed (target 3000 µm² per well)"), code('''
 for r in runs:
     display(Markdown(f"### {r.name}"))
@@ -386,17 +425,28 @@ def nb_collection(run_dir):
 # 06 · Collection, section by section
 
 For every section (animal × spinal level) on both replicate slides: **which cells are collected and
-into which reaction**. Filled outlines are collected cells coloured by compartment (core, rim, peri,
-deep, GM, WM, VBO); grey dots are Pu.1⁺ cells in that section that are *not* collected (outside the
-eligible compartments, within the edge exclusion, or in the meninges). Every eligible cell is collected:
-~250 per reaction is a general target, not a cap (reactions below 80 % of it are flagged as shortfall).
-White line = parenchyma boundary; yellow = automatic lesion. The table under each section lists its
-reactions and how the selected cells split between the two slides. Aggregates at the end.
+into which reaction**. Markers are collected cells coloured by compartment (core, rim, peri, deep, GM,
+WM, VBO); grey dots are Pu.1⁺ cells in that section that are *not* collected (outside the eligible
+compartments or within the edge exclusion). Every eligible cell is collected: ~250 per reaction is a
+general target, not a cap (reactions below 80 % of it are flagged as shortfall).
+
+**Meninges are kept apart from the lesion.** The meninges boundary follows the tissue per location
+(`lesionseg.meninges`): the outer 10 µm of the surface plus very compact, surface-connected meningeal
+infiltrate. Light-grey markers are Pu.1⁺ cells in the meninges, white rings Pu.1⁺ cells in the 10 µm
+buffer inward of it; neither is ever collected, so meninges and lesion pools never touch. Solid grey line
+= inner edge of the meninges, dashed white = inner edge of the buffer; yellow = automatic lesion. The
+collaborator's manual lesion cores are protected: no cell inside them is ever meninges or buffer (checked
+below). The table under each section lists its reactions and how the selected cells split between the two
+slides. Aggregates at the end.
 """), code(SETUP.format(run_dir=run_dir)), code('''
 plan = R.load_reaction_plan(RUN_DIR)
 cells_by_scene = {r.name: R.attach_reactions(r) for r in runs}
 budget = pd.read_csv(Path(RUN_DIR) / "cohort" / "reactions_budget.csv")
 display(budget)
+surf = R.surface_summary(runs)
+sec_surf = surf.groupby("section")[["pu1_meninges", "pu1_buffer", "manual_core_cells_in_meninges_or_buffer"]].sum()
+display(Markdown(f"**Manual-core cells in meninges or buffer: {int(surf.manual_core_cells_in_meninges_or_buffer.sum())}** "
+                 "(must be 0)"))
 sections = sorted({s for r in runs for s in r.sections.section_name.astype(str) if s not in ("unassigned", "nan")})
 print(len(sections), "sections:", sections)
 '''), md("## Sections"), code('''
@@ -407,8 +457,12 @@ for sec in sections:
         continue
     les = any(bool(r.sections.set_index("section_name").loc[sec, "is_lesion_section"]) for r, _ in hits)
     tab = R.section_collection_table(plan, sec, cells_by_scene)
+    own = sum(int(((c.section_name.astype(str) == sec) & (c.reaction_id > 0)).sum()) for c in cells_by_scene.values())
+    ms = sec_surf.loc[sec] if sec in sec_surf.index else None
+    surf_txt = (f" · meninges {int(ms.pu1_meninges)} / buffer {int(ms.pu1_buffer)} Pu.1⁺ (not collected)"
+                if ms is not None else "")
     display(Markdown(f"### {sec} — {'lesion section' if les else 'control section'} · {len(hits)} slide(s) · "
-                     f"{int(tab.n_selected.sum()) if len(tab) else 0} cells in {len(tab)} reaction(s)"))
+                     f"{own} cells collected from this section in {len(tab)} reaction(s){surf_txt}"))
     fig, axes = plt.subplots(1, len(hits), figsize=(10 * len(hits), 10), squeeze=False)
     for ax, (r, sid) in zip(axes.ravel(), hits):
         R.plot_section_collection(r, sid, ax=ax, cells=cells_by_scene[r.name])
@@ -434,6 +488,10 @@ sel = sel.assign(animal=sel.section_name.astype(str).str.replace(r"_[TCL]?$", ""
 display(sel.pivot_table(index=["animal", "level"], columns="compartment", values="cell_id", aggfunc="size", fill_value=0).astype(int))
 display(Markdown("### Collected cells by manual annotation (sanity check)"))
 display(pd.crosstab(sel.compartment, sel.manual_annotation.fillna("none")))
+display(Markdown("### Surface tier of collected cells (must all be parenchyma, VBO excepted)"))
+display(pd.crosstab(sel.compartment, sel.surface_tier.astype(str)))
+display(Markdown("### Meninges and buffer per section (Pu.1⁺, never collected)"))
+display(surf.set_index(["scene", "section"]))
 '''), code('''
 # cells per reaction vs the 250-cell target (a minimum to aim for, not a cap), and area per reaction
 fig, axes = plt.subplots(1, 2, figsize=(16, 0.28 * len(plan) + 1.5))

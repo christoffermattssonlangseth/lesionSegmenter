@@ -1,4 +1,4 @@
-# lesionSegmenter – report (2026-10-05)
+# lesionSegmenter – report (2026-10-06)
 
 
 Automatic outlining of EAE lesions from Cellpose segmentation masks and the collaborator's Pu.1 calls,
@@ -19,10 +19,10 @@ the notebooks in `notebooks/` hold the image evidence behind every number.
 
 | scene | cells | Pu.1+ | Pu.1+ frac | lesions | lesion sections | sections | auto lesion mm² | manual core mm² | manual cores | cores ≥50% covered | manual area covered | wells |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CML_1 scene 0 | 57044 | 17315 | 0.30 | 22 | 5 | 9 | 1.61 | 0.69 | 34 | 0.71 | 0.86 | 41 |
-| CML_2_rescan scene 0 | 60095 | 13214 | 0.22 | 36 | 3 | 9 | 1.54 | 0.97 | 25 | 0.84 | 0.83 | 31 |
-| CML_metal scene 0 | 50627 | 15502 | 0.31 | 17 | 5 | 9 | 1.10 | 0.44 | 33 | 0.48 | 0.82 | 39 |
-| CML_metal scene 1 | 50980 | 17992 | 0.35 | 35 | 3 | 9 | 1.50 | 0.36 | 20 | 0.90 | 0.89 | 30 |
+| CML_1 scene 0 | 57044 | 17315 | 0.30 | 22 | 5 | 9 | 1.66 | 0.69 | 34 | 0.71 | 0.89 | 41 |
+| CML_2_rescan scene 0 | 60095 | 13214 | 0.22 | 36 | 3 | 9 | 1.53 | 0.97 | 25 | 0.84 | 0.85 | 30 |
+| CML_metal scene 0 | 50627 | 15502 | 0.31 | 17 | 5 | 9 | 1.06 | 0.44 | 33 | 0.64 | 0.85 | 39 |
+| CML_metal scene 1 | 50980 | 17992 | 0.35 | 35 | 3 | 9 | 1.46 | 0.36 | 20 | 0.90 | 0.90 | 30 |
 
 
 ## Pu.1⁺ cells from the segmentation mask (no zoning)
@@ -65,42 +65,42 @@ Per animal and spinal level (T = thoracic, C = cervical, L = lumbar; CFA = adjuv
 
 | scene | section_name | is_lesion_section | has_manual_core | area_mm2 | n_cells | n_pu1_pos | frac_pu1_pos | n_lesions | lesion_area_mm2 | lesion_frac_of_section | lesion_area_frac_unrestricted |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| CML_1 scene 0 | P2_3_T | True | True | 1.859 | 8217 | 3740 | 0.455 | 3 | 0.504 | 0.271 | 0.326 |
+| CML_1 scene 0 | P2_3_T | True | True | 1.859 | 8217 | 3740 | 0.455 | 8 | 0.515 | 0.277 | 0.326 |
 | CML_1 scene 0 | R1_3_C | False | False | 3.366 | 5995 | 2055 | 0.343 | 0 | 0.000 | 0.000 | 0.002 |
 | CML_1 scene 0 | R1_3_L | True | True | 2.452 | 5481 | 1703 | 0.311 | 2 | 0.032 | 0.013 | 0.013 |
 | CML_1 scene 0 | OS1_2_L | False | False | 2.508 | 4403 | 491 | 0.112 | 0 | 0.000 | 0.000 | 0.021 |
 | CML_1 scene 0 | OS1_2_ | False | False | 1.895 | 2606 | 263 | 0.101 | 0 | 0.000 | 0.000 | 0.000 |
-| CML_1 scene 0 | P2_3_C | True | True | 3.542 | 9974 | 4245 | 0.426 | 8 | 0.486 | 0.137 | 0.161 |
+| CML_1 scene 0 | P2_3_C | True | True | 3.542 | 9974 | 4245 | 0.426 | 11 | 0.496 | 0.140 | 0.161 |
 | CML_1 scene 0 | OS1_2_C | False | False | 3.474 | 4634 | 487 | 0.105 | 0 | 0.000 | 0.000 | 0.000 |
-| CML_1 scene 0 | P2_3_L | True | True | 2.722 | 10451 | 3111 | 0.298 | 4 | 0.556 | 0.204 | 0.241 |
-| CML_1 scene 0 | R1_3_T | True | True | 2.171 | 4403 | 1057 | 0.240 | 3 | 0.037 | 0.017 | 0.019 |
-| CML_2_rescan scene 0 | R1_2_T | True | True | 4.785 | 15395 | 4710 | 0.306 | 12 | 0.820 | 0.171 | 0.188 |
-| CML_2_rescan scene 0 | P3_1_C | True | True | 4.033 | 12236 | 3392 | 0.277 | 8 | 0.560 | 0.139 | 0.155 |
+| CML_1 scene 0 | P2_3_L | True | True | 2.722 | 10451 | 3111 | 0.298 | 6 | 0.579 | 0.213 | 0.241 |
+| CML_1 scene 0 | R1_3_T | True | True | 2.171 | 4403 | 1057 | 0.240 | 3 | 0.039 | 0.018 | 0.019 |
+| CML_2_rescan scene 0 | R1_2_T | True | True | 4.785 | 15395 | 4710 | 0.306 | 17 | 0.828 | 0.173 | 0.188 |
+| CML_2_rescan scene 0 | P3_1_C | True | True | 4.033 | 12236 | 3392 | 0.277 | 13 | 0.539 | 0.134 | 0.155 |
 | CML_2_rescan scene 0 | P3_1_L | False | False | 2.242 | 4677 | 923 | 0.197 | 0 | 0.000 | 0.000 | 0.023 |
 | CML_2_rescan scene 0 | CFA_L2_L | False | False | 4.135 | 4963 | 441 | 0.089 | 0 | 0.000 | 0.000 | 0.000 |
 | CML_2_rescan scene 0 | CFA_L2_T | False | False | 1.975 | 2547 | 210 | 0.082 | 0 | 0.000 | 0.000 | 0.000 |
 | CML_2_rescan scene 0 | R1_2_C | False | False | 0.344 | 822 | 120 | 0.146 | 0 | 0.000 | 0.000 | 0.000 |
 | CML_2_rescan scene 0 | CFA_L2_C | False | False | 3.719 | 5267 | 459 | 0.087 | 0 | 0.000 | 0.000 | 0.000 |
 | CML_2_rescan scene 0 | R1_2_L | False | False | 2.488 | 5777 | 1186 | 0.205 | 0 | 0.000 | 0.000 | 0.063 |
-| CML_2_rescan scene 0 | P3_1_T | True | True | 3.536 | 7149 | 1664 | 0.233 | 4 | 0.158 | 0.045 | 0.051 |
-| CML_metal scene 0 | P2_3_T | True | True | 1.657 | 6243 | 2971 | 0.476 | 4 | 0.435 | 0.263 | 0.292 |
+| CML_2_rescan scene 0 | P3_1_T | True | True | 3.536 | 7149 | 1664 | 0.233 | 4 | 0.166 | 0.047 | 0.051 |
+| CML_metal scene 0 | P2_3_T | True | True | 1.657 | 6243 | 2971 | 0.476 | 7 | 0.395 | 0.239 | 0.292 |
 | CML_metal scene 0 | R1_3_C | False | False | 3.525 | 5438 | 1948 | 0.358 | 0 | 0.000 | 0.000 | 0.000 |
-| CML_metal scene 0 | R1_3_L | True | True | 2.554 | 4772 | 1626 | 0.341 | 2 | 0.019 | 0.007 | 0.008 |
+| CML_metal scene 0 | R1_3_L | True | True | 2.554 | 4772 | 1626 | 0.341 | 3 | 0.018 | 0.007 | 0.008 |
 | CML_metal scene 0 | OS1_2_L | False | False | 2.921 | 3533 | 728 | 0.206 | 0 | 0.000 | 0.000 | 0.006 |
 | CML_metal scene 0 | OS1_2_ | False | False | 2.031 | 2303 | 336 | 0.146 | 0 | 0.000 | 0.000 | 0.000 |
-| CML_metal scene 0 | P2_3_C | True | True | 3.845 | 9106 | 3038 | 0.334 | 3 | 0.328 | 0.085 | 0.097 |
+| CML_metal scene 0 | P2_3_C | True | True | 3.845 | 9106 | 3038 | 0.334 | 4 | 0.328 | 0.085 | 0.097 |
 | CML_metal scene 0 | OS1_2_C | False | False | 3.408 | 4351 | 863 | 0.198 | 0 | 0.000 | 0.000 | 0.000 |
-| CML_metal scene 0 | P2_3_L | True | True | 2.793 | 9401 | 2805 | 0.298 | 6 | 0.313 | 0.112 | 0.124 |
-| CML_metal scene 0 | R1_3_T | True | True | 2.324 | 4075 | 985 | 0.242 | 2 | 0.006 | 0.002 | 0.005 |
-| CML_metal scene 1 | R1_2_T | True | True | 4.435 | 13792 | 7547 | 0.547 | 12 | 0.875 | 0.197 | 0.231 |
-| CML_metal scene 1 | P3_1_C | True | True | 4.027 | 9938 | 4120 | 0.415 | 8 | 0.482 | 0.120 | 0.135 |
+| CML_metal scene 0 | P2_3_L | True | True | 2.793 | 9401 | 2805 | 0.298 | 6 | 0.312 | 0.112 | 0.124 |
+| CML_metal scene 0 | R1_3_T | True | True | 2.324 | 4075 | 985 | 0.242 | 2 | 0.008 | 0.004 | 0.005 |
+| CML_metal scene 1 | R1_2_T | True | True | 4.435 | 13792 | 7547 | 0.547 | 16 | 0.857 | 0.193 | 0.231 |
+| CML_metal scene 1 | P3_1_C | True | True | 4.027 | 9938 | 4120 | 0.415 | 12 | 0.450 | 0.112 | 0.135 |
 | CML_metal scene 1 | P3_1_L | False | False | 2.163 | 3815 | 698 | 0.183 | 0 | 0.000 | 0.000 | 0.003 |
 | CML_metal scene 1 | CFA_L2_L | False | False | 3.892 | 4703 | 822 | 0.175 | 0 | 0.000 | 0.000 | 0.000 |
 | CML_metal scene 1 | CFA_L2_T | False | False | 1.597 | 1968 | 206 | 0.105 | 0 | 0.000 | 0.000 | 0.000 |
 | CML_metal scene 1 | R1_2_C | False | False | 0.242 | 342 | 18 | 0.053 | 0 | 0.000 | 0.000 | 0.000 |
 | CML_metal scene 1 | CFA_L2_C | False | False | 3.075 | 3895 | 912 | 0.234 | 0 | 0.000 | 0.000 | 0.005 |
 | CML_metal scene 1 | R1_2_L | False | False | 2.502 | 5376 | 1538 | 0.286 | 0 | 0.000 | 0.000 | 0.040 |
-| CML_metal scene 1 | P3_1_T | True | True | 3.216 | 5930 | 1875 | 0.316 | 3 | 0.148 | 0.046 | 0.049 |
+| CML_metal scene 1 | P3_1_T | True | True | 3.216 | 5930 | 1875 | 0.316 | 4 | 0.151 | 0.047 | 0.049 |
 
 
 `lesion_area_frac_unrestricted` is what the detector found before control sections were cleared – the
@@ -111,10 +111,10 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
 
 | scene | manual cores | cores ≥50% inside auto lesion | manual core area inside auto lesion | auto lesion mm² | manual core mm² |
 |---|---|---|---|---|---|
-| CML_1 scene 0 | 34 | 0.71 | 0.86 | 1.61 | 0.69 |
-| CML_2_rescan scene 0 | 25 | 0.84 | 0.83 | 1.54 | 0.97 |
-| CML_metal scene 0 | 33 | 0.48 | 0.82 | 1.10 | 0.44 |
-| CML_metal scene 1 | 20 | 0.90 | 0.89 | 1.50 | 0.36 |
+| CML_1 scene 0 | 34 | 0.71 | 0.89 | 1.66 | 0.69 |
+| CML_2_rescan scene 0 | 25 | 0.84 | 0.85 | 1.53 | 0.97 |
+| CML_metal scene 0 | 33 | 0.64 | 0.85 | 1.06 | 0.44 |
+| CML_metal scene 1 | 20 | 0.90 | 0.90 | 1.46 | 0.36 |
 
 
 Model, leave-one-scene-out (bin level; avg_precision and cores_detected_frac are the informative columns):
@@ -145,15 +145,15 @@ Pooled over all sections. `n_pu1_eligible` excludes cells within 100 µm of the 
 
 | lesion_section | compartment | n_sections | n_cells_all | n_pu1_raw | n_pu1_eligible | area_pu1_eligible_um2 | n_selected | area_selected_um2 |
 |---|---|---|---|---|---|---|---|---|
-| False | GM | 10 | 27357 | 6167 | 6075 | 198766 | 1656 | 52834 |
-| False | WM | 10 | 12957 | 1830 | 1293 | 37083 | 835 | 22307 |
-| True | core | 8 | 23006 | 10850 | 6906 | 197263 | 1276 | 36104 |
-| True | rim | 8 | 18540 | 7951 | 4216 | 122842 | 1328 | 37715 |
-| True | ring_0_10 | 8 | 30425 | 10090 | 3647 | 109926 | 1298 | 37092 |
-| True | ring_10_20 | 8 | 14591 | 4379 | 2968 | 93798 | 1148 | 34633 |
-| True | ring_20_40 | 8 | 22844 | 7329 | 5544 | 180429 | 1478 | 46194 |
-| True | ring_40_60 | 8 | 15086 | 4600 | 3540 | 115516 | 1474 | 44972 |
-| True | ring_60_plus | 8 | 12082 | 3369 | 2093 | 63894 | 763 | 22579 |
+| False | GM | 10 | 27357 | 6163 | 6075 | 198766 | 1656 | 52834 |
+| False | WM | 10 | 12954 | 1830 | 1293 | 37083 | 835 | 22307 |
+| True | core | 8 | 22157 | 10353 | 6902 | 197171 | 1276 | 36105 |
+| True | rim | 8 | 18443 | 7929 | 4205 | 122458 | 1329 | 37724 |
+| True | ring_0_10 | 8 | 31403 | 10638 | 3648 | 110002 | 1297 | 37058 |
+| True | ring_10_20 | 8 | 14592 | 4382 | 2969 | 93767 | 1149 | 34652 |
+| True | ring_20_40 | 8 | 22844 | 7323 | 5542 | 180379 | 1477 | 46174 |
+| True | ring_40_60 | 8 | 15088 | 4602 | 3539 | 115526 | 1471 | 44926 |
+| True | ring_60_plus | 8 | 12041 | 3362 | 2090 | 63781 | 764 | 22583 |
 
 
 By manual annotation compartment (collaborator's GM / WM / VBO / core polygons):
@@ -162,10 +162,10 @@ By manual annotation compartment (collaborator's GM / WM / VBO / core polygons):
 |---|---|---|---|---|---|---|---|---|
 | False | manual:GM | 10 | 27387 | 6168 | 6075 | 198766 | 1656 | 52834 |
 | False | manual:WM | 10 | 13926 | 1935 | 1293 | 37083 | 835 | 22307 |
-| False | manual:unannotated | 10 | 35601 | 6551 | 2392 | 75356 | 20 | 629 |
+| False | manual:unannotated | 10 | 35601 | 6551 | 2385 | 75174 | 0 | 0 |
 | False | manual:vbo | 10 | 501 | 50 | 0 | 0 | 0 | 0 |
-| True | manual:core | 8 | 21898 | 10677 | 5713 | 167744 | 1372 | 39609 |
-| True | manual:unannotated | 8 | 114262 | 37827 | 23206 | 716039 | 7381 | 219325 |
+| True | manual:core | 8 | 21898 | 10677 | 5713 | 167744 | 1374 | 39661 |
+| True | manual:unannotated | 8 | 114262 | 37827 | 23186 | 715425 | 7377 | 219206 |
 | True | manual:vbo | 8 | 403 | 85 | 0 | 0 | 0 | 0 |
 
 
@@ -204,8 +204,8 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells or more (every eligible cell is co
 |---|---|---|---|---|---|---|---|---|
 | 1 | P2_3_C|core | lesion | core | P2_3_C | 1 | 663 | 663 | False |
 | 2 | P2_3_C|rim | lesion | rim | P2_3_C | 1 | 719 | 719 | False |
-| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1037 | 1037 | False |
-| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 841 | 841 | False |
+| 3 | P2_3_C|peri | lesion | peri | P2_3_C | 1 | 1041 | 1041 | False |
+| 4 | P2_3_C|deep | lesion | deep | P2_3_C | 1 | 842 | 842 | False |
 | 5 | P2_3_L|core | lesion | core | P2_3_L | 1 | 1318 | 1318 | False |
 | 6 | P2_3_L|rim | lesion | rim | P2_3_L | 1 | 361 | 361 | False |
 | 7 | P2_3_L|peri | lesion | peri | P2_3_L | 1 | 602 | 602 | False |
@@ -214,8 +214,8 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells or more (every eligible cell is co
 | 10 | P2_3_T|rim | lesion | rim | P2_3_T | 1 | 397 | 397 | False |
 | 11 | P2_3_T|peri | lesion | peri | P2_3_T | 1 | 518 | 518 | False |
 | 12 | P2_3_T|deep | lesion | deep | P2_3_T | 1 | 460 | 460 | False |
-| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 670 | 670 | False |
-| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 864 | 864 | False |
+| 13 | P3_1_C|core | lesion | core | P3_1_C | 1 | 666 | 666 | False |
+| 14 | P3_1_C|rim | lesion | rim | P3_1_C | 1 | 856 | 856 | False |
 | 15 | P3_1_C|peri | lesion | peri | P3_1_C | 1 | 641 | 641 | False |
 | 16 | P3_1_C|deep | lesion | deep | P3_1_C | 1 | 729 | 729 | False |
 | 17 | P3_1_T|core | lesion | core | P3_1_T | 1 | 435 | 435 | False |
@@ -223,13 +223,13 @@ Rules: ≤ 60 reactions of ~250 Pu.1⁺ cells or more (every eligible cell is co
 | 19 | P3_1_T|peri | lesion | peri | P3_1_T | 1 | 294 | 294 | False |
 | 20 | P3_1_T|deep | lesion | deep | P3_1_T | 1 | 258 | 258 | False |
 | 21 | R1_2_T|core | lesion | core | R1_2_T | 1 | 1907 | 1907 | False |
-| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 1430 | 1430 | False |
+| 22 | R1_2_T|rim | lesion | rim | R1_2_T | 1 | 1427 | 1427 | False |
 | 23 | R1_2_T|peri | lesion | peri | R1_2_T | 1 | 1787 | 1787 | False |
 | 24 | R1_2_T|deep | lesion | deep | R1_2_T | 1 | 1100 | 1100 | False |
 | 25 | R1_3_L|core | lesion | core | R1_3_L | 1 | 15 | 15 | True |
 | 26 | R1_3_L|rim | lesion | rim | R1_3_L | 1 | 125 | 125 | True |
 | 27 | R1_3_L|peri | lesion | peri | R1_3_L | 1 | 179 | 179 | True |
-| 28 | R1_3_L|deep | lesion | deep | R1_3_L | 1 | 190 | 190 | True |
+| 28 | R1_3_L|deep | lesion | deep | R1_3_L | 1 | 192 | 192 | True |
 | 29 | R1_3_T|core | lesion | core | R1_3_T | 1 | 8 | 8 | True |
 | 30 | R1_3_T|rim | lesion | rim | R1_3_T | 1 | 15 | 15 | True |
 | 31 | R1_3_T|peri | lesion | peri | R1_3_T | 1 | 56 | 56 | True |

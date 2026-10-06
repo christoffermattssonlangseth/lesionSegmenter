@@ -39,12 +39,19 @@ lesion:
 # Only sections with manually annotated lesions carry lesions; the rest are lesion-free controls.
 sections: {focus: manual}
 
-# Parenchyma: the section outline is clipped to the outermost cells (true surface), opened with a
-# 150 µm disk (thin meningeal flaps / roots fall off) and eroded by erode_um – that outer band is the
-# meninges. Lesions and zones are clipped to the parenchyma; meningeal cells are never collected.
-# Trade-off (results/cohort/meninges_band_sweep.csv): the manual cores reach to ~25 µm from the
-# outermost cells; 30 µm removes the surface layer and loses <7 % of manual-core cells, 75 µm loses ~36 %.
-parenchyma: {enabled: true, open_um: 150, erode_um: 30}
+# Parenchyma / meninges (lesionseg.meninges, results/meninges_tiers): the meninges boundary is placed
+# per location – the outer 10 µm of the true surface (outermost nuclei) plus very compact, surface-connected
+# meningeal infiltrate (nuclei touching; can swell to 40–80 µm next to lesions), with a 10 µm buffer inward
+# that is never collected, so meninges and lesion pools never touch. Thin flaps / roots (opening with a
+# 150 µm disk) are meninges too. `method: band` restores the old fixed 30 µm band (erode_um).
+parenchyma:
+  method: adaptive
+  open_um: 150
+  erode_um: 30            # band method only
+  # manual CORE polygons are protected: never meninges or buffer (meninges must never enter the annotated
+  # lesions); compact_q 99.9 because looser growth also swallows lymphocyte-rich subpial lesion
+  adaptive: {seed_um: 10, max_um: 80, compact_q: 99.9, compact_sigma_um: 8, gap_um: 10, cell_gap_um: 6,
+             protect_manual_cores: true}
 assign: {distance_bins_um: [-100, -50, 0, 50, 100, 150, 300]}
 export: {cell_geojson: pu1}
 

@@ -85,8 +85,18 @@
     },
     "parenchyma": {
       "enabled": true,
+      "method": "adaptive",
       "open_um": 150,
-      "erode_um": 30
+      "erode_um": 30,
+      "adaptive": {
+        "seed_um": 10,
+        "max_um": 80,
+        "compact_q": 99.9,
+        "compact_sigma_um": 8,
+        "gap_um": 10,
+        "cell_gap_um": 6,
+        "protect_manual_cores": true
+      }
     },
     "sections": {
       "min_area_um2": 200000.0,
@@ -190,6 +200,7 @@
     },
     "reactions": {
       "target_cells": 250,
+      "max_cells": null,
       "max_reactions": 60,
       "pool_cfa": true,
       "pool_other_gm_wm": "auto",
@@ -205,7 +216,7 @@
         "OS"
       ],
       "edge_exclusion_um": 100,
-      "order": "spatial",
+      "order": "random",
       "shortfall_frac": 0.8
     },
     "samples": [
@@ -283,7 +294,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_1.czi_shapes",
     "n_cells": 57044,
-    "seconds": 11.7
+    "seconds": 14.1
   },
   "segmentation": {
     "route": "spatialdata",
@@ -299,7 +310,7 @@
     "n_not_in_mask": 0,
     "contours_from": "20260917_CML_1.czi_shapes",
     "n_cells": 57044,
-    "seconds": 11.7
+    "seconds": 14.1
   },
   "pu1": {
     "method": "mask",
@@ -375,8 +386,38 @@
   "parenchyma": {
     "open_um": 150,
     "erode_um": 30,
-    "meninges_area_mm2": 1.8342,
-    "parenchyma_area_mm2": 22.154600000000002
+    "method": "adaptive",
+    "meninges_area_mm2": 1.5510000000000002,
+    "parenchyma_area_mm2": 22.4378,
+    "adaptive": {
+      "scale": 0.25,
+      "cell_r_um": 5.0,
+      "close_um": 30.0,
+      "edge_um": 20.0,
+      "seed_um": 10,
+      "max_um": 80,
+      "compact_sigma_um": 8,
+      "compact_q": 99.9,
+      "gap_um": 10,
+      "cell_gap_um": 6,
+      "open_um": 150
+    },
+    "compact_threshold": 0.6080790162086487,
+    "surface_tiers_res_um": 1.3003888162560608,
+    "meninges_area_mm2_fine": 0.7949375415816551,
+    "buffer_area_mm2_fine": 0.5478368574636007,
+    "cells_per_tier": {
+      "parenchyma": 48647,
+      "meninges": 4592,
+      "buffer": 2925,
+      "outside": 880
+    },
+    "pu1_per_tier": {
+      "parenchyma": 14876,
+      "meninges": 1318,
+      "buffer": 958,
+      "outside": 163
+    }
   },
   "section_focus": {
     "mode": "manual",
@@ -417,13 +458,13 @@
       "n_cells": 8217,
       "n_pu1_pos": 3740,
       "frac_pu1_pos": 0.45515394912985274,
-      "n_lesions": 3,
-      "lesion_area_mm2": 0.5036,
-      "lesion_frac_of_section": 0.270898332436794,
-      "n_pu1_pos_core": 1865,
-      "n_pu1_pos_rim": 344,
-      "n_pu1_pos_peri": 346,
-      "n_pu1_pos_deep": 280,
+      "n_lesions": 8,
+      "lesion_area_mm2": 0.5146,
+      "lesion_frac_of_section": 0.27681549220010754,
+      "n_pu1_pos_core": 1870,
+      "n_pu1_pos_rim": 380,
+      "n_pu1_pos_peri": 371,
+      "n_pu1_pos_deep": 286,
       "n_auto_lesions_unrestricted": 3,
       "has_manual_core": true
     },
@@ -460,8 +501,8 @@
       "lesion_frac_of_section": 0.013211009174311925,
       "n_pu1_pos_core": 15,
       "n_pu1_pos_rim": 86,
-      "n_pu1_pos_peri": 140,
-      "n_pu1_pos_deep": 133,
+      "n_pu1_pos_peri": 150,
+      "n_pu1_pos_deep": 144,
       "n_auto_lesions_unrestricted": 2,
       "has_manual_core": true
     },
@@ -512,13 +553,13 @@
       "n_cells": 9974,
       "n_pu1_pos": 4245,
       "frac_pu1_pos": 0.4256065771004612,
-      "n_lesions": 8,
-      "lesion_area_mm2": 0.4863,
-      "lesion_frac_of_section": 0.13730306623750635,
-      "n_pu1_pos_core": 809,
-      "n_pu1_pos_rim": 578,
-      "n_pu1_pos_peri": 906,
-      "n_pu1_pos_deep": 663,
+      "n_lesions": 11,
+      "lesion_area_mm2": 0.49589999999999995,
+      "lesion_frac_of_section": 0.1400135524309673,
+      "n_pu1_pos_core": 755,
+      "n_pu1_pos_rim": 613,
+      "n_pu1_pos_peri": 905,
+      "n_pu1_pos_deep": 668,
       "n_auto_lesions_unrestricted": 8,
       "has_manual_core": true
     },
@@ -550,13 +591,13 @@
       "n_cells": 10451,
       "n_pu1_pos": 3111,
       "frac_pu1_pos": 0.29767486364941154,
-      "n_lesions": 4,
-      "lesion_area_mm2": 0.5555,
-      "lesion_frac_of_section": 0.20404040404040402,
-      "n_pu1_pos_core": 1182,
-      "n_pu1_pos_rim": 312,
-      "n_pu1_pos_peri": 364,
-      "n_pu1_pos_deep": 301,
+      "n_lesions": 6,
+      "lesion_area_mm2": 0.5788,
+      "lesion_frac_of_section": 0.2125987144168962,
+      "n_pu1_pos_core": 1241,
+      "n_pu1_pos_rim": 379,
+      "n_pu1_pos_peri": 404,
+      "n_pu1_pos_deep": 311,
       "n_auto_lesions_unrestricted": 4,
       "has_manual_core": true
     },
@@ -570,12 +611,12 @@
       "n_pu1_pos": 1057,
       "frac_pu1_pos": 0.24006359300476948,
       "n_lesions": 3,
-      "lesion_area_mm2": 0.037,
-      "lesion_frac_of_section": 0.017045192794950936,
+      "lesion_area_mm2": 0.0394,
+      "lesion_frac_of_section": 0.018150826922190996,
       "n_pu1_pos_core": 21,
-      "n_pu1_pos_rim": 52,
-      "n_pu1_pos_peri": 102,
-      "n_pu1_pos_deep": 135,
+      "n_pu1_pos_rim": 64,
+      "n_pu1_pos_peri": 129,
+      "n_pu1_pos_deep": 158,
       "n_auto_lesions_unrestricted": 3,
       "has_manual_core": true
     }
@@ -583,39 +624,39 @@
   "zone_summary": [
     {
       "zone": "distal",
-      "n_cells": 25594,
-      "n_pu1_pos": 6040,
-      "frac_pu1_pos": 0.2359928108150348
+      "n_cells": 25866,
+      "n_pu1_pos": 6164,
+      "frac_pu1_pos": 0.23830511095646795
     },
     {
       "zone": "peri",
-      "n_cells": 5877,
-      "n_pu1_pos": 1858,
-      "frac_pu1_pos": 0.3161476944019057
+      "n_cells": 6105,
+      "n_pu1_pos": 1959,
+      "frac_pu1_pos": 0.3208845208845209
     },
     {
       "zone": "rim",
-      "n_cells": 3403,
-      "n_pu1_pos": 1372,
-      "frac_pu1_pos": 0.4031736702909198
+      "n_cells": 3750,
+      "n_pu1_pos": 1522,
+      "frac_pu1_pos": 0.40586666666666665
     },
     {
       "zone": "core",
-      "n_cells": 8962,
-      "n_pu1_pos": 3892,
-      "frac_pu1_pos": 0.4342780629323812
+      "n_cells": 9194,
+      "n_pu1_pos": 3902,
+      "frac_pu1_pos": 0.42440722210137044
     },
     {
       "zone": "deep",
-      "n_cells": 4515,
-      "n_pu1_pos": 1512,
-      "frac_pu1_pos": 0.33488372093023255
+      "n_cells": 4688,
+      "n_pu1_pos": 1567,
+      "frac_pu1_pos": 0.3342576791808874
     },
     {
       "zone": "meninges",
-      "n_cells": 8693,
-      "n_pu1_pos": 2641,
-      "frac_pu1_pos": 0.30380766133670767
+      "n_cells": 7441,
+      "n_pu1_pos": 2201,
+      "frac_pu1_pos": 0.2957935761322403
     }
   ],
   "pu1_counts": {
@@ -624,71 +665,71 @@
   },
   "validation": {
     "core_vs_lesion": {
-      "auto_area_mm2": 1.6148,
+      "auto_area_mm2": 1.6611,
       "manual_area_mm2": 0.6899000000000001,
-      "iou": 0.3462819089900111,
-      "manual_covered_by_auto": 0.8592549644876069,
-      "auto_inside_manual": 0.36710428536041617
+      "iou": 0.3559028779053002,
+      "manual_covered_by_auto": 0.894477460501522,
+      "auto_inside_manual": 0.37150081271446633
     },
     "core_vs_core": {
-      "auto_area_mm2": 0.9800000000000001,
+      "auto_area_mm2": 0.9938,
       "manual_area_mm2": 0.6899000000000001,
-      "iou": 0.45246586065930244,
-      "manual_covered_by_auto": 0.7540223220756631,
-      "auto_inside_manual": 0.5308163265306123
+      "iou": 0.461925848745333,
+      "manual_covered_by_auto": 0.7711262501811856,
+      "auto_inside_manual": 0.5353189776615013
     },
     "n_manual_cores": 34,
     "manual_cores_detected_frac": 0.7058823529411765,
     "cell_confusion": {
       "distal": {
-        "GM": 7012,
-        "WM": 3110,
-        "core": 153,
-        "none": 15141,
+        "GM": 7011,
+        "WM": 3123,
+        "core": 233,
+        "none": 15321,
         "vbo": 178
       },
       "peri": {
         "GM": 0,
         "WM": 0,
-        "core": 239,
-        "none": 5537,
+        "core": 305,
+        "none": 5699,
         "vbo": 101
       },
       "rim": {
         "GM": 0,
         "WM": 0,
-        "core": 617,
-        "none": 2774,
+        "core": 811,
+        "none": 2927,
         "vbo": 12
       },
       "core": {
         "GM": 0,
         "WM": 0,
-        "core": 5037,
-        "none": 3925,
+        "core": 5275,
+        "none": 3919,
         "vbo": 0
       },
       "deep": {
         "GM": 0,
         "WM": 0,
-        "core": 38,
-        "none": 4447,
+        "core": 54,
+        "none": 4604,
         "vbo": 30
       },
       "meninges": {
-        "GM": 4,
-        "WM": 177,
-        "core": 731,
-        "none": 7781,
+        "GM": 5,
+        "WM": 164,
+        "core": 137,
+        "none": 7135,
         "vbo": 0
       }
     }
   },
   "wells": {
     "n_groups": 41,
-    "n_cells": 3418,
+    "n_cells": 3414,
     "target_area_um2": 3000
   },
   "cell_geojson": 17315,
-  "seconds_total": 27.8
+  "seconds_total": 63.6
 }

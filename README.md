@@ -32,7 +32,8 @@ All distances are measured from the lesion boundary in µm and are configurable.
 | **peri** | outside lesion, within `peri_width_um` of the edge | 0–150 µm outside |
 | **deep** | outside the peri band, a further `deep_width_um` outward (the "additional step" captured for DVP) | 150–300 µm |
 | **distal** | everything farther out, and all tissue of lesion-free control sections | > 300 µm |
-| **meninges** | outer band of the true tissue surface (`parenchyma.erode_um`, default 30 µm) and thin surface flaps; never zoned or collected | – |
+| **meninges** | placed per location (`parenchyma.method: adaptive`, `lesionseg.meninges`): outer 10 µm of the true surface (outermost nuclei), thin flaps / roots, and very compact surface-connected meningeal infiltrate (≤ 80 µm); never zoned or collected | – |
+| **buffer** (`surface_tier`) | 10 µm inward of the meninges: cells keep their zone but are never collected, so meninges and lesion pools never touch | – |
 
 Slides carry several cross-sections (nine per slide here). Sections come from the curated
 `Sample_category` polygons when present, otherwise connected tissue pieces are labelled
@@ -46,6 +47,18 @@ lesion section when the automatically detected lesions cover ≥ `lesion_min_fra
 polygons are never used to define lesions or sections – they only feed the validation files and
 the `has_manual_core` column, so the two views can be compared. Each cell additionally gets `dist_to_lesion_um` (negative inside) and an optional `dist_bin`
 so zones can be re-binned later without re-running anything (`lesionseg run --from-cells`).
+
+### Meninges are never lesion
+
+The meninges boundary follows the tissue (results/meninges_tiers, notebook 05): where the meninges are a
+single cell layer it sits at ~10 µm, where they swell into a dense infiltrate next to a lesion it follows
+the compact band (up to 80 µm). A 10 µm buffer inward of it is never collected. **The collaborator's
+manual CORE polygons are protected**: nothing inside them is ever meninges or buffer, meninges cannot grow
+through them, and where they meet the meninges the buffer is carved from the meningeal side. Without that,
+nuclear packing alone would call 7–23 % of manual-core cells meninges (dense lymphocyte-rich subpial
+lesion looks like swollen meninges). Every cell carries `surface_tier` (meninges | buffer | parenchyma)
+and `depth_um` below the surface; `maps/surface_tiers.tif` holds the fine (~1.3 µm) raster.
+`parenchyma.method: band` restores the old fixed 30 µm band.
 
 ### What counts as a lesion – and what does not
 
@@ -236,6 +249,9 @@ data/raw ->   ../DVP/data/OneDrive_1_9-18-2026 (symlink, not committed)
 
 ## Open questions
 
+* Edge exclusion: wells and reactions still skip every cell within 100 µm of the section edge. With
+  meninges + buffer handled explicitly this margin is the main restriction on subpial lesion cells –
+  lowering it to 25 µm would add ~3.3k core, ~3.4k rim and ~1.8k peri Pu.1⁺ cells (notebook 05).
 * Section threshold: 2 % lesion area calls CFA_L2_C (adjuvant-only control, CML_metal scene1) a
   lesion section at 2.2 % – raise `lesion_min_frac` or add a Pu.1⁺-fraction criterion?
 * Calibration-mark coordinates for the LMD export.

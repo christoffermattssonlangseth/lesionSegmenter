@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import assign, density, export, features, lesion, masks, sdata, segment, tissue, validate, viz, wells
+from . import assign, density, export, features, lesion, masks, meninges, sdata, segment, tissue, validate, viz, wells
 from .config import deep_update, sample_config
 from .io import SlideReader, open_slide
 
@@ -229,16 +229,43 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
         lesion_sections = set(int(i) for i in sec_area.index)
     if focus != "none" and lesion_sections != set(int(i) for i in sec_area.index):
         res = lesion.restrict_to_sections(res, sections, lesion_sections, maps)
-    # parenchyma: the outer `erode_um` band of the true surface is meninges; thin flaps (< 2×open_um)
-    # fall off. Lesions and zones are clipped to the parenchyma; meningeal cells are never collected.
+    # parenchyma: `method: band` – the outer `erode_um` band of the true surface is meninges and thin
+    # flaps (< 2×open_um) fall off; `method: adaptive` (needs the image) – the meninges boundary follows
+    # the swollen, compact meningeal infiltrate and a buffer separates it from the parenchyma
+    # (lesionseg.meninges). Lesions and zones are clipped to the parenchyma; meningeal and buffer cells
+    # are never collected.
     pcfg = dict(cfg.get("parenchyma") or {})
+    surf_layers = None
     if pcfg.pop("enabled", True) and int(sections.max()) > 0:
+        pmethod = pcfg.pop("method", "band")
+        acfg = dict(pcfg.pop("adaptive", None) or {})
         paren = tissue.parenchyma_mask(sections, grid.bin_um, **pcfg)
-        meninges = (sections > 0) & ~paren
-        res = lesion.clip_lesions(res, paren, maps, meninges=meninges, note="parenchyma")
+        if pmethod == "adaptive" and reader is None:
+            pmethod = "band"
+            log.setdefault("warnings", []).append("parenchyma.method adaptive needs the image – used band")
+        if pmethod == "adaptive":
+            acfg.setdefault("open_um", pcfg.get("open_um", 150.0))
+            ov = reader.read_overview(scene, acfg.get("scale", meninges.DEFAULTS["scale"]),
+                                      reader.channel_index(cfg["channels"]["nuclei"]))
+            protect = None  # manual lesion cores are never meninges (restriction agreed with the collaborator)
+            if acfg.pop("protect_manual_cores", True) and "CORE" in manual and len(manual["CORE"]):
+                protect = manual["CORE"]["geometry"]
+            surf_layers = meninges.surface_layers(cells, sections, surface, grid.bin_um, (H, W), px, ov,
+                                                  protect_shapes=protect, **acfg)
+            paren = (sections > 0) & ~meninges.excluded_grid(surf_layers, sections.shape, grid.bin_um)
+        men_grid = (sections > 0) & ~paren
+        res = lesion.clip_lesions(res, paren, maps, meninges=men_grid, note="parenchyma")
         maps.extra["parenchyma"] = paren.astype(np.uint8)
-        log["parenchyma"] = {**pcfg, "meninges_area_mm2": float(meninges.sum() * grid.bin_area_mm2()),
+        log["parenchyma"] = {**pcfg, "method": pmethod,
+                             "meninges_area_mm2": float(men_grid.sum() * grid.bin_area_mm2()),
                              "parenchyma_area_mm2": float(paren.sum() * grid.bin_area_mm2())}
+        if surf_layers is not None:
+            r2 = surf_layers["res"] ** 2 / 1e6
+            log["parenchyma"].update({
+                "adaptive": surf_layers["params"], "compact_threshold": surf_layers["compact_threshold"],
+                "surface_tiers_res_um": surf_layers["res"],
+                "meninges_area_mm2_fine": float(surf_layers["meninges"].sum() * r2),
+                "buffer_area_mm2_fine": float(surf_layers["buffer"].sum() * r2)})
     log["section_focus"] = {"mode": focus, "lesion_sections": sorted(lesion_sections),
                             "lesion_area_frac": {int(k): round(float(v), 4) for k, v in les_frac.items()},
                             "manual_core_sections": sorted(core_sections)}
@@ -247,6 +274,21 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     cells, res.lesions = assign.assign_sections(cells, res.lesions, sections, grid)
     cells = assign.add_relative_geometry(cells, geom, grid)
     cells["section_has_lesion"] = cells["section_id"].isin(lesion_sections)
+    if surf_layers is not None:
+        # cell-level tiers override the grid: meningeal cells get the meninges zone, buffer cells are
+        # flagged (surface_tier) and skipped by wells and reactions
+        prot = None
+        if surf_layers["protect"].any():
+            prot = sdata.annotate_cells_with_polygons(cells[["x_px", "y_px"]], manual["CORE"], "core", default=0)
+            prot = prot["core"].to_numpy(int) > 0
+        cells = meninges.cell_tiers(cells, surf_layers, protected=prot)
+        men_cells = (cells["surface_tier"] == "meninges").to_numpy()
+        cells.loc[men_cells, "zone"] = "meninges"
+        cells.loc[men_cells, "zone_code"] = lesion.ZONE_CODES["meninges"]
+        cells.loc[men_cells, "lesion_id"] = 0
+        log["parenchyma"]["cells_per_tier"] = cells["surface_tier"].astype(str).value_counts().to_dict()
+        log["parenchyma"]["pu1_per_tier"] = (cells.loc[cells["pu1_pos"].astype(bool), "surface_tier"].astype(str)
+                                             .value_counts().to_dict())
     if focus != "none":
         # control sections: no lesion context at all (peri zones must not bleed across the gap)
         ctrl = ~cells["section_has_lesion"].to_numpy(bool)
@@ -327,6 +369,11 @@ def run_sample(cfg: dict, *, name: str, out_dir: Path, scene: int = 0, reader: S
     # -- exports --------------------------------------------------------------
     export.save_cells(cells, out_dir / "cells.parquet")
     export.save_maps(maps, res, out_dir / "maps")
+    if surf_layers is not None:
+        import tifffile
+
+        tifffile.imwrite(out_dir / "maps" / "surface_tiers.tif", surf_layers["tiers"], compression="zlib",
+                         metadata={"axes": "YX", "res_um": surf_layers["res"], "codes": meninges.TIER_CODES})
     export.save_zone_geojson(res, maps, out_dir / "zones_px.geojson", units="px")
     export.save_zone_geojson(res, maps, out_dir / "zones_um.geojson", units="um")
     export.save_zone_polygons_table(res, maps, out_dir / "zone_polygons.csv")

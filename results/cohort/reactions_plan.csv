@@ -1,8 +1,8 @@
 reaction_id,reaction_name,pool_type,compartment,sections,scenes,n_sections,n_available,n_selected,n_pu1_available,n_pu1_selected,area_selected_um2,shortfall,priority
 1,P2_3_C|core,lesion,core,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,663,663,663,663,18697.615127260622,False,1
 2,P2_3_C|rim,lesion,rim,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,719,719,719,719,20155.160984377122,False,1
-3,P2_3_C|peri,lesion,peri,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,1037,1037,1037,1037,29744.779093685043,False,1
-4,P2_3_C|deep,lesion,deep,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,841,841,841,841,26355.99290250359,False,1
+3,P2_3_C|peri,lesion,peri,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,1041,1041,1041,1041,29883.8647544758,False,1
+4,P2_3_C|deep,lesion,deep,P2_3_C,CML_1 scene 0;CML_metal scene 0,1,842,842,842,842,26361.17162391601,False,1
 5,P2_3_L|core,lesion,core,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,1318,1318,1318,1318,38487.30634338969,False,1
 6,P2_3_L|rim,lesion,rim,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,361,361,361,361,10571.461413826251,False,1
 7,P2_3_L|peri,lesion,peri,P2_3_L,CML_1 scene 0;CML_metal scene 0,1,602,602,602,602,19236.519218728754,False,1
@@ -11,8 +11,8 @@ reaction_id,reaction_name,pool_type,compartment,sections,scenes,n_sections,n_ava
 10,P2_3_T|rim,lesion,rim,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,397,397,397,397,10544.61661303533,False,1
 11,P2_3_T|peri,lesion,peri,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,518,518,518,518,13700.043276081535,False,1
 12,P2_3_T|deep,lesion,deep,P2_3_T,CML_1 scene 0;CML_metal scene 0,1,460,460,460,460,12385.493542863129,False,1
-13,P3_1_C|core,lesion,core,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,670,670,670,670,19031.061373305325,False,1
-14,P3_1_C|rim,lesion,rim,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,864,864,864,864,24819.07521312732,False,1
+13,P3_1_C|core,lesion,core,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,666,666,666,666,18939.11264618682,False,1
+14,P3_1_C|rim,lesion,rim,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,856,856,856,856,24520.82313504866,False,1
 15,P3_1_C|peri,lesion,peri,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,641,641,641,641,20389.894459009545,False,1
 16,P3_1_C|deep,lesion,deep,P3_1_C,CML_2_rescan scene 0;CML_metal scene 1,1,729,729,729,729,24883.967763070727,False,1
 17,P3_1_T|core,lesion,core,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,435,435,435,435,12888.146584444312,False,1
@@ -20,13 +20,13 @@ reaction_id,reaction_name,pool_type,compartment,sections,scenes,n_sections,n_ava
 19,P3_1_T|peri,lesion,peri,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,294,294,294,294,8896.72632196431,False,1
 20,P3_1_T|deep,lesion,deep,P3_1_T,CML_2_rescan scene 0;CML_metal scene 1,1,258,258,258,258,8645.611177557897,False,1
 21,R1_2_T|core,lesion,core,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1907,1907,1907,1907,59131.486592568355,False,1
-22,R1_2_T|rim,lesion,rim,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1430,1430,1430,1430,44277.856699821845,False,1
+22,R1_2_T|rim,lesion,rim,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1427,1427,1427,1427,44191.29807049994,False,1
 23,R1_2_T|peri,lesion,peri,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1787,1787,1787,1787,57402.427769972026,False,1
 24,R1_2_T|deep,lesion,deep,R1_2_T,CML_2_rescan scene 0;CML_metal scene 1,1,1100,1100,1100,1100,36348.600088251595,False,1
 25,R1_3_L|core,lesion,core,R1_3_L,CML_1 scene 0,1,15,15,15,15,356.4862719203794,True,1
 26,R1_3_L|rim,lesion,rim,R1_3_L,CML_1 scene 0;CML_metal scene 0,1,125,125,125,125,3066.014452537861,True,1
 27,R1_3_L|peri,lesion,peri,R1_3_L,CML_1 scene 0;CML_metal scene 0,1,179,179,179,179,4858.486190388331,True,1
-28,R1_3_L|deep,lesion,deep,R1_3_L,CML_1 scene 0;CML_metal scene 0,1,190,190,190,190,5872.987146262545,True,1
+28,R1_3_L|deep,lesion,deep,R1_3_L,CML_1 scene 0;CML_metal scene 0,1,192,192,192,192,5920.758209087333,True,1
 29,R1_3_T|core,lesion,core,R1_3_T,CML_1 scene 0,1,8,8,8,8,200.2791240110047,True,1
 30,R1_3_T|rim,lesion,rim,R1_3_T,CML_1 scene 0,1,15,15,15,15,393.89989192032436,True,1
 31,R1_3_T|peri,lesion,peri,R1_3_T,CML_1 scene 0;CML_metal scene 0,1,56,56,56,56,1747.7656325962982,True,1

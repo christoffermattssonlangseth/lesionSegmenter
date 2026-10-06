@@ -1,5 +1,9 @@
 """Diagnostic for a three-tier surface model: meninges | buffer | parenchyma (nothing is changed in the run).
 
+This is the exploration behind ``lesionseg.meninges`` (now ``parenchyma.method: adaptive`` in the
+pipeline). It compares against whatever the run in ``--run-dir`` did and does *not* protect the manual
+cores; the pipeline does, with the stricter ``compact_q = 99.9`` (see lesionseg/meninges.py).
+
 The current pipeline labels the outer ``parenchyma.erode_um`` (30 µm) band of each section, measured
 on the 10 µm grid, as meninges and never collects it. That band is too wide where the meninges are a
 single cell layer, and too narrow where they swell into a dense infiltrate next to lesions (40–80 µm).

@@ -21,7 +21,7 @@ Rules (important-info.md, agreed with Ting):
   Pu.1⁻; ``vbo_all_cells: true``) and ignore the edge exclusion.
 * Lesion / GM / WM compartments count Pu.1⁺ cells only and respect the edge exclusion used for wells
   (``dist_to_section_edge_um`` ≥ ``edge_exclusion_um``); VBO cells are excluded from the other
-  compartments.
+  compartments, and so are meningeal and buffer cells (``surface_tier`` ≠ parenchyma).
 """
 from __future__ import annotations
 
@@ -49,6 +49,9 @@ def _compartment(cells: pd.DataFrame, edge_exclusion_um: float) -> pd.Series:
     # GM / WM (non-lesion sections only)
     for m in ("GM", "WM"):
         comp[~has_les & (manual == m).to_numpy() & edge_ok] = m
+    # meninges and the buffer around them are never pooled with parenchyma (lesionseg.meninges)
+    if "surface_tier" in cells:
+        comp[(cells["surface_tier"].astype(str) != "parenchyma").to_numpy()] = None
     # VBO overrides everything and ignores the edge exclusion
     comp[in_vbo] = "VBO"
     return pd.Series(comp, index=cells.index)
@@ -56,9 +59,9 @@ def _compartment(cells: pd.DataFrame, edge_exclusion_um: float) -> pd.Series:
 
 def _select(df: pd.DataFrame, n: int | None, order: str, rng: np.random.Generator) -> pd.Index:
     """Pick up to ``n`` rows (all rows if ``n`` is None), stratified across replicate slides
-    (``scene``) in proportion to what each slide offers, so a pooled reaction never comes from one slide only. Within a slide:
-    ``random`` (default, seeded), ``spatial`` (x/y order – compact for cutting but biased to one
-    corner) or ``central`` (closest to / deepest in the lesion first)."""
+    (``scene``) in proportion to what each slide offers, so a pooled reaction never comes from one
+    slide only. Within a slide: ``random`` (default, seeded), ``spatial`` (x/y order – compact for
+    cutting but biased to one corner) or ``central`` (closest to / deepest in the lesion first)."""
     if n is None or len(df) <= n:
         return df.index
     scenes = df["scene"].astype(str).to_numpy() if "scene" in df else np.array(["_"] * len(df))

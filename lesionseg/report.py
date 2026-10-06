@@ -554,10 +554,142 @@ def attach_reactions(run: SceneRun) -> pd.DataFrame:
     return c
 
 
+# meninges | buffer | parenchyma (lesionseg.meninges): meninges keep the zone colour, buffer is a white ring
+SURFACE_COLORS = {"meninges": ZONE_COLORS["meninges"], "buffer": "#ffffff"}
+TIER_CODES = {"outside": 0, "parenchyma": 1, "buffer": 2, "meninges": 3}
+
+
+def surface_tiers(run: SceneRun):
+    """(tier raster, µm per pixel) from ``maps/surface_tiers.tif``, or (None, None) for band-method runs."""
+    f = run.dir / "maps" / "surface_tiers.tif"
+    if not f.exists():
+        return None, None
+    if "surface_tiers" not in run.maps:
+        run.maps["surface_tiers"] = tifffile.imread(f)
+    return run.maps["surface_tiers"], float(run.log["parenchyma"]["surface_tiers_res_um"])
+
+
+def draw_surface(ax, run: SceneRun, view: tuple[float, float, float, float], lw: float = 0.8) -> bool:
+    """Inner edge of the meninges (solid) and of the buffer (dashed) inside ``view`` = (x0, x1, y0, y1) µm."""
+    tiers, res = surface_tiers(run)
+    if tiers is None:
+        return False
+    x0, x1, y0, y1 = view
+    i0, i1 = max(int(y0 / res), 0), min(int(y1 / res) + 1, tiers.shape[0])
+    j0, j1 = max(int(x0 / res), 0), min(int(x1 / res) + 1, tiers.shape[1])
+    sub = tiers[i0:i1, j0:j1]
+    ext = (j0 * res, j1 * res, i1 * res, i0 * res)
+    for mask, col, ls in ((sub == TIER_CODES["meninges"], SURFACE_COLORS["meninges"], "-"),
+                          (sub >= TIER_CODES["buffer"], SURFACE_COLORS["buffer"], "--")):
+        if mask.any() and not mask.all():
+            ax.contour(mask.astype(float), levels=[0.5], colors=col, linewidths=lw, linestyles=ls, extent=ext,
+                       origin="upper")
+    return True
+
+
+def surface_summary(runs: list[SceneRun], edge_exclusion_um: float = 100.0) -> pd.DataFrame:
+    """Per scene × section: Pu.1⁺ cells in meninges / buffer / parenchyma, manual-core cells that ended up
+    in meninges or buffer (must be 0), and lesion-zone Pu.1⁺ parenchyma cells blocked only by the edge
+    exclusion."""
+    rows = []
+    for r in runs:
+        c = r.cells
+        if "surface_tier" not in c:
+            continue
+        t = c["surface_tier"].astype(str)
+        pos = c["pu1_pos"].astype(bool)
+        mcore = c["manual_core_id"].to_numpy() > 0 if "manual_core_id" in c else np.zeros(len(c), bool)
+        lz = c["zone"].astype(str).isin(["core", "rim", "peri", "deep"])
+        edge = c["dist_to_section_edge_um"].to_numpy(float) < edge_exclusion_um
+        for sec, idx in c.groupby(c["section_name"].astype(str)).groups.items():
+            if sec in ("unassigned", "nan", "None"):
+                continue
+            m = c.index.isin(idx)
+            rows.append({
+                "scene": r.name, "section": sec, "lesion_section": bool(c.loc[m, "section_has_lesion"].any()),
+                "pu1_meninges": int((m & pos & (t == "meninges")).sum()),
+                "pu1_buffer": int((m & pos & (t == "buffer")).sum()),
+                "pu1_parenchyma": int((m & pos & (t == "parenchyma")).sum()),
+                "manual_core_cells_in_meninges_or_buffer": int((m & mcore & t.isin(["meninges", "buffer"])).sum()),
+                f"pu1_lesion_zone_within_{edge_exclusion_um:g}um_of_edge": int((m & pos & lz & edge
+                                                                                 & (t == "parenchyma")).sum()),
+                "max_meninges_depth_um": round(float(c.loc[m & (t == "meninges"), "depth_um"].max()), 1)
+                if (m & (t == "meninges")).any() else np.nan,
+            })
+    return pd.DataFrame(rows)
+
+
+def edge_exclusion_sweep(runs: list[SceneRun], edges=(100, 75, 50, 25, 0)) -> pd.DataFrame:
+    """Pu.1⁺ parenchyma cells per lesion compartment that the reactions could draw from at each edge
+    exclusion (meninges and buffer are excluded regardless)."""
+    rows = []
+    for r in runs:
+        c = r.cells
+        if "surface_tier" not in c:
+            continue
+        ok = c["pu1_pos"].astype(bool) & (c["surface_tier"].astype(str) == "parenchyma") & c["section_has_lesion"]
+        if "in_vbo" in c:
+            ok &= ~c["in_vbo"].astype(bool)
+        for e in edges:
+            sub = c[ok & (c["dist_to_section_edge_um"] >= e)]
+            for z in ("core", "rim", "peri", "deep"):
+                rows.append({"edge_exclusion_um": e, "compartment": z, "scene": r.name,
+                             "n_pu1": int((sub["zone"].astype(str) == z).sum())})
+    df = pd.DataFrame(rows)
+    return df.pivot_table(index="edge_exclusion_um", columns="compartment", values="n_pu1", aggfunc="sum")[
+        ["core", "rim", "peri", "deep"]].sort_index(ascending=False)
+
+
+def thickest_meninges_spots(run: SceneRun, n: int = 3, min_sep_um: float = 400.0, max_depth_um: float = 80.0,
+                            near_lesion_um: float = 100.0) -> list[tuple[float, float]]:
+    """Positions of the deepest meningeal cells next to a lesion (flaps excluded: depth ≤ ``max_depth_um``),
+    at least ``min_sep_um`` apart – where the meninges / lesion boundary matters."""
+    c = run.cells
+    if "surface_tier" not in c:
+        return []
+    men = c[(c["surface_tier"].astype(str) == "meninges") & (c["depth_um"] <= max_depth_um)
+            & (c["dist_to_lesion_um"] <= near_lesion_um)].sort_values("depth_um", ascending=False)
+    picks: list[tuple[float, float]] = []
+    for x, y in men[["x_um", "y_um"]].to_numpy()[:2000]:
+        if all(np.hypot(x - px_, y - py_) > min_sep_um for px_, py_ in picks):
+            picks.append((float(x), float(y)))
+        if len(picks) == n:
+            break
+    return picks
+
+
+def plot_surface_zoom(run: SceneRun, x_um: float, y_um: float, size_um: float = 250.0, ax=None, raw: bool = False):
+    """Full-resolution crop: image, Pu.1⁺ cells by surface tier, meninges / buffer edges, lesion and
+    manual-core outlines. ``raw`` shows the image only."""
+    if ax is None:
+        _, ax = plt.subplots(figsize=(6, 6))
+    rgb, ext = read_crop_um(run, x_um, y_um, size_um, scale=1.0)
+    if rgb is not None:
+        ax.imshow(np.clip(rgb * 1.3, 0, 1), extent=ext)
+    view = (x_um - size_um / 2, x_um + size_um / 2, y_um - size_um / 2, y_um + size_um / 2)
+    if not raw:
+        c = _cells_in(run, (view[0], view[1], view[3], view[2]))
+        t = c["surface_tier"].astype(str)
+        par = c[t == "parenchyma"]
+        ax.scatter(par.x_um, par.y_um, s=10, c="#898781", linewidths=0)
+        men = c[t == "meninges"]
+        ax.scatter(men.x_um, men.y_um, s=40, c=SURFACE_COLORS["meninges"], edgecolors="black", linewidths=0.3)
+        buf = c[t == "buffer"]
+        ax.scatter(buf.x_um, buf.y_um, s=40, facecolors="none", edgecolors=SURFACE_COLORS["buffer"], linewidths=0.8)
+        draw_surface(ax, run, view, lw=1.0)
+        draw_outlines(ax, run, core=False, manual=True, lw=1.0)
+    ax.set_xlim(view[0], view[1])
+    ax.set_ylim(view[3], view[2])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return ax
+
+
 def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: float = 0.25, dim: float = 0.5,
                             cells: pd.DataFrame | None = None):
-    """One section on one slide: collected cells as filled outlines coloured by reaction compartment;
-    other Pu.1⁺ cells as faint dots; lesion outline and parenchyma boundary for orientation."""
+    """One section on one slide: collected cells as markers coloured by reaction compartment; Pu.1⁺
+    cells in the meninges (grey) and in the buffer (white ring), both never collected; other Pu.1⁺ cells
+    as faint dots; lesion outline, parenchyma boundary and the inner edges of meninges / buffer."""
     c = cells if cells is not None else attach_reactions(run)
     x0, x1, y1, y0 = section_bbox_um(run, section_id)
     cx, cy, size = (x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0)
@@ -567,15 +699,23 @@ def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: floa
     if rgb is not None:
         ax.imshow(rgb * dim, extent=ext)
     sec = c[c.section_id == section_id]
-    other = sec[sec.pu1_pos & (sec.reaction_id == 0)]
+    tier = sec["surface_tier"].astype(str) if "surface_tier" in sec else pd.Series("parenchyma", index=sec.index)
+    pos = sec.pu1_pos.astype(bool) & (sec.reaction_id == 0)
+    other = sec[pos & (tier == "parenchyma")]
     ax.scatter(other.x_um, other.y_um, s=1.5, c="#898781", alpha=0.5, linewidths=0)
+    men = sec[pos & (tier == "meninges")]
+    ax.scatter(men.x_um, men.y_um, s=6, c=SURFACE_COLORS["meninges"], edgecolors="black", linewidths=0.2, zorder=2)
+    buf = sec[pos & (tier == "buffer")]
+    ax.scatter(buf.x_um, buf.y_um, s=6, facecolors="none", edgecolors=SURFACE_COLORS["buffer"], linewidths=0.5,
+               zorder=2)
     sel = sec[sec.reaction_id > 0]
     # at section scale a nucleus is ~1 px, so collected cells are drawn as visible markers
     for comp in REACTION_ORDER:
         s_ = sel[sel.compartment == comp]
         if len(s_):
             ax.scatter(s_.x_um, s_.y_um, s=16, c=REACTION_COLORS[comp], edgecolors="black", linewidths=0.3, zorder=3)
-    if (run.dir / "maps" / "parenchyma.tif").exists():
+    has_surface = draw_surface(ax, run, (x0, x1, y0, y1), lw=0.6)
+    if not has_surface and (run.dir / "maps" / "parenchyma.tif").exists():
         ax.contour(run.map("parenchyma").astype(float), levels=[0.5], colors="white", linewidths=0.6,
                    extent=run.extent_um, origin="upper")
     draw_outlines(ax, run, core=False, manual=False, lw=0.8)
@@ -586,7 +726,11 @@ def plot_section_collection(run: SceneRun, section_id: int, ax=None, scale: floa
 
     handles = [Patch(facecolor=REACTION_COLORS[k], edgecolor="black", label=f"{k} ({int(counts[k])})")
                for k in REACTION_ORDER if k in counts.index]
-    handles.append(plt.Line2D([], [], marker=".", ls="", color="#898781", label="Pu.1⁺ not collected"))
+    handles += [plt.Line2D([], [], marker="o", ls="", mfc=SURFACE_COLORS["meninges"], mec="black", ms=4,
+                           label=f"meninges Pu.1⁺ ({len(men)}, not collected)"),
+                plt.Line2D([], [], marker="o", ls="", mfc="none", mec=SURFACE_COLORS["buffer"], ms=4,
+                           label=f"buffer Pu.1⁺ ({len(buf)}, never collected)"),
+                plt.Line2D([], [], marker=".", ls="", color="#898781", label="Pu.1⁺ not collected")]
     ax.legend(handles=handles, loc="lower right", fontsize=8, framealpha=0.85)
     name = run.sections.set_index("section_id").loc[section_id]
     ax.set_title(f"{run.name} – {name.get('section_name', section_id)}: {len(sel)} cells collected", fontsize=10)
