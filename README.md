@@ -183,7 +183,7 @@ Reproduces the collaborator's protocol (`docs/collaborator/code/2_2_Annotation.i
 data-driven zones: per lesion section, a fixed **target area of Pu.1⁺ cells** (3000 µm²) is picked
 for each group – `core`, `rim`, rings `0–100`, `100–200`, `200–400` µm outside the lesion edge –
 and GM / WM control groups from the manual grey/white-matter polygons in any section. Cells within
-100 µm of the section edge or inside VBO polygons are excluded, cells far from the group's median
+`edge_exclusion_um` (25 µm; the collaborator used 100 µm) of the section edge or inside VBO polygons are excluded, cells far from the group's median
 size are dropped, and cells are taken in spatial order (`order: spatial | random | central`).
 Rings measured from the *manual* core boundary are available via `manual_dist_um` filters for
 direct comparison with the collaborator's wells. Result: `well_group` / `well_name` per cell and
@@ -249,9 +249,9 @@ data/raw ->   ../DVP/data/OneDrive_1_9-18-2026 (symlink, not committed)
 
 ## Open questions
 
-* Edge exclusion: wells and reactions still skip every cell within 100 µm of the section edge. With
-  meninges + buffer handled explicitly this margin is the main restriction on subpial lesion cells –
-  lowering it to 25 µm would add ~3.3k core, ~3.4k rim and ~1.8k peri Pu.1⁺ cells (notebook 05).
+* Edge exclusion: lowered from 100 µm (collaborator's well protocol) to 25 µm for wells and reactions,
+  since meninges + buffer are now excluded per cell – the old margin dropped ~9.5k subpial lesion Pu.1⁺
+  cells. Confirm with the collaborator that 25 µm is acceptable for the LMD wells.
 * Section threshold: 2 % lesion area calls CFA_L2_C (adjuvant-only control, CML_metal scene1) a
   lesion section at 2.2 % – raise `lesion_min_frac` or add a Pu.1⁺-fraction criterion?
 * Calibration-mark coordinates for the LMD export.

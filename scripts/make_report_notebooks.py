@@ -351,9 +351,11 @@ The meninges boundary is placed per location (`lesionseg.meninges`, `parenchyma.
   23 % (99th) of manual-core cells meninges – dense lymphocyte-rich subpial lesion looks like swollen
   meninges.
 
-Lesion zones, wells and reactions are clipped to the parenchyma. Separately, wells and reactions skip
-every cell within `edge_exclusion_um` (100 µm) of the section edge – with meninges and buffer handled
-explicitly, that blanket margin is now the main thing keeping subpial lesion cells out.
+Lesion zones, wells and reactions are clipped to the parenchyma. On top of that, wells and reactions
+skip cells within `edge_exclusion_um` of the section edge. That margin used to be 100 µm (the
+collaborator's well protocol) and was the main thing keeping subpial lesion cells out; with meninges and
+buffer excluded per cell it is now 25 µm, only keeping off the damaged cut edge. The table below shows
+what each margin would make available.
 """), code('''
 surf = R.surface_summary(runs)
 display(Markdown(f"**Manual-core cells in meninges or buffer: {int(surf.manual_core_cells_in_meninges_or_buffer.sum())}** (must be 0)"))
