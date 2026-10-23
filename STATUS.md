@@ -6,7 +6,7 @@ reaction rules agreed with Ting. Last commit at handoff: `e6b8755` (main, pushed
 ## Where things stand
 
 The pipeline runs end to end on the 4 scenes (CML_1, CML_2_rescan, CML_metal scene 0/1), the mass-spec
-reaction plan is regenerated, and notebooks 01–11 are executed (`notebooks/`, copies in
+reaction plan is regenerated, and notebooks 01–12 are executed (`notebooks/`, copies in
 `results/notebooks/`, summary in `results/REPORT.md`).
 
 ### Decisions taken in this session (all in `configs/eae_dvp_sdata.yaml`)
@@ -35,6 +35,7 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
 | 09 | round vs elongated nuclei, zoom-ins with every nucleus outline (from the Cellpose label image) |
 | 10 | is meningeal elongation reliable: section-level stats, hierarchical bootstrap, robustness checks, random galleries, layer split |
 | 11 | meningeal swelling along the surface in 100 µm segments |
+| 12 | orientation of nuclei vs the local surface (`lesionseg/orientation.py`; long axis from label-image moments, cached as `nucleus_orientation.parquet` per scene) |
 
 ## Findings so far (exploratory; unit = section, 8 lesion sections / 17 sections / 6 animals)
 
@@ -51,6 +52,10 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
   far vs 3.2 in controls; 30 % of near-lesion surface swollen vs 10 % / 5 %; control animals (CFA_L2,
   OS1_2) 1–3 % swollen, EAE animals 6–18 % incl. lesion-free EAE sections. Thickness barely responds
   (10 µm floor by construction).
+* **Orientation** (nb 12): elongated outer-meningeal nuclei lie along the surface: order parameter
+  S = 0.61 (+1 parallel, 0 random), 74 % within 30° (random 33 %); > parenchyma 20–80 µm in 17/17 sections,
+  shuffle null ≈ 0, holds for Pu.1⁻ and Pu.1⁺, all robustness checks. Fades by ~100 µm; deep parenchyma
+  slightly radial (S ≈ −0.13). Supports flattened pial / arachnoid lining cells.
 * **Correction made along the way:** the old 100 µm edge exclusion, not the 30 µm meninges band, was
   what kept subpial lesion out of the reactions; only ~50 collected cells were in the new meninges/buffer.
 
@@ -59,8 +64,7 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
 1. **Ask the collaborator** whether 40 µm edge exclusion is fine for the LMD wells (her protocol: 100 µm).
 2. **Meninges annotation (option 1)**: if she can draw meninges on ~6–8 sections, train a cell-level
    classifier (like the lesion model) and validate the adaptive boundary; would also make thickness measurable.
-3. **Orientation analysis** (offered, not started): long axis of elongated meningeal nuclei vs local
-   surface direction – parallel = pial/arachnoid cells.
+3. ~~Orientation analysis~~ done (nb 12).
 4. Meninges as its own **reaction compartment** (discussed, not decided): budget is 57/60, needs pooling.
 5. Cell identity needs markers (resident vs infiltrating myeloid: TMEM119/P2RY12 vs CCR2; meningeal
    fibroblasts: PDGFRβ / collagen I; CD31 for endothelium).
