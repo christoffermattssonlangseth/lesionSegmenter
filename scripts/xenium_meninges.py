@@ -98,20 +98,25 @@ def main():
     n_edge = prof[prof["depth"] == prof["depth"].min()].groupby("section")["seg"].nunique()
     cov = (pia.groupby("section").size() / n_edge).rename("stretches_with_pia").reset_index()
     cov.to_csv(out / "section_coverage.csv", index=False)
-    pia.groupby("group")["pia_depth_um"].describe(percentiles=[.1, .25, .5, .75, .9]).reindex(X.PHASES) \
-        .to_csv(out / "pia_depth_summary.csv")
+    summ = pia.groupby("group")["pia_depth_um"].describe(percentiles=[.1, .25, .5, .75, .9])
+    summ["no_meningeal_layer"] = pia.groupby("group")["pia_depth_um"].apply(lambda v: (v == 0).mean())
+    summ.reindex(X.PHASES).to_csv(out / "pia_depth_summary.csv")
     # cells above / below the pia, both definitions
     c = cl.merge(pia[["section", "seg", "pia_depth_um", "pia_glia_um"]], on=["section", "seg"], how="inner")
     c["above_balance"] = c["depth"] <= c["pia_depth_um"]
     c["above_glia"] = c["depth"] <= c["pia_glia_um"]
+    # the clean question: where a meningeal layer exists, which side of it is the infiltrate on?
+    c["above_present"] = c["above_balance"].where(c["pia_depth_um"] > 0)
     c["cell_class"] = np.select([c["Anno_L2"].isin(X.MENINGEAL_FB), c["Anno_L1_curated"].isin(X.IMMUNE_L1)],
                                 ["meningeal FB", "immune"], "other")
     c = c[c["depth"] <= DEPTH_BINS[-1]]
     c["depth_bin"] = pd.cut(c["depth"], DEPTH_BINS).astype(str)
     long = c.melt(id_vars=["section", "group", "animal", "cell_class", "depth_bin"],
-                  value_vars=["above_balance", "above_glia"], var_name="definition", value_name="above_pia")
+                  value_vars=["above_balance", "above_glia", "above_present"], var_name="definition",
+                  value_name="above_pia")
     long["definition"] = long["definition"].str.replace("above_", "")
     keys = ["definition", "group", "cell_class", "depth_bin"]
+    long = long.dropna(subset=["above_pia"])
     ab = long.groupby(keys)["above_pia"].agg(["mean", "size"]).rename(columns={"mean": "above_pia", "size": "cells"})
     ab.reset_index().to_csv(out / "above_pia_by_depth.csv", index=False)
     # per section (the unit for any test) and per animal (for our animals' Xenium twins), immune cells only

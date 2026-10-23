@@ -35,17 +35,23 @@ def load_region(path: Path) -> dict:
     return {k: z[k] for k in z.files}
 
 
-def tissue_mask(total: np.ndarray, res: float, frac: float = 0.5) -> np.ndarray:
-    """Tissue = transcript density above ``frac`` × the section's median tissue density (half-maximum edge).
-    A looser mask (Otsu on log density, heavier smoothing) sat 15–20 µm outside the outermost cells, because
-    transcripts diffuse off the section."""
+def tissue_mask(total: np.ndarray, res: float, frac: float = 0.5, edge_um: float = 20.0) -> np.ndarray:
+    """Tissue: a solid body from heavily smoothed transcript density (σ 15 µm, > ¼ of the median tissue level,
+    holes filled – white matter has fewer transcripts and a fine threshold turns it into lace with false inner
+    edges), whose outer ``edge_um`` is refined at half the median density (σ 5 µm) so the edge sits at half
+    maximum. A single looser mask sat 15–20 µm outside the outermost cells."""
     from skimage.filters import threshold_otsu
 
-    s = ndi.gaussian_filter(total.astype(np.float32), 1.0)
-    rough = np.log1p(s) > threshold_otsu(np.log1p(s[s > 0]))
-    m = s > frac * np.median(s[rough])
+    t = total.astype(np.float32)
+    fine = ndi.gaussian_filter(t, 1.0)
+    coarse = ndi.gaussian_filter(t, 3.0)
+    rough = np.log1p(fine) > threshold_otsu(np.log1p(fine[fine > 0]))
+    med = np.median(fine[rough])
+    body = ndi.binary_fill_holes(ndi.binary_closing(coarse > 0.25 * med, iterations=2))
+    inner = ndi.distance_transform_edt(body) * res > edge_um
+    m = body & (inner | (fine > frac * med))
     m = ndi.binary_opening(m, iterations=1)
-    return ndi.binary_fill_holes(ndi.binary_closing(m, iterations=2))
+    return ndi.binary_fill_holes(m)
 
 
 def section_frame(reg: dict, row, cells: pd.DataFrame):
@@ -70,19 +76,34 @@ def section_frame(reg: dict, row, cells: pd.DataFrame):
     return crop, tis, origin, res
 
 
-def depth_and_segments(tis: np.ndarray, res: float, origin):
-    """Depth (µm) per pixel and the id of the SEG_UM edge stretch its nearest edge point falls in."""
-    dist, (ii, jj) = ndi.distance_transform_edt(tis, return_indices=True)
+def dead_zone(total: np.ndarray, size_px: int = 5) -> np.ndarray:
+    """Pixels in a patch with no transcripts at all (≥ size_px × size_px zeros, grown by 2 px): a missing field of
+    view or a crop limit. A real tissue edge is followed by a halo of diffused transcripts, never by exact zeros."""
+    z = ndi.uniform_filter((total == 0).astype(np.float32), size_px, mode="constant", cval=1.0) > 0.999
+    return ndi.binary_dilation(z, iterations=2)
+
+
+def depth_and_segments(tis: np.ndarray, res: float, origin, total: np.ndarray | None = None):
+    """Depth (µm) per pixel and the id of the SEG_UM edge stretch its nearest edge point falls in. False edges –
+    tissue cut by the frame, or whose nearest outside pixel lies in a transcript-free patch (``dead_zone`` of
+    ``total``) – get stretch id −1 and are left out."""
+    pad = np.pad(tis, 1)
+    dist, (ii, jj) = ndi.distance_transform_edt(pad, return_indices=True)
+    bad = (ii == 0) | (jj == 0) | (ii == pad.shape[0] - 1) | (jj == pad.shape[1] - 1)
+    if total is not None:
+        dead = np.pad(dead_zone(total), 1, constant_values=True)
+        bad |= dead[ii, jj]
+    dist, ii, jj, bad = (a[1:-1, 1:-1] for a in (dist, ii - 1, jj - 1, bad))
     depth = dist * res
     sx = (origin[0] + jj * res) // SEG_UM
     sy = (origin[1] + ii * res) // SEG_UM
-    seg = (sy * 100000 + sx).astype(np.int64)
+    seg = np.where(bad, -1, sy * 100000 + sx).astype(np.int64)
     return depth, seg
 
 
 def section_profiles(crop: dict, tis, depth, seg, step: float = 5.0) -> pd.DataFrame:
     """Counts per (edge stretch, depth bin) for every gene group, pixels ≤ MAX_DEPTH_UM deep."""
-    m = tis & (depth <= MAX_DEPTH_UM)
+    m = tis & (depth <= MAX_DEPTH_UM) & (seg >= 0)
     db = (depth[m] // step * step).astype(np.float32)
     df = pd.DataFrame({"seg": seg[m], "depth": db, **{k: crop[k][m].astype(np.int32) for k in GROUPS}})
     df["pixels"] = 1
@@ -176,7 +197,7 @@ def run(raster_dir: Path, cells: pd.DataFrame, sections: pd.DataFrame):
             if c.empty:
                 continue
             crop, tis, origin, res = section_frame(reg, row, c)
-            depth, seg = depth_and_segments(tis, res, origin)
+            depth, seg = depth_and_segments(tis, res, origin, crop["total"])
             profs.append(section_profiles(crop, tis, depth, seg).assign(section=row.section))
             cl.append(cell_depth(c, tis, depth, seg, origin, res))
     return pd.concat(profs, ignore_index=True), pd.concat(cl, ignore_index=True)
@@ -187,7 +208,7 @@ def section_view(raster_dir: Path, row, cells: pd.DataFrame, pia: pd.DataFrame, 
     plotting. Meninges = tissue pixels no deeper than their edge stretch's pia (column ``col`` of ``pia``)."""
     reg = load_region(Path(raster_dir) / f"{row.xenium_output}.npz")
     crop, tis, origin, res = section_frame(reg, row, cells)
-    depth, seg = depth_and_segments(tis, res, origin)
+    depth, seg = depth_and_segments(tis, res, origin, crop["total"])
     pd_map = pia[pia["section"] == row.section].set_index("seg")[col]
     lim = pd.Series(seg.ravel()).map(pd_map).to_numpy().reshape(seg.shape)
     men = tis & (depth <= np.nan_to_num(lim, nan=-1))

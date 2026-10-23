@@ -81,10 +81,11 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
    **Gene-based answer from Xenium** (notebook 14, 2026-10-23; `lesionseg/xenium_meninges.py`,
    `scripts/xenium_meninges.py`): RRMAP2 Xenium 5k atlas, 157 EAE/CFA spinal cord sections. Meningeal-FB genes
    (Slc47a1, Foxc2, Crabp2, Osr1, Slc13a4, Smoc2, Wnt6, Klf5, Fmod, Cdh1) vs glia limitans (Aqp4, Gfap) place the
-   pia per 50 µm surface stretch. Meninges are thin (pia mostly 0–15 µm deep). In EAE only ~30–55 % of immune
-   cells at 0–10 µm, ~10–30 % at 20–30 µm and ≤ ~20 % beyond 30 µm are above the pia – **the rule's extension
-   of the meninges into infiltrate down to 80 µm takes in mostly subpial lesion**; expected subpial: ~63–67 %
-   of the rule's Pu.1⁺ meninges cells, ~82–86 % of those > 20 µm deep (two pia definitions with opposite
+   pia per 50 µm surface stretch (tissue = solid body + half-maximum edge; false edges at missing FOVs removed).
+   Meninges are thin (no resolved layer in ~40–55 % of EAE stretches). Where a layer exists, immune cells in EAE
+   are ~89 % above the pia at 0–10 µm, ~47 % at 10–20, ~20 % at 20–30, ≤ 10 % beyond – **the rule's extension
+   of the meninges into infiltrate down to 80 µm takes in mostly subpial lesion**; expected subpial: ~78–89 %
+   of the rule's Pu.1⁺ meninges cells deeper than 20 µm, 39–68 % overall (three definitions with different
    biases agree). Our animals OS1_2/P2_3/P3_1/R1_2/R1_3 appear in the atlas as RR_* (same names and levels) –
    **confirm they are the same animals**. Suggested change (not made): cap the meninges at ~20 µm / drop the
    infiltrate extension. Regenerate: `scripts/xenium_transcript_rasters.py` on the remote (env `sq`, raw data

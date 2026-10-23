@@ -1,289 +1,433 @@
 definition,group,cell_class,depth_bin,above_pia,cells
-balance,CFA control,immune,"(0, 10]",0.17297297297297298,185
-balance,CFA control,immune,"(10, 20]",0.10236220472440945,254
-balance,CFA control,immune,"(20, 30]",0.08888888888888889,135
-balance,CFA control,immune,"(30, 50]",0.07734806629834254,181
-balance,CFA control,immune,"(50, 80]",0.004975124378109453,201
-balance,CFA control,immune,"(80, 150]",0.008086253369272238,371
-balance,CFA control,meningeal FB,"(0, 10]",0.6968011126564673,719
-balance,CFA control,meningeal FB,"(10, 20]",0.6577181208053692,745
-balance,CFA control,meningeal FB,"(20, 30]",0.5846153846153846,260
-balance,CFA control,meningeal FB,"(30, 50]",0.6,250
-balance,CFA control,meningeal FB,"(50, 80]",0.6747967479674797,123
-balance,CFA control,meningeal FB,"(80, 150]",0.48717948717948717,78
-balance,CFA control,other,"(0, 10]",0.2351878612716763,2768
-balance,CFA control,other,"(10, 20]",0.18875793291024479,5515
-balance,CFA control,other,"(20, 30]",0.17604562737642585,2630
-balance,CFA control,other,"(30, 50]",0.10708860759493671,3950
-balance,CFA control,other,"(50, 80]",0.045296878188124876,4901
-balance,CFA control,other,"(80, 150]",0.010188919549989387,9422
-balance,early chronic (day 16),immune,"(0, 10]",0.42732919254658386,805
-balance,early chronic (day 16),immune,"(10, 20]",0.296113074204947,1415
-balance,early chronic (day 16),immune,"(20, 30]",0.1914744933612858,1431
-balance,early chronic (day 16),immune,"(30, 50]",0.07802690582959641,2230
-balance,early chronic (day 16),immune,"(50, 80]",0.017217942908926143,2207
-balance,early chronic (day 16),immune,"(80, 150]",0.0027404085700049826,4014
-balance,early chronic (day 16),meningeal FB,"(0, 10]",0.8854524627720504,873
-balance,early chronic (day 16),meningeal FB,"(10, 20]",0.8434670116429496,773
-balance,early chronic (day 16),meningeal FB,"(20, 30]",0.7607361963190185,326
-balance,early chronic (day 16),meningeal FB,"(30, 50]",0.6857142857142857,245
-balance,early chronic (day 16),meningeal FB,"(50, 80]",0.4041095890410959,146
-balance,early chronic (day 16),meningeal FB,"(80, 150]",0.3359375,128
-balance,early chronic (day 16),other,"(0, 10]",0.5131639722863741,2165
-balance,early chronic (day 16),other,"(10, 20]",0.3803418803418803,3978
-balance,early chronic (day 16),other,"(20, 30]",0.24207119741100325,3090
-balance,early chronic (day 16),other,"(30, 50]",0.11932068813409792,4534
-balance,early chronic (day 16),other,"(50, 80]",0.04079714231998496,5319
-balance,early chronic (day 16),other,"(80, 150]",0.006515984524536754,9822
-balance,late,immune,"(0, 10]",0.37125,800
-balance,late,immune,"(10, 20]",0.31375080697224017,1549
-balance,late,immune,"(20, 30]",0.16963064295485636,1462
-balance,late,immune,"(30, 50]",0.08396501457725948,1715
-balance,late,immune,"(50, 80]",0.040356083086053415,1685
-balance,late,immune,"(80, 150]",0.010961214165261383,2372
-balance,late,meningeal FB,"(0, 10]",0.8623265741728922,937
-balance,late,meningeal FB,"(10, 20]",0.7901554404145078,772
-balance,late,meningeal FB,"(20, 30]",0.7013574660633484,221
-balance,late,meningeal FB,"(30, 50]",0.7894736842105263,171
-balance,late,meningeal FB,"(50, 80]",0.5507246376811594,69
-balance,late,meningeal FB,"(80, 150]",0.125,16
-balance,late,other,"(0, 10]",0.45315348158950053,2743
-balance,late,other,"(10, 20]",0.34777303233679074,4917
-balance,late,other,"(20, 30]",0.21579778830963664,3165
-balance,late,other,"(30, 50]",0.1200280767430978,4274
-balance,late,other,"(50, 80]",0.05764659270998415,5048
-balance,late,other,"(80, 150]",0.005169321658402785,9479
-balance,late chronic (day 30),immune,"(0, 10]",0.4227504244482173,589
-balance,late chronic (day 30),immune,"(10, 20]",0.28111401218450827,1149
-balance,late chronic (day 30),immune,"(20, 30]",0.13941480206540446,1162
-balance,late chronic (day 30),immune,"(30, 50]",0.08174386920980926,1835
-balance,late chronic (day 30),immune,"(50, 80]",0.012838147638697846,2181
-balance,late chronic (day 30),immune,"(80, 150]",0.0009492168960607499,4214
-balance,late chronic (day 30),meningeal FB,"(0, 10]",0.8786407766990292,1030
-balance,late chronic (day 30),meningeal FB,"(10, 20]",0.8535353535353535,792
-balance,late chronic (day 30),meningeal FB,"(20, 30]",0.7515723270440252,318
-balance,late chronic (day 30),meningeal FB,"(30, 50]",0.7010869565217391,368
-balance,late chronic (day 30),meningeal FB,"(50, 80]",0.7393939393939394,165
-balance,late chronic (day 30),meningeal FB,"(80, 150]",0.5087719298245614,57
-balance,late chronic (day 30),other,"(0, 10]",0.5588124765125893,2661
-balance,late chronic (day 30),other,"(10, 20]",0.4153234709648929,4529
-balance,late chronic (day 30),other,"(20, 30]",0.23219328522121116,3187
-balance,late chronic (day 30),other,"(30, 50]",0.12026535416220843,4673
-balance,late chronic (day 30),other,"(50, 80]",0.032588454376163874,5370
-balance,late chronic (day 30),other,"(80, 150]",0.003661239040369978,10379
-balance,onset,immune,"(0, 10]",0.3873563218390805,870
-balance,onset,immune,"(10, 20]",0.2909090909090909,1595
-balance,onset,immune,"(20, 30]",0.20884289746001883,1063
-balance,onset,immune,"(30, 50]",0.13050314465408805,1272
-balance,onset,immune,"(50, 80]",0.0749063670411985,1335
-balance,onset,immune,"(80, 150]",0.035629453681710214,2105
-balance,onset,meningeal FB,"(0, 10]",0.917963224893918,707
-balance,onset,meningeal FB,"(10, 20]",0.824,750
-balance,onset,meningeal FB,"(20, 30]",0.7019867549668874,151
-balance,onset,meningeal FB,"(30, 50]",0.6292134831460674,89
-balance,onset,meningeal FB,"(50, 80]",0.5,38
-balance,onset,meningeal FB,"(80, 150]",0.23076923076923078,13
-balance,onset,other,"(0, 10]",0.37598116169544743,3822
-balance,onset,other,"(10, 20]",0.3116900647948164,7408
-balance,onset,other,"(20, 30]",0.23983341499265065,4082
-balance,onset,other,"(30, 50]",0.12786761940579164,5318
-balance,onset,other,"(50, 80]",0.05011709601873536,6405
-balance,onset,other,"(80, 150]",0.009292681053682512,13021
-balance,peak,immune,"(0, 10]",0.4182239126839755,6047
-balance,peak,immune,"(10, 20]",0.3076306651233194,11231
-balance,peak,immune,"(20, 30]",0.17448899026230372,11399
-balance,peak,immune,"(30, 50]",0.07457938207402875,16345
-balance,peak,immune,"(50, 80]",0.021577426692075984,16267
-balance,peak,immune,"(80, 150]",0.002543958099513655,26730
-balance,peak,meningeal FB,"(0, 10]",0.902265100671141,2384
-balance,peak,meningeal FB,"(10, 20]",0.8739495798319328,2142
-balance,peak,meningeal FB,"(20, 30]",0.84375,672
-balance,peak,meningeal FB,"(30, 50]",0.7665903890160183,437
-balance,peak,meningeal FB,"(50, 80]",0.5845410628019324,207
-balance,peak,meningeal FB,"(80, 150]",0.2375,80
-balance,peak,other,"(0, 10]",0.5621301775147929,10816
-balance,peak,other,"(10, 20]",0.4206106003858813,17622
-balance,peak,other,"(20, 30]",0.25937606546198433,11732
-balance,peak,other,"(30, 50]",0.12250606004102181,16089
-balance,peak,other,"(50, 80]",0.03627232142857143,17920
-balance,peak,other,"(80, 150]",0.0030690961373627894,36167
-balance,pre-symptomatic,immune,"(0, 10]",0.32,75
-balance,pre-symptomatic,immune,"(10, 20]",0.14678899082568808,109
-balance,pre-symptomatic,immune,"(20, 30]",0.046153846153846156,65
-balance,pre-symptomatic,immune,"(30, 50]",0.1044776119402985,67
-balance,pre-symptomatic,immune,"(50, 80]",0.024096385542168676,83
-balance,pre-symptomatic,immune,"(80, 150]",0.0,113
-balance,pre-symptomatic,meningeal FB,"(0, 10]",0.6157635467980296,203
-balance,pre-symptomatic,meningeal FB,"(10, 20]",0.6455696202531646,158
-balance,pre-symptomatic,meningeal FB,"(20, 30]",0.5869565217391305,46
-balance,pre-symptomatic,meningeal FB,"(30, 50]",0.5454545454545454,11
-balance,pre-symptomatic,meningeal FB,"(50, 80]",0.0,3
-balance,pre-symptomatic,meningeal FB,"(80, 150]",0.0,1
-balance,pre-symptomatic,other,"(0, 10]",0.2638095238095238,1050
-balance,pre-symptomatic,other,"(10, 20]",0.15555555555555556,2160
-balance,pre-symptomatic,other,"(20, 30]",0.10580912863070539,964
-balance,pre-symptomatic,other,"(30, 50]",0.04976303317535545,1266
-balance,pre-symptomatic,other,"(50, 80]",0.005788712011577424,1382
-balance,pre-symptomatic,other,"(80, 150]",0.0,2907
-balance,remission,immune,"(0, 10]",0.46918918918918917,1850
-balance,remission,immune,"(10, 20]",0.3920614596670935,3905
-balance,remission,immune,"(20, 30]",0.2003720435822482,3763
-balance,remission,immune,"(30, 50]",0.07035073409461665,4904
-balance,remission,immune,"(50, 80]",0.025693035835023664,4437
-balance,remission,immune,"(80, 150]",0.006994005138452755,7006
-balance,remission,meningeal FB,"(0, 10]",0.8768996960486323,1974
-balance,remission,meningeal FB,"(10, 20]",0.8092573753814852,1966
-balance,remission,meningeal FB,"(20, 30]",0.7302904564315352,482
-balance,remission,meningeal FB,"(30, 50]",0.4924812030075188,266
-balance,remission,meningeal FB,"(50, 80]",0.3546099290780142,141
-balance,remission,meningeal FB,"(80, 150]",0.1595744680851064,94
-balance,remission,other,"(0, 10]",0.5058937198067632,5175
-balance,remission,other,"(10, 20]",0.3911389998098498,10518
-balance,remission,other,"(20, 30]",0.2664496957690675,7067
-balance,remission,other,"(30, 50]",0.14125398949861012,9713
-balance,remission,other,"(50, 80]",0.0439904288606663,10866
-balance,remission,other,"(80, 150]",0.008182209675104073,20899
-glia,CFA control,immune,"(0, 10]",0.12972972972972974,185
-glia,CFA control,immune,"(10, 20]",0.03543307086614173,254
-glia,CFA control,immune,"(20, 30]",0.05925925925925926,135
-glia,CFA control,immune,"(30, 50]",0.06077348066298342,181
-glia,CFA control,immune,"(50, 80]",0.009950248756218905,201
-glia,CFA control,immune,"(80, 150]",0.008086253369272238,371
-glia,CFA control,meningeal FB,"(0, 10]",0.4144645340751043,719
-glia,CFA control,meningeal FB,"(10, 20]",0.3006711409395973,745
-glia,CFA control,meningeal FB,"(20, 30]",0.4,260
-glia,CFA control,meningeal FB,"(30, 50]",0.376,250
-glia,CFA control,meningeal FB,"(50, 80]",0.6504065040650406,123
-glia,CFA control,meningeal FB,"(80, 150]",0.1282051282051282,78
-glia,CFA control,other,"(0, 10]",0.12427745664739884,2768
-glia,CFA control,other,"(10, 20]",0.07796917497733455,5515
-glia,CFA control,other,"(20, 30]",0.09619771863117871,2630
-glia,CFA control,other,"(30, 50]",0.06658227848101266,3950
-glia,CFA control,other,"(50, 80]",0.03774739849010406,4901
-glia,CFA control,other,"(80, 150]",0.008384631713012099,9422
-glia,early chronic (day 16),immune,"(0, 10]",0.4012422360248447,805
-glia,early chronic (day 16),immune,"(10, 20]",0.26713780918727914,1415
-glia,early chronic (day 16),immune,"(20, 30]",0.21313766596785463,1431
-glia,early chronic (day 16),immune,"(30, 50]",0.09955156950672646,2230
-glia,early chronic (day 16),immune,"(50, 80]",0.027639329406434075,2207
-glia,early chronic (day 16),immune,"(80, 150]",0.007972097658196313,4014
-glia,early chronic (day 16),meningeal FB,"(0, 10]",0.7525773195876289,873
-glia,early chronic (day 16),meningeal FB,"(10, 20]",0.6313065976714101,773
-glia,early chronic (day 16),meningeal FB,"(20, 30]",0.5613496932515337,326
-glia,early chronic (day 16),meningeal FB,"(30, 50]",0.6122448979591837,245
-glia,early chronic (day 16),meningeal FB,"(50, 80]",0.6232876712328768,146
-glia,early chronic (day 16),meningeal FB,"(80, 150]",0.4296875,128
-glia,early chronic (day 16),other,"(0, 10]",0.47990762124711317,2165
-glia,early chronic (day 16),other,"(10, 20]",0.332579185520362,3978
-glia,early chronic (day 16),other,"(20, 30]",0.25598705501618124,3090
-glia,early chronic (day 16),other,"(30, 50]",0.1557123952359947,4534
-glia,early chronic (day 16),other,"(50, 80]",0.08422635833803346,5319
-glia,early chronic (day 16),other,"(80, 150]",0.02504581551618815,9822
-glia,late,immune,"(0, 10]",0.35625,800
-glia,late,immune,"(10, 20]",0.23111684958037443,1549
-glia,late,immune,"(20, 30]",0.11833105335157319,1462
-glia,late,immune,"(30, 50]",0.05014577259475218,1715
-glia,late,immune,"(50, 80]",0.045103857566765576,1685
-glia,late,immune,"(80, 150]",0.0096964586846543,2372
-glia,late,meningeal FB,"(0, 10]",0.6029882604055496,937
-glia,late,meningeal FB,"(10, 20]",0.4430051813471503,772
-glia,late,meningeal FB,"(20, 30]",0.47058823529411764,221
-glia,late,meningeal FB,"(30, 50]",0.5789473684210527,171
-glia,late,meningeal FB,"(50, 80]",0.4057971014492754,69
-glia,late,meningeal FB,"(80, 150]",0.25,16
-glia,late,other,"(0, 10]",0.36018957345971564,2743
-glia,late,other,"(10, 20]",0.20398617042912345,4917
-glia,late,other,"(20, 30]",0.14818325434439178,3165
-glia,late,other,"(30, 50]",0.10154422087037904,4274
-glia,late,other,"(50, 80]",0.05843898573692551,5048
-glia,late,other,"(80, 150]",0.005380314379153919,9479
-glia,late chronic (day 30),immune,"(0, 10]",0.3870967741935484,589
-glia,late chronic (day 30),immune,"(10, 20]",0.21409921671018275,1149
-glia,late chronic (day 30),immune,"(20, 30]",0.1523235800344234,1162
-glia,late chronic (day 30),immune,"(30, 50]",0.11771117166212534,1835
-glia,late chronic (day 30),immune,"(50, 80]",0.029802842732691424,2181
-glia,late chronic (day 30),immune,"(80, 150]",0.0028476506881822496,4214
-glia,late chronic (day 30),meningeal FB,"(0, 10]",0.6932038834951456,1030
-glia,late chronic (day 30),meningeal FB,"(10, 20]",0.6098484848484849,792
-glia,late chronic (day 30),meningeal FB,"(20, 30]",0.5408805031446541,318
-glia,late chronic (day 30),meningeal FB,"(30, 50]",0.6141304347826086,368
-glia,late chronic (day 30),meningeal FB,"(50, 80]",0.696969696969697,165
-glia,late chronic (day 30),meningeal FB,"(80, 150]",0.49122807017543857,57
-glia,late chronic (day 30),other,"(0, 10]",0.48102217211574594,2661
-glia,late chronic (day 30),other,"(10, 20]",0.30470302495032014,4529
-glia,late chronic (day 30),other,"(20, 30]",0.21775964857232508,3187
-glia,late chronic (day 30),other,"(30, 50]",0.15322062914615878,4673
-glia,late chronic (day 30),other,"(50, 80]",0.07094972067039106,5370
-glia,late chronic (day 30),other,"(80, 150]",0.012332594662298873,10379
-glia,onset,immune,"(0, 10]",0.2885057471264368,870
-glia,onset,immune,"(10, 20]",0.19184952978056427,1595
-glia,onset,immune,"(20, 30]",0.17309501411100658,1063
-glia,onset,immune,"(30, 50]",0.12971698113207547,1272
-glia,onset,immune,"(50, 80]",0.10711610486891386,1335
-glia,onset,immune,"(80, 150]",0.03895486935866983,2105
-glia,onset,meningeal FB,"(0, 10]",0.685997171145686,707
-glia,onset,meningeal FB,"(10, 20]",0.48133333333333334,750
-glia,onset,meningeal FB,"(20, 30]",0.4503311258278146,151
-glia,onset,meningeal FB,"(30, 50]",0.33707865168539325,89
-glia,onset,meningeal FB,"(50, 80]",0.18421052631578946,38
-glia,onset,meningeal FB,"(80, 150]",0.15384615384615385,13
-glia,onset,other,"(0, 10]",0.27237048665620095,3822
-glia,onset,other,"(10, 20]",0.18075053995680346,7408
-glia,onset,other,"(20, 30]",0.16119549240568348,4082
-glia,onset,other,"(30, 50]",0.09025949605114705,5318
-glia,onset,other,"(50, 80]",0.03840749414519906,6405
-glia,onset,other,"(80, 150]",0.011596651562859996,13021
-glia,peak,immune,"(0, 10]",0.5478749793285926,6047
-glia,peak,immune,"(10, 20]",0.3923070073902591,11231
-glia,peak,immune,"(20, 30]",0.3131853671374682,11399
-glia,peak,immune,"(30, 50]",0.2181095136127256,16345
-glia,peak,immune,"(50, 80]",0.114218970922727,16267
-glia,peak,immune,"(80, 150]",0.03497942386831276,26730
-glia,peak,meningeal FB,"(0, 10]",0.75,2384
-glia,peak,meningeal FB,"(10, 20]",0.6965452847805789,2142
-glia,peak,meningeal FB,"(20, 30]",0.6800595238095238,672
-glia,peak,meningeal FB,"(30, 50]",0.7025171624713958,437
-glia,peak,meningeal FB,"(50, 80]",0.5410628019323671,207
-glia,peak,meningeal FB,"(80, 150]",0.225,80
-glia,peak,other,"(0, 10]",0.5660133136094675,10816
-glia,peak,other,"(10, 20]",0.39422313017818633,17622
-glia,peak,other,"(20, 30]",0.2992669621547903,11732
-glia,peak,other,"(30, 50]",0.17981229411399094,16089
-glia,peak,other,"(50, 80]",0.07751116071428571,17920
-glia,peak,other,"(80, 150]",0.015511377775320042,36167
-glia,pre-symptomatic,immune,"(0, 10]",0.12,75
-glia,pre-symptomatic,immune,"(10, 20]",0.027522935779816515,109
-glia,pre-symptomatic,immune,"(20, 30]",0.015384615384615385,65
-glia,pre-symptomatic,immune,"(30, 50]",0.014925373134328358,67
-glia,pre-symptomatic,immune,"(50, 80]",0.0,83
-glia,pre-symptomatic,immune,"(80, 150]",0.0,113
-glia,pre-symptomatic,meningeal FB,"(0, 10]",0.22167487684729065,203
-glia,pre-symptomatic,meningeal FB,"(10, 20]",0.20253164556962025,158
-glia,pre-symptomatic,meningeal FB,"(20, 30]",0.17391304347826086,46
-glia,pre-symptomatic,meningeal FB,"(30, 50]",0.18181818181818182,11
-glia,pre-symptomatic,meningeal FB,"(50, 80]",0.0,3
-glia,pre-symptomatic,meningeal FB,"(80, 150]",0.0,1
-glia,pre-symptomatic,other,"(0, 10]",0.10857142857142857,1050
-glia,pre-symptomatic,other,"(10, 20]",0.04861111111111111,2160
-glia,pre-symptomatic,other,"(20, 30]",0.04149377593360996,964
-glia,pre-symptomatic,other,"(30, 50]",0.009478672985781991,1266
-glia,pre-symptomatic,other,"(50, 80]",0.002894356005788712,1382
-glia,pre-symptomatic,other,"(80, 150]",0.0,2907
-glia,remission,immune,"(0, 10]",0.42,1850
-glia,remission,immune,"(10, 20]",0.2819462227912932,3905
-glia,remission,immune,"(20, 30]",0.1926654265213925,3763
-glia,remission,immune,"(30, 50]",0.13499184339314846,4904
-glia,remission,immune,"(50, 80]",0.05949966193373901,4437
-glia,remission,immune,"(80, 150]",0.00756494433342849,7006
-glia,remission,meningeal FB,"(0, 10]",0.6995947315096251,1974
-glia,remission,meningeal FB,"(10, 20]",0.5264496439471007,1966
-glia,remission,meningeal FB,"(20, 30]",0.44813278008298757,482
-glia,remission,meningeal FB,"(30, 50]",0.34210526315789475,266
-glia,remission,meningeal FB,"(50, 80]",0.3617021276595745,141
-glia,remission,meningeal FB,"(80, 150]",0.2978723404255319,94
-glia,remission,other,"(0, 10]",0.4235748792270531,5175
-glia,remission,other,"(10, 20]",0.27837992013690815,10518
-glia,remission,other,"(20, 30]",0.24055469081647093,7067
-glia,remission,other,"(30, 50]",0.16390404612375167,9713
-glia,remission,other,"(50, 80]",0.07767347690042334,10866
-glia,remission,other,"(80, 150]",0.010622517823819322,20899
+balance,CFA control,immune,"(0, 10]",0.23577235772357724,123
+balance,CFA control,immune,"(10, 20]",0.22448979591836735,147
+balance,CFA control,immune,"(20, 30]",0.11450381679389313,131
+balance,CFA control,immune,"(30, 50]",0.08955223880597014,201
+balance,CFA control,immune,"(50, 80]",0.013953488372093023,215
+balance,CFA control,immune,"(80, 150]",0.0,479
+balance,CFA control,meningeal FB,"(0, 10]",0.7128463476070529,794
+balance,CFA control,meningeal FB,"(10, 20]",0.646606914212548,781
+balance,CFA control,meningeal FB,"(20, 30]",0.6597222222222222,288
+balance,CFA control,meningeal FB,"(30, 50]",0.48859934853420195,307
+balance,CFA control,meningeal FB,"(50, 80]",0.27049180327868855,122
+balance,CFA control,meningeal FB,"(80, 150]",0.0916030534351145,131
+balance,CFA control,other,"(0, 10]",0.39555555555555555,2025
+balance,CFA control,other,"(10, 20]",0.3089887640449438,3382
+balance,CFA control,other,"(20, 30]",0.20761245674740483,2312
+balance,CFA control,other,"(30, 50]",0.10554951033732318,3676
+balance,CFA control,other,"(50, 80]",0.03486120077469335,4647
+balance,CFA control,other,"(80, 150]",0.00597382893988242,10546
+balance,early chronic (day 16),immune,"(0, 10]",0.45161290322580644,620
+balance,early chronic (day 16),immune,"(10, 20]",0.29793233082706766,1064
+balance,early chronic (day 16),immune,"(20, 30]",0.1507321274763135,1161
+balance,early chronic (day 16),immune,"(30, 50]",0.06389452332657201,1972
+balance,early chronic (day 16),immune,"(50, 80]",0.029857602204869087,2177
+balance,early chronic (day 16),immune,"(80, 150]",0.0012056908608632747,4147
+balance,early chronic (day 16),meningeal FB,"(0, 10]",0.8853575482406356,881
+balance,early chronic (day 16),meningeal FB,"(10, 20]",0.8464516129032258,775
+balance,early chronic (day 16),meningeal FB,"(20, 30]",0.7659574468085106,329
+balance,early chronic (day 16),meningeal FB,"(30, 50]",0.6444444444444445,270
+balance,early chronic (day 16),meningeal FB,"(50, 80]",0.43333333333333335,180
+balance,early chronic (day 16),meningeal FB,"(80, 150]",0.35,140
+balance,early chronic (day 16),other,"(0, 10]",0.5710337202874516,1809
+balance,early chronic (day 16),other,"(10, 20]",0.4036885245901639,2928
+balance,early chronic (day 16),other,"(20, 30]",0.2540291634689179,2606
+balance,early chronic (day 16),other,"(30, 50]",0.11747063234191452,4001
+balance,early chronic (day 16),other,"(50, 80]",0.0487279843444227,5110
+balance,early chronic (day 16),other,"(80, 150]",0.006463527239150508,9747
+balance,late,immune,"(0, 10]",0.45229681978798586,566
+balance,late,immune,"(10, 20]",0.2960698689956332,1145
+balance,late,immune,"(20, 30]",0.15510522213561964,1283
+balance,late,immune,"(30, 50]",0.05996365838885524,1651
+balance,late,immune,"(50, 80]",0.026543566070398154,1733
+balance,late,immune,"(80, 150]",0.007766272189349112,2704
+balance,late,meningeal FB,"(0, 10]",0.8483904465212876,963
+balance,late,meningeal FB,"(10, 20]",0.7886792452830189,795
+balance,late,meningeal FB,"(20, 30]",0.6546184738955824,249
+balance,late,meningeal FB,"(30, 50]",0.7609756097560976,205
+balance,late,meningeal FB,"(50, 80]",0.4835164835164835,91
+balance,late,meningeal FB,"(80, 150]",0.0967741935483871,31
+balance,late,other,"(0, 10]",0.5610775661867162,2153
+balance,late,other,"(10, 20]",0.39155982905982906,3744
+balance,late,other,"(20, 30]",0.23010833022039598,2677
+balance,late,other,"(30, 50]",0.1217524197656648,3926
+balance,late,other,"(50, 80]",0.05482275350370981,4852
+balance,late,other,"(80, 150]",0.004829362524146813,9318
+balance,late chronic (day 30),immune,"(0, 10]",0.40038684719535783,517
+balance,late chronic (day 30),immune,"(10, 20]",0.2544132917964694,963
+balance,late chronic (day 30),immune,"(20, 30]",0.12772277227722773,1010
+balance,late chronic (day 30),immune,"(30, 50]",0.05184705119896306,1543
+balance,late chronic (day 30),immune,"(50, 80]",0.02223398623610376,1889
+balance,late chronic (day 30),immune,"(80, 150]",0.0016233766233766235,4312
+balance,late chronic (day 30),meningeal FB,"(0, 10]",0.8713080168776371,948
+balance,late chronic (day 30),meningeal FB,"(10, 20]",0.8507265521796565,757
+balance,late chronic (day 30),meningeal FB,"(20, 30]",0.7955974842767296,318
+balance,late chronic (day 30),meningeal FB,"(30, 50]",0.7568238213399504,403
+balance,late chronic (day 30),meningeal FB,"(50, 80]",0.68359375,256
+balance,late chronic (day 30),meningeal FB,"(80, 150]",0.3851851851851852,135
+balance,late chronic (day 30),other,"(0, 10]",0.5632798573975044,2244
+balance,late chronic (day 30),other,"(10, 20]",0.4031443009545199,3562
+balance,late chronic (day 30),other,"(20, 30]",0.2343692870201097,2735
+balance,late chronic (day 30),other,"(30, 50]",0.12752795622174637,4203
+balance,late chronic (day 30),other,"(50, 80]",0.054269597354600276,5141
+balance,late chronic (day 30),other,"(80, 150]",0.008606192501731131,10109
+balance,onset,immune,"(0, 10]",0.4112388250319285,783
+balance,onset,immune,"(10, 20]",0.3069053708439898,1173
+balance,onset,immune,"(20, 30]",0.1679920477137177,1006
+balance,onset,immune,"(30, 50]",0.1182108626198083,1252
+balance,onset,immune,"(50, 80]",0.0557443915703603,1471
+balance,onset,immune,"(80, 150]",0.014847512038523275,2492
+balance,onset,meningeal FB,"(0, 10]",0.9113233287858117,733
+balance,onset,meningeal FB,"(10, 20]",0.8443579766536965,771
+balance,onset,meningeal FB,"(20, 30]",0.7150837988826816,179
+balance,onset,meningeal FB,"(30, 50]",0.6933333333333334,150
+balance,onset,meningeal FB,"(50, 80]",0.39344262295081966,61
+balance,onset,meningeal FB,"(80, 150]",0.22857142857142856,35
+balance,onset,other,"(0, 10]",0.5004645401052957,3229
+balance,onset,other,"(10, 20]",0.41310975609756095,5248
+balance,onset,other,"(20, 30]",0.2722703155543144,3581
+balance,onset,other,"(30, 50]",0.1751913008457511,4966
+balance,onset,other,"(50, 80]",0.06829429231276807,6062
+balance,onset,other,"(80, 150]",0.008663858198871313,12581
+balance,peak,immune,"(0, 10]",0.4168458080906781,5117
+balance,peak,immune,"(10, 20]",0.2695247933884298,9680
+balance,peak,immune,"(20, 30]",0.13269961977186312,10520
+balance,peak,immune,"(30, 50]",0.06420505012054308,15762
+balance,peak,immune,"(50, 80]",0.02514188075913834,16387
+balance,peak,immune,"(80, 150]",0.004449007529089665,29220
+balance,peak,meningeal FB,"(0, 10]",0.8754654530409599,2417
+balance,peak,meningeal FB,"(10, 20]",0.850563449289564,2041
+balance,peak,meningeal FB,"(20, 30]",0.8384615384615385,780
+balance,peak,meningeal FB,"(30, 50]",0.7672552166934189,623
+balance,peak,meningeal FB,"(50, 80]",0.5649717514124294,354
+balance,peak,meningeal FB,"(80, 150]",0.36538461538461536,208
+balance,peak,other,"(0, 10]",0.582534611288605,9390
+balance,peak,other,"(10, 20]",0.4209109730848861,14490
+balance,peak,other,"(20, 30]",0.2596377148165351,10765
+balance,peak,other,"(30, 50]",0.14087209687024416,15113
+balance,peak,other,"(50, 80]",0.05422206872733552,17373
+balance,peak,other,"(80, 150]",0.00948139635109898,34805
+balance,pre-symptomatic,immune,"(0, 10]",0.375,64
+balance,pre-symptomatic,immune,"(10, 20]",0.2459016393442623,61
+balance,pre-symptomatic,immune,"(20, 30]",0.14285714285714285,63
+balance,pre-symptomatic,immune,"(30, 50]",0.15,60
+balance,pre-symptomatic,immune,"(50, 80]",0.030303030303030304,99
+balance,pre-symptomatic,immune,"(80, 150]",0.010810810810810811,185
+balance,pre-symptomatic,meningeal FB,"(0, 10]",0.6210045662100456,219
+balance,pre-symptomatic,meningeal FB,"(10, 20]",0.5694444444444444,144
+balance,pre-symptomatic,meningeal FB,"(20, 30]",0.56,50
+balance,pre-symptomatic,meningeal FB,"(30, 50]",0.38095238095238093,21
+balance,pre-symptomatic,meningeal FB,"(50, 80]",0.05555555555555555,18
+balance,pre-symptomatic,meningeal FB,"(80, 150]",0.08333333333333333,12
+balance,pre-symptomatic,other,"(0, 10]",0.38751625487646296,769
+balance,pre-symptomatic,other,"(10, 20]",0.2572347266881029,1244
+balance,pre-symptomatic,other,"(20, 30]",0.17752234993614305,783
+balance,pre-symptomatic,other,"(30, 50]",0.10033167495854063,1206
+balance,pre-symptomatic,other,"(50, 80]",0.055904522613065326,1592
+balance,pre-symptomatic,other,"(80, 150]",0.0037079292641186536,3506
+balance,remission,immune,"(0, 10]",0.4989339019189765,1407
+balance,remission,immune,"(10, 20]",0.34991652754590985,2995
+balance,remission,immune,"(20, 30]",0.1553337492202121,3206
+balance,remission,immune,"(30, 50]",0.05333635950975942,4406
+balance,remission,immune,"(50, 80]",0.02379841343910406,4286
+balance,remission,immune,"(80, 150]",0.005294506949040371,7555
+balance,remission,meningeal FB,"(0, 10]",0.8779193205944799,1884
+balance,remission,meningeal FB,"(10, 20]",0.8027941966684579,1861
+balance,remission,meningeal FB,"(20, 30]",0.7425149700598802,501
+balance,remission,meningeal FB,"(30, 50]",0.4673202614379085,306
+balance,remission,meningeal FB,"(50, 80]",0.36231884057971014,207
+balance,remission,meningeal FB,"(80, 150]",0.1048951048951049,143
+balance,remission,other,"(0, 10]",0.5643414756988164,3971
+balance,remission,other,"(10, 20]",0.4202972834443875,7804
+balance,remission,other,"(20, 30]",0.266,6000
+balance,remission,other,"(30, 50]",0.1283005699662673,8597
+balance,remission,other,"(50, 80]",0.045265451664025354,10096
+balance,remission,other,"(80, 150]",0.006056393963463066,20144
+glia,CFA control,immune,"(0, 10]",0.25203252032520324,123
+glia,CFA control,immune,"(10, 20]",0.14965986394557823,147
+glia,CFA control,immune,"(20, 30]",0.1297709923664122,131
+glia,CFA control,immune,"(30, 50]",0.09950248756218906,201
+glia,CFA control,immune,"(50, 80]",0.027906976744186046,215
+glia,CFA control,immune,"(80, 150]",0.008350730688935281,479
+glia,CFA control,meningeal FB,"(0, 10]",0.4836272040302267,794
+glia,CFA control,meningeal FB,"(10, 20]",0.3738796414852753,781
+glia,CFA control,meningeal FB,"(20, 30]",0.4479166666666667,288
+glia,CFA control,meningeal FB,"(30, 50]",0.30293159609120524,307
+glia,CFA control,meningeal FB,"(50, 80]",0.21311475409836064,122
+glia,CFA control,meningeal FB,"(80, 150]",0.1450381679389313,131
+glia,CFA control,other,"(0, 10]",0.2637037037037037,2025
+glia,CFA control,other,"(10, 20]",0.1788882318154938,3382
+glia,CFA control,other,"(20, 30]",0.17474048442906576,2312
+glia,CFA control,other,"(30, 50]",0.11289445048966268,3676
+glia,CFA control,other,"(50, 80]",0.06348181622552185,4647
+glia,CFA control,other,"(80, 150]",0.012895884695619192,10546
+glia,early chronic (day 16),immune,"(0, 10]",0.5016129032258064,620
+glia,early chronic (day 16),immune,"(10, 20]",0.3298872180451128,1064
+glia,early chronic (day 16),immune,"(20, 30]",0.24892334194659776,1161
+glia,early chronic (day 16),immune,"(30, 50]",0.14959432048681542,1972
+glia,early chronic (day 16),immune,"(50, 80]",0.042259990813045475,2177
+glia,early chronic (day 16),immune,"(80, 150]",0.009404388714733543,4147
+glia,early chronic (day 16),meningeal FB,"(0, 10]",0.7797956867196367,881
+glia,early chronic (day 16),meningeal FB,"(10, 20]",0.6593548387096774,775
+glia,early chronic (day 16),meningeal FB,"(20, 30]",0.6291793313069909,329
+glia,early chronic (day 16),meningeal FB,"(30, 50]",0.5666666666666667,270
+glia,early chronic (day 16),meningeal FB,"(50, 80]",0.6,180
+glia,early chronic (day 16),meningeal FB,"(80, 150]",0.3142857142857143,140
+glia,early chronic (day 16),other,"(0, 10]",0.5710337202874516,1809
+glia,early chronic (day 16),other,"(10, 20]",0.4228142076502732,2928
+glia,early chronic (day 16),other,"(20, 30]",0.3595548733691481,2606
+glia,early chronic (day 16),other,"(30, 50]",0.23319170207448137,4001
+glia,early chronic (day 16),other,"(50, 80]",0.11976516634050881,5110
+glia,early chronic (day 16),other,"(80, 150]",0.030368318456961117,9747
+glia,late,immune,"(0, 10]",0.46996466431095407,566
+glia,late,immune,"(10, 20]",0.28558951965065504,1145
+glia,late,immune,"(20, 30]",0.14886983632112236,1283
+glia,late,immune,"(30, 50]",0.06662628709872805,1651
+glia,late,immune,"(50, 80]",0.06520484708597807,1733
+glia,late,immune,"(80, 150]",0.017381656804733726,2704
+glia,late,meningeal FB,"(0, 10]",0.6303219106957425,963
+glia,late,meningeal FB,"(10, 20]",0.4666666666666667,795
+glia,late,meningeal FB,"(20, 30]",0.5060240963855421,249
+glia,late,meningeal FB,"(30, 50]",0.6487804878048781,205
+glia,late,meningeal FB,"(50, 80]",0.4835164835164835,91
+glia,late,meningeal FB,"(80, 150]",0.3870967741935484,31
+glia,late,other,"(0, 10]",0.46168137482582444,2153
+glia,late,other,"(10, 20]",0.27564102564102566,3744
+glia,late,other,"(20, 30]",0.20246544639521852,2677
+glia,late,other,"(30, 50]",0.14518593988792663,3926
+glia,late,other,"(50, 80]",0.08635614179719703,4852
+glia,late,other,"(80, 150]",0.009980682549903412,9318
+glia,late chronic (day 30),immune,"(0, 10]",0.42940038684719534,517
+glia,late chronic (day 30),immune,"(10, 20]",0.2398753894080997,963
+glia,late chronic (day 30),immune,"(20, 30]",0.17425742574257425,1010
+glia,late chronic (day 30),immune,"(30, 50]",0.11341542449773169,1543
+glia,late chronic (day 30),immune,"(50, 80]",0.048703017469560614,1889
+glia,late chronic (day 30),immune,"(80, 150]",0.020871985157699443,4312
+glia,late chronic (day 30),meningeal FB,"(0, 10]",0.7278481012658228,948
+glia,late chronic (day 30),meningeal FB,"(10, 20]",0.6829590488771466,757
+glia,late chronic (day 30),meningeal FB,"(20, 30]",0.6226415094339622,318
+glia,late chronic (day 30),meningeal FB,"(30, 50]",0.6997518610421837,403
+glia,late chronic (day 30),meningeal FB,"(50, 80]",0.69921875,256
+glia,late chronic (day 30),meningeal FB,"(80, 150]",0.3851851851851852,135
+glia,late chronic (day 30),other,"(0, 10]",0.533868092691622,2244
+glia,late chronic (day 30),other,"(10, 20]",0.35485682201010665,3562
+glia,late chronic (day 30),other,"(20, 30]",0.2946983546617916,2735
+glia,late chronic (day 30),other,"(30, 50]",0.22769450392576732,4203
+glia,late chronic (day 30),other,"(50, 80]",0.13421513324255982,5141
+glia,late chronic (day 30),other,"(80, 150]",0.020377881096053024,10109
+glia,onset,immune,"(0, 10]",0.3946360153256705,783
+glia,onset,immune,"(10, 20]",0.31202046035805625,1173
+glia,onset,immune,"(20, 30]",0.2673956262425447,1006
+glia,onset,immune,"(30, 50]",0.19408945686900958,1252
+glia,onset,immune,"(50, 80]",0.13596193065941536,1471
+glia,onset,immune,"(80, 150]",0.06500802568218299,2492
+glia,onset,meningeal FB,"(0, 10]",0.713506139154161,733
+glia,onset,meningeal FB,"(10, 20]",0.5291828793774319,771
+glia,onset,meningeal FB,"(20, 30]",0.547486033519553,179
+glia,onset,meningeal FB,"(30, 50]",0.5666666666666667,150
+glia,onset,meningeal FB,"(50, 80]",0.39344262295081966,61
+glia,onset,meningeal FB,"(80, 150]",0.22857142857142856,35
+glia,onset,other,"(0, 10]",0.4109631464849799,3229
+glia,onset,other,"(10, 20]",0.3014481707317073,5248
+glia,onset,other,"(20, 30]",0.24741692264730522,3581
+glia,onset,other,"(30, 50]",0.18908578332662102,4966
+glia,onset,other,"(50, 80]",0.09897723523589574,6062
+glia,onset,other,"(80, 150]",0.023050631905253954,12581
+glia,peak,immune,"(0, 10]",0.6134453781512605,5117
+glia,peak,immune,"(10, 20]",0.4388429752066116,9680
+glia,peak,immune,"(20, 30]",0.3403041825095057,10520
+glia,peak,immune,"(30, 50]",0.24305291206699658,15762
+glia,peak,immune,"(50, 80]",0.15353633978153414,16387
+glia,peak,immune,"(80, 150]",0.05817932922655715,29220
+glia,peak,meningeal FB,"(0, 10]",0.7567232105916425,2417
+glia,peak,meningeal FB,"(10, 20]",0.7197452229299363,2041
+glia,peak,meningeal FB,"(20, 30]",0.7333333333333333,780
+glia,peak,meningeal FB,"(30, 50]",0.7495987158908507,623
+glia,peak,meningeal FB,"(50, 80]",0.6271186440677966,354
+glia,peak,meningeal FB,"(80, 150]",0.5817307692307693,208
+glia,peak,other,"(0, 10]",0.6463258785942492,9390
+glia,peak,other,"(10, 20]",0.4752933057280883,14490
+glia,peak,other,"(20, 30]",0.3700882489549466,10765
+glia,peak,other,"(30, 50]",0.23847019122609675,15113
+glia,peak,other,"(50, 80]",0.13267714269268405,17373
+glia,peak,other,"(80, 150]",0.036431547191495474,34805
+glia,pre-symptomatic,immune,"(0, 10]",0.171875,64
+glia,pre-symptomatic,immune,"(10, 20]",0.16393442622950818,61
+glia,pre-symptomatic,immune,"(20, 30]",0.07936507936507936,63
+glia,pre-symptomatic,immune,"(30, 50]",0.08333333333333333,60
+glia,pre-symptomatic,immune,"(50, 80]",0.010101010101010102,99
+glia,pre-symptomatic,immune,"(80, 150]",0.02702702702702703,185
+glia,pre-symptomatic,meningeal FB,"(0, 10]",0.2876712328767123,219
+glia,pre-symptomatic,meningeal FB,"(10, 20]",0.20833333333333334,144
+glia,pre-symptomatic,meningeal FB,"(20, 30]",0.22,50
+glia,pre-symptomatic,meningeal FB,"(30, 50]",0.09523809523809523,21
+glia,pre-symptomatic,meningeal FB,"(50, 80]",0.1111111111111111,18
+glia,pre-symptomatic,meningeal FB,"(80, 150]",0.16666666666666666,12
+glia,pre-symptomatic,other,"(0, 10]",0.2795838751625488,769
+glia,pre-symptomatic,other,"(10, 20]",0.14790996784565916,1244
+glia,pre-symptomatic,other,"(20, 30]",0.12260536398467432,783
+glia,pre-symptomatic,other,"(30, 50]",0.0978441127694859,1206
+glia,pre-symptomatic,other,"(50, 80]",0.06155778894472362,1592
+glia,pre-symptomatic,other,"(80, 150]",0.00827153451226469,3506
+glia,remission,immune,"(0, 10]",0.48187633262260127,1407
+glia,remission,immune,"(10, 20]",0.3325542570951586,2995
+glia,remission,immune,"(20, 30]",0.22676232064878354,3206
+glia,remission,immune,"(30, 50]",0.16976849750340445,4406
+glia,remission,immune,"(50, 80]",0.08399440037330845,4286
+glia,remission,immune,"(80, 150]",0.019324950363997354,7555
+glia,remission,meningeal FB,"(0, 10]",0.7404458598726115,1884
+glia,remission,meningeal FB,"(10, 20]",0.5738850080601827,1861
+glia,remission,meningeal FB,"(20, 30]",0.5129740518962076,501
+glia,remission,meningeal FB,"(30, 50]",0.35947712418300654,306
+glia,remission,meningeal FB,"(50, 80]",0.4057971014492754,207
+glia,remission,meningeal FB,"(80, 150]",0.27972027972027974,143
+glia,remission,other,"(0, 10]",0.49886678418534375,3971
+glia,remission,other,"(10, 20]",0.3589185033316248,7804
+glia,remission,other,"(20, 30]",0.30416666666666664,6000
+glia,remission,other,"(30, 50]",0.21681982086774457,8597
+glia,remission,other,"(50, 80]",0.1324286846275753,10096
+glia,remission,other,"(80, 150]",0.022140587768069896,20144
+present,CFA control,immune,"(0, 10]",1.0,29
+present,CFA control,immune,"(10, 20]",0.6875,48
+present,CFA control,immune,"(20, 30]",0.3125,48
+present,CFA control,immune,"(30, 50]",0.21686746987951808,83
+present,CFA control,immune,"(50, 80]",0.03529411764705882,85
+present,CFA control,immune,"(80, 150]",0.0,160
+present,CFA control,meningeal FB,"(0, 10]",0.8969889064976229,631
+present,CFA control,meningeal FB,"(10, 20]",0.7308248914616498,691
+present,CFA control,meningeal FB,"(20, 30]",0.7450980392156863,255
+present,CFA control,meningeal FB,"(30, 50]",0.6198347107438017,242
+present,CFA control,meningeal FB,"(50, 80]",0.39759036144578314,83
+present,CFA control,meningeal FB,"(80, 150]",0.17391304347826086,69
+present,CFA control,other,"(0, 10]",0.9,890
+present,CFA control,other,"(10, 20]",0.60932944606414,1715
+present,CFA control,other,"(20, 30]",0.40234702430846603,1193
+present,CFA control,other,"(30, 50]",0.2319187089061566,1673
+present,CFA control,other,"(50, 80]",0.08733153638814016,1855
+present,CFA control,other,"(80, 150]",0.01694459386767079,3718
+present,early chronic (day 16),immune,"(0, 10]",0.8860759493670886,316
+present,early chronic (day 16),immune,"(10, 20]",0.5239669421487604,605
+present,early chronic (day 16),immune,"(20, 30]",0.22522522522522523,777
+present,early chronic (day 16),immune,"(30, 50]",0.09271523178807947,1359
+present,early chronic (day 16),immune,"(50, 80]",0.04703328509406657,1382
+present,early chronic (day 16),immune,"(80, 150]",0.0018811136192626034,2658
+present,early chronic (day 16),meningeal FB,"(0, 10]",0.9523809523809523,819
+present,early chronic (day 16),meningeal FB,"(10, 20]",0.8665785997357992,757
+present,early chronic (day 16),meningeal FB,"(20, 30]",0.782608695652174,322
+present,early chronic (day 16),meningeal FB,"(30, 50]",0.6641221374045801,262
+present,early chronic (day 16),meningeal FB,"(50, 80]",0.5492957746478874,142
+present,early chronic (day 16),meningeal FB,"(80, 150]",0.4298245614035088,114
+present,early chronic (day 16),other,"(0, 10]",0.9198575244879786,1123
+present,early chronic (day 16),other,"(10, 20]",0.5851485148514851,2020
+present,early chronic (day 16),other,"(20, 30]",0.36194641880809186,1829
+present,early chronic (day 16),other,"(30, 50]",0.1750465549348231,2685
+present,early chronic (day 16),other,"(50, 80]",0.07593778591033852,3279
+present,early chronic (day 16),other,"(80, 150]",0.010667118184896716,5906
+present,late,immune,"(0, 10]",0.8827586206896552,290
+present,late,immune,"(10, 20]",0.4374193548387097,775
+present,late,immune,"(20, 30]",0.21490280777537796,926
+present,late,immune,"(30, 50]",0.08333333333333333,1188
+present,late,immune,"(50, 80]",0.03814262023217247,1206
+present,late,immune,"(80, 150]",0.012462908011869436,1685
+present,late,meningeal FB,"(0, 10]",0.920045045045045,888
+present,late,meningeal FB,"(10, 20]",0.8111254851228978,773
+present,late,meningeal FB,"(20, 30]",0.659919028340081,247
+present,late,meningeal FB,"(30, 50]",0.8125,192
+present,late,meningeal FB,"(50, 80]",0.5176470588235295,85
+present,late,meningeal FB,"(80, 150]",0.13043478260869565,23
+present,late,other,"(0, 10]",0.887582659808964,1361
+present,late,other,"(10, 20]",0.5275278877293991,2779
+present,late,other,"(20, 30]",0.30662020905923343,2009
+present,late,other,"(30, 50]",0.17489937797292351,2733
+present,late,other,"(50, 80]",0.08605629246198641,3091
+present,late,other,"(80, 150]",0.007847924659923265,5734
+present,late chronic (day 30),immune,"(0, 10]",0.8961038961038961,231
+present,late chronic (day 30),immune,"(10, 20]",0.48804780876494025,502
+present,late chronic (day 30),immune,"(20, 30]",0.18970588235294117,680
+present,late chronic (day 30),immune,"(30, 50]",0.07648183556405354,1046
+present,late chronic (day 30),immune,"(50, 80]",0.033386327503974564,1258
+present,late chronic (day 30),immune,"(80, 150]",0.002339572192513369,2992
+present,late chronic (day 30),meningeal FB,"(0, 10]",0.9516129032258065,868
+present,late chronic (day 30),meningeal FB,"(10, 20]",0.8575233022636485,751
+present,late chronic (day 30),meningeal FB,"(20, 30]",0.8057324840764332,314
+present,late chronic (day 30),meningeal FB,"(30, 50]",0.7800511508951407,391
+present,late chronic (day 30),meningeal FB,"(50, 80]",0.720164609053498,243
+present,late chronic (day 30),meningeal FB,"(80, 150]",0.4126984126984127,126
+present,late chronic (day 30),other,"(0, 10]",0.8939179632248939,1414
+present,late chronic (day 30),other,"(10, 20]",0.5631372549019608,2550
+present,late chronic (day 30),other,"(20, 30]",0.32604272634791454,1966
+present,late chronic (day 30),other,"(30, 50]",0.19020581973030518,2818
+present,late chronic (day 30),other,"(50, 80]",0.08619091751621873,3237
+present,late chronic (day 30),other,"(80, 150]",0.01432806324110672,6072
+present,onset,immune,"(0, 10]",0.8944444444444445,360
+present,onset,immune,"(10, 20]",0.547112462006079,658
+present,onset,immune,"(20, 30]",0.27346278317152106,618
+present,onset,immune,"(30, 50]",0.19680851063829788,752
+present,onset,immune,"(50, 80]",0.09975669099756691,822
+present,onset,immune,"(80, 150]",0.02779864763335838,1331
+present,onset,meningeal FB,"(0, 10]",0.9667149059334298,691
+present,onset,meningeal FB,"(10, 20]",0.8703208556149733,748
+present,onset,meningeal FB,"(20, 30]",0.7757575757575758,165
+present,onset,meningeal FB,"(30, 50]",0.7938931297709924,131
+present,onset,meningeal FB,"(50, 80]",0.5106382978723404,47
+present,onset,meningeal FB,"(80, 150]",0.2962962962962963,27
+present,onset,other,"(0, 10]",0.9140271493212669,1768
+present,onset,other,"(10, 20]",0.6537997587454765,3316
+present,onset,other,"(20, 30]",0.42744410346339323,2281
+present,onset,other,"(30, 50]",0.31385281385281383,2772
+present,onset,other,"(50, 80]",0.13944088918827888,2969
+present,onset,other,"(80, 150]",0.019022687609075044,5730
+present,peak,immune,"(0, 10]",0.8920953575909661,2391
+present,peak,immune,"(10, 20]",0.45804073033707865,5696
+present,peak,immune,"(20, 30]",0.19897377423033066,7016
+present,peak,immune,"(30, 50]",0.0957426679280984,10570
+present,peak,immune,"(50, 80]",0.039527966996066394,10423
+present,peak,immune,"(80, 150]",0.007625975244911128,17047
+present,peak,meningeal FB,"(0, 10]",0.9467561521252796,2235
+present,peak,meningeal FB,"(10, 20]",0.8658354114713217,2005
+present,peak,meningeal FB,"(20, 30]",0.8493506493506493,770
+present,peak,meningeal FB,"(30, 50]",0.8087986463620981,591
+present,peak,meningeal FB,"(50, 80]",0.5899705014749262,339
+present,peak,meningeal FB,"(80, 150]",0.3838383838383838,198
+present,peak,other,"(0, 10]",0.9083361009631352,6022
+present,peak,other,"(10, 20]",0.5932302305223227,10281
+present,peak,other,"(20, 30]",0.3659334904425242,7638
+present,peak,other,"(30, 50]",0.2062984496124031,10320
+present,peak,other,"(50, 80]",0.08610603290676416,10940
+present,peak,other,"(80, 150]",0.016337442447645924,20199
+present,pre-symptomatic,immune,"(0, 10]",0.8275862068965517,29
+present,pre-symptomatic,immune,"(10, 20]",0.7142857142857143,21
+present,pre-symptomatic,immune,"(20, 30]",0.391304347826087,23
+present,pre-symptomatic,immune,"(30, 50]",0.5,18
+present,pre-symptomatic,immune,"(50, 80]",0.1,30
+present,pre-symptomatic,immune,"(80, 150]",0.034482758620689655,58
+present,pre-symptomatic,meningeal FB,"(0, 10]",0.8553459119496856,159
+present,pre-symptomatic,meningeal FB,"(10, 20]",0.6612903225806451,124
+present,pre-symptomatic,meningeal FB,"(20, 30]",0.6511627906976745,43
+present,pre-symptomatic,meningeal FB,"(30, 50]",0.47058823529411764,17
+present,pre-symptomatic,meningeal FB,"(50, 80]",0.09090909090909091,11
+present,pre-symptomatic,meningeal FB,"(80, 150]",0.1111111111111111,9
+present,pre-symptomatic,other,"(0, 10]",0.8688046647230321,343
+present,pre-symptomatic,other,"(10, 20]",0.5653710247349824,566
+present,pre-symptomatic,other,"(20, 30]",0.4064327485380117,342
+present,pre-symptomatic,other,"(30, 50]",0.27816091954022987,435
+present,pre-symptomatic,other,"(50, 80]",0.16666666666666666,534
+present,pre-symptomatic,other,"(80, 150]",0.014380530973451327,904
+present,remission,immune,"(0, 10]",0.8720496894409938,805
+present,remission,immune,"(10, 20]",0.48608534322820035,2156
+present,remission,immune,"(20, 30]",0.19369894982497082,2571
+present,remission,immune,"(30, 50]",0.0656607991058955,3579
+present,remission,immune,"(50, 80]",0.03148148148148148,3240
+present,remission,immune,"(80, 150]",0.007525870178739417,5315
+present,remission,meningeal FB,"(0, 10]",0.9397727272727273,1760
+present,remission,meningeal FB,"(10, 20]",0.8263274336283186,1808
+present,remission,meningeal FB,"(20, 30]",0.7638603696098563,487
+present,remission,meningeal FB,"(30, 50]",0.4847457627118644,295
+present,remission,meningeal FB,"(50, 80]",0.39473684210526316,190
+present,remission,meningeal FB,"(80, 150]",0.1171875,128
+present,remission,other,"(0, 10]",0.8878763866877971,2524
+present,remission,other,"(10, 20]",0.5662005869152426,5793
+present,remission,other,"(20, 30]",0.3475609756097561,4592
+present,remission,other,"(30, 50]",0.17521842732327245,6295
+present,remission,other,"(50, 80]",0.06497938290914261,7033
+present,remission,other,"(80, 150]",0.00945736434108527,12900

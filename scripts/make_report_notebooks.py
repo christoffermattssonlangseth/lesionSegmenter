@@ -1619,7 +1619,12 @@ transcripts. Two gene layers mark the border:
    * **glia** – the run of rings from the surface where the glia-limitans *density* is below half its deep level
      (no astrocyte endfeet yet). Astrocyte loss in lesions → leans "meningeal".
 
-   Stretches that never reach parenchyma (flaps, tears, oblique cuts) get no pia and are left out.
+   Stretches that never reach parenchyma (flaps, tears, oblique cuts) get no pia and are left out, as are false
+   edges: tissue whose nearest outside pixel lies in a patch with *no* transcripts at all (a missing field of
+   view – a real edge always has a halo of diffused transcripts).
+   A stretch whose pia is at 0 µm has **no resolved meningeal layer** – mostly meninges thinner than one 5 µm
+   ring (a single cell), sometimes stripped. A third view, **present**, asks the clean question only on
+   stretches that do have a layer: where meninges exist, which side of them is the infiltrate on?
 4. Atlas cells (curated cell types) are placed **above** (meninges) or **below** (parenchyma) the pia of their
    stretch.
 
@@ -1710,27 +1715,32 @@ for col, ls in (("pia_depth_um", "-"), ("pia_glia_um", "--")):
 ax.set_xlabel("immune load of the stretch (quintile, EAE)"); ax.set_ylabel("pia depth (µm)"); ax.legend(fontsize=8, frameon=False)
 ax.set_title("infiltrated stretches have thicker meninges", loc="left", fontsize=10)
 plt.tight_layout(); plt.show()
-pd.concat({c: pia.groupby("group")[c].describe(percentiles=[.5, .75, .9])[["count", "mean", "50%", "75%", "90%"]]
-           for c in ("pia_depth_um", "pia_glia_um")}, axis=1).reindex(PH).round(1)
+summ = pd.concat({c: pia.groupby("group")[c].describe(percentiles=[.5, .75, .9])[["count", "mean", "50%", "75%", "90%"]]
+                  for c in ("pia_depth_um", "pia_glia_um")}, axis=1)
+summ[("", "no meningeal layer (balance)")] = pia.groupby("group").pia_depth_um.apply(lambda v: (v == 0).mean())
+summ.reindex(PH).round(2)
 '''), md("""
 ## Are immune cells near the surface meningeal or subpial?
 
-Share of atlas cells **above** the pia of their stretch, by depth; solid = balance, dashed = glia. Meningeal
+Share of atlas cells **above** the pia of their stretch, by depth; solid = balance, dashed = glia; middle panel
+= only stretches that have a meningeal layer (present). Meningeal
 fibroblasts are the method's control: ~87 % of them at 0–10 µm land above the pia (5 µm rings and cell
 positions set a floor of ~13 % misplacement).
 """), code('''
-fig, axes = plt.subplots(1, 2, figsize=(17, 4.4), sharey=True)
-for ax, cls in zip(axes, ["immune", "meningeal FB"]):
+fig, axes = plt.subplots(1, 3, figsize=(24, 4.4), sharey=True)
+for ax, (cls, dfns, title) in zip(axes, [("immune", (("balance", "-"), ("glia", "--")), "immune cells, all stretches"),
+                                         ("immune", (("present", "-"),), "immune cells, stretches with a meningeal layer"),
+                                         ("meningeal FB", (("balance", "-"), ("glia", "--")), "meningeal FB cells (control)")]):
     for g in PH:
-        for dfn, ls in (("balance", "-"), ("glia", "--")):
+        for dfn, ls in dfns:
             d = ab[(ab.definition == dfn) & (ab.cell_class == cls) & (ab.group == g) & ab.depth_bin.isin(BINS)]
             d = d.assign(x=d.depth_bin.map(MID)).sort_values("x")
             d = d[d.cells >= 30]
             ax.plot(d.x, 100 * d.above_pia, color=PCOL[g], lw=1.8, ls=ls, marker="o", ms=3,
-                    label=g if dfn == "balance" else None)
+                    label=g if ls == "-" else None)
     ax.axhline(50, color="#52514e", lw=0.8, ls=":"); ax.set_xscale("symlog", linthresh=30)
-    ax.set_xlabel("depth of the cell (µm)"); ax.set_title(f"{cls} cells", loc="left", fontsize=10)
-axes[0].set_ylabel("% above the pia (= in the meninges)"); axes[1].legend(fontsize=8, frameon=False)
+    ax.set_xlabel("depth of the cell (µm)"); ax.set_title(title, loc="left", fontsize=10)
+axes[0].set_ylabel("% above the pia (= in the meninges)"); axes[2].legend(fontsize=8, frameon=False)
 plt.tight_layout(); plt.show()
 t = (ab[(ab.cell_class == "immune") & ab.depth_bin.isin(BINS)]
      .pivot_table(index=["definition", "depth_bin"], columns="group", values="above_pia"))
@@ -1758,11 +1768,106 @@ ax.set_xticks(range(5), [f"{b} µm" for b in BINS[:5]]); ax.set_ylabel("% immune
 ax.legend(fontsize=8, frameon=False, ncol=4); ax.set_title("each dot a section, black = median", loc="left")
 plt.tight_layout(); plt.show()
 '''), md("""
+## Zoomed examples at the surface (300 µm windows)
+
+Background: gene layers as above (dimmed). **White line** = pia (balance), yellow dashed = pia (glia), grey =
+tissue edge. Every atlas cell is a dot: **green** meningeal fibroblast, **blue** immune (myeloid, T, B, DC –
+not microglia), **orange** astrocyte, **pink** microglia, grey other. **Filled** = above the pia (meninges),
+**hollow** = below (parenchyma); small grey × = outside the tissue mask or on a stretch without a pia. Windows are centred on a 50 µm surface stretch picked by the criterion in the
+title – four per kind, from different sections.
+"""), code('''
+cdepth = pd.read_parquet(WORK / "cells_depth.parquet").merge(pia[["section", "seg", "pia_depth_um"]], on=["section", "seg"], how="left")
+cdepth["above"] = cdepth.depth <= cdepth.pia_depth_um
+KIND = [(cdepth.Anno_L2.isin(X.MENINGEAL_FB), "#1baf7a", "meningeal FB"),
+        (cdepth.Anno_L1_curated.isin(X.IMMUNE_L1), "#3987e5", "immune"),
+        (cdepth.Anno_L1_curated == "Astrocyte", "#eda100", "astrocyte"),
+        (cdepth.Anno_L2 == "Microglia", "#e87ba4", "microglia")]
+cdepth["col"] = np.select([k[0] for k in KIND], [k[1] for k in KIND], "#898781")
+_views = {}
+
+def view(s):
+    if s not in _views:
+        r = sh[sh.section == s].iloc[0]
+        c = cells_atlas[cells_atlas.section == s]
+        rgb, men, tis, ext = X.section_view("outputs/xenium_rasters", r, c, pia)
+        _views[s] = (r, rgb, men, X.section_view("outputs/xenium_rasters", r, c, pia, col="pia_glia_um")[1], tis, ext)
+    return _views[s]
+
+def zoom(ax, s, seg, size=300, note=""):
+    r, rgb, men, men_g, tis, ext = view(s)
+    cx, cy = (seg % 100000 + 0.5) * X.SEG_UM, (seg // 100000 + 0.5) * X.SEG_UM
+    ax.imshow(np.clip(rgb * 0.55, 0, 1), extent=ext)
+    ax.contour(men, levels=[0.5], colors="white", linewidths=1.4, extent=ext, origin="upper")
+    ax.contour(men_g, levels=[0.5], colors="#eda100", linewidths=1, linestyles="--", extent=ext, origin="upper")
+    ax.contour(tis, levels=[0.5], colors="#898781", linewidths=0.8, extent=ext, origin="upper")
+    d = cdepth[(cdepth.section == s) & cdepth.x_centroid.between(cx - size / 2, cx + size / 2)
+               & cdepth.y_centroid.between(cy - size / 2, cy + size / 2)]
+    out_ = d.depth.isna() | d.pia_depth_um.isna()
+    ax.scatter(d.x_centroid[out_], d.y_centroid[out_], s=10, marker="x", c="#52514e", lw=0.6)
+    d = d[~out_]
+    up = d.above.astype(bool)
+    ax.scatter(d.x_centroid[up], d.y_centroid[up], s=16, c=d.col[up], lw=0)
+    ax.scatter(d.x_centroid[~up], d.y_centroid[~up], s=16, facecolors="none", edgecolors=d.col[~up], lw=0.9)
+    ax.set_xlim(cx - size / 2, cx + size / 2); ax.set_ylim(cy + size / 2, cy - size / 2)
+    ax.set_xticks([]); ax.set_yticks([])
+    p = pia[(pia.section == s) & (pia.seg == seg)].iloc[0]
+    imm = d[d.col == "#3987e5"]
+    ax.set_title(f"{s} · {r.animal} · {r.group}\\npia {p.pia_depth_um:.0f} µm (glia {p.pia_glia_um:.0f}) · immune above/below: "
+                 f"{int(imm.above.fillna(False).sum())}/{int((~imm.above.fillna(False).astype(bool)).sum())} {note}",
+                 loc="left", fontsize=8.5)
+
+def gallery(picks, ncol=4):
+    picks = list(picks)
+    nrow = int(np.ceil(len(picks) / ncol))
+    fig, axes = plt.subplots(nrow, ncol, figsize=(5.2 * ncol, 5.6 * nrow), squeeze=False)
+    for ax, (s, seg) in zip(axes.ravel(), picks):
+        zoom(ax, s, seg)
+    for ax in axes.ravel()[len(picks):]:
+        ax.axis("off")
+    from matplotlib.lines import Line2D
+    h = [Line2D([], [], marker="o", ls="", color=c, label=l) for _, c, l in KIND] + [
+        Line2D([], [], marker="o", ls="", color="#898781", label="other"),
+        Line2D([], [], marker="o", ls="", mfc="none", mec="#52514e", label="hollow = below the pia"),
+        Line2D([], [], color="white", lw=2, label="pia (balance)"), Line2D([], [], color="#eda100", ls="--", label="pia (glia)")]
+    fig.legend(handles=h, loc="lower center", ncol=8, fontsize=9, frameon=False, facecolor="#52514e")
+    plt.tight_layout(rect=(0, 0.03, 1, 1)); plt.show()
+
+def pick(df, n=4, seed=None, by=None):
+    df = df.sample(frac=1, random_state=seed) if seed is not None else df.sort_values(by, ascending=False)
+    return list(df.drop_duplicates("section").head(n)[["section", "seg"]].itertuples(index=False, name=None))
+pia["imm_above_dens"] = pia.immune_above_pia / pia.total
+pia["imm_below_dens"] = pia.immune_below_pia_0_50 / pia.total
+'''), md("### Normal meninges – CFA controls, random stretches with a pia"), code('''
+gallery(pick(pia[pia.group == "CFA control"], seed=1))
+'''), md("### Swollen meninges: immune infiltrate **above** the pia (most immune transcripts above, pia ≥ 20 µm)"),
+code('''
+gallery(pick(pia[(pia.group != "CFA control") & (pia.pia_depth_um >= 20)], by="imm_above_dens"))
+'''), md("### Subpial infiltrate: immune infiltrate **below** an existing pia (layer 5–15 µm, most immune transcripts below)"),
+code('''
+gallery(pick(pia[(pia.group != "CFA control") & pia.pia_depth_um.between(5, 15)], by="imm_below_dens"))
+'''), md("""### No resolved meningeal layer (pia at 0 µm), infiltrated EAE stretches – random
+
+What the "all stretches" numbers count as subpial although no meningeal layer is visible: thin meninges, lost
+meninges or infiltrate right at the edge."""), code('''
+e0 = pia[(pia.group != "CFA control") & (pia.pia_depth_um == 0)]
+gallery(pick(e0[e0.immune_frac_0_80 > e0.immune_frac_0_80.median()], seed=3))
+'''), md("### Unselected: random infiltrated EAE stretches (immune load above the EAE median)"), code('''
+e = pia[pia.group != "CFA control"]
+gallery(pick(e[e.immune_frac_0_80 > e.immune_frac_0_80.median()], n=8, seed=2))
+'''), md("### Our five animals' Xenium twins: the most infiltrated surface stretch of each section"), code('''
+tw = pia[pia.section.isin(sh[sh.animal.isin(TWIN.values())].section)].copy()
+tw["imm"] = tw.immune_above_pia + tw.immune_below_pia_0_50
+picks = list(tw.sort_values("imm", ascending=False).drop_duplicates("section")
+             .merge(sh[["section", "spinal_level"]], on="section").sort_values(["animal", "spinal_level"])
+             [["section", "seg"]].itertuples(index=False, name=None))
+gallery(picks, ncol=3)
+'''), md("""
 ## What it means for our rule
 
 Our rule calls the outer 10 µm meninges and extends the meninges into compact infiltrate connected to it, down to
 80 µm. Below: how deep our rule's Pu.1⁺ meninges cells are, and – applying the Xenium share of immune cells
-above the pia in the **same animal** – how many of them would be subpial (range over the two definitions).
+above the pia in the **same animal** – how many of them would be subpial. *present* (stretches with a layer)
+is the lower bound, *balance* / *glia* over all stretches the upper.
 
 **Assumption to confirm:** our animals OS1_2, P2_3, P3_1, R1_2 and R1_3 are the RRMAP2 animals RR_OS1_2,
 RR_P2_3, RR_P3_1, RR_R1_2 and RR_R1_3 (same names, same C/T/L levels). CFA_L2 has no match and uses the pooled
@@ -1781,7 +1886,7 @@ grp_of = sh.drop_duplicates("animal").set_index("animal").group
 phase_rate = (pd.read_csv(OUT / "above_pia_by_depth.csv").query("cell_class == 'immune'")
               .set_index(["definition", "group", "depth_bin"]).above_pia)
 est = []
-for dfn in ("balance", "glia"):
+for dfn in ("present", "balance", "glia"):
     a = aba[(aba.definition == dfn)].set_index(["animal", "depth_bin"])
     t = ours_t.copy()
     t["xenium_animal"] = t.animal.map(TWIN)
@@ -1800,7 +1905,7 @@ tab = est.pivot_table(index="depth_bin", columns="definition", values="expected_
 tab.insert(0, "pu1_meninges_cells", est[est.definition == "balance"].groupby("depth_bin").pu1_meninges_cells.sum())
 display(tab.round(0))
 tot = tab.pu1_meninges_cells.sum()
-for dfn in ("balance", "glia"):
+for dfn in ("present", "balance", "glia"):
     print(f"{dfn:8s}: of {tot:,.0f} Pu.1+ cells our rule calls meninges, expected subpial {tab[dfn].sum():,.0f} "
           f"({100 * tab[dfn].sum() / tot:.0f} %); deeper than 20 µm: {tab.loc[BINS[2:], dfn].sum():,.0f} "
           f"of {tab.loc[BINS[2:], 'pu1_meninges_cells'].sum():,.0f}")
@@ -1809,27 +1914,29 @@ display((100 * est.pivot_table(index=["definition", "animal"], columns="depth_bi
 '''), md("""
 ## Reading
 
-* **The meninges are thin, and the genes find them.** Meningeal fibroblast genes sit in the outer 5–15 µm and in
-  most stretches the pia lies within 0–15 µm of the edge (90th percentile ~15–25 µm). Infiltrated stretches
-  have thicker meninges, so swelling is real but modest in µm terms.
-* **Most immune cells near the surface are subpial, and almost all deeper than ~20–30 µm are.** Both
-  definitions – with opposite biases – agree: in EAE ~30–55 % of immune cells at 0–10 µm are above the pia,
-  ~20–40 % at 10–20 µm, ~10–30 % at 20–30 µm and ≤ ~20 % beyond 30 µm. CFA controls have few immune cells and
-  even fewer meningeal ones.
-* **For our rule:** extending the meninges into compact infiltrate down to 80 µm takes in mostly subpial lesion –
-  the table above estimates how many of our rule's Pu.1⁺ meninges cells that is. A cap of ~20 µm (or no infiltrate
-  extension beyond the outer layer) would match the genes better; even the outer 10 µm holds a lot of subpial
-  infiltrate in EAE.
-* **It explains notebook 13:** meninges and lesion genuinely interleave in the outer 10–30 µm, so a model trained
-  on "outer ≤ 10 µm = meninges" learns infiltrate, and no image feature separates them.
-* **Which definition to trust:** by the fibroblast control, *balance* (≈ 87 % of meningeal fibroblasts at 0–10 µm
-  above its pia) is clearly better than *glia* (60–75 % in EAE, ~40 % in controls, where the glia limitans
-  sits right at the edge); glia is kept as the bracket with the opposite bias. Expected subpial share of our
-  rule's Pu.1⁺ meninges cells: ~63–67 % overall, ~82–86 % of those deeper than 20 µm.
+* **The meninges are thin.** In ~40–55 % of EAE surface stretches and ~70 % in CFA controls no meningeal layer
+  is resolved at 5 µm (a single-cell pia–arachnoid, sometimes stripped). Where there is one, it is 5–30 µm deep
+  and thicker where the surface is infiltrated.
+* **Where meninges exist, the outer 10 µm is meningeal and deeper infiltrate is subpial.** On stretches with a
+  meningeal layer, immune cells in EAE are ~89 % above the pia at 0–10 µm, ~47 % at 10–20 µm, ~20 % at
+  20–30 µm, ~9 % at 30–50 µm and ~4 % at 50–80 µm. Over all stretches (counting edges without a layer as
+  subpial) the shares are lower, but every definition agrees beyond ~20 µm: **most immune cells there are below
+  the pia.**
+* **For our rule:** the outer ≤ 10 µm layer is fine where meninges exist; the extension of the meninges into
+  compact infiltrate down to 80 µm takes in mostly subpial lesion. A cap at ~20 µm would match the genes.
+  Expected subpial share of our rule's Pu.1⁺ meninges cells: ~39 % (present, lower bound) to ~57–68 % (all
+  stretches) overall, but **~78–89 % of those deeper than 20 µm** (1,630–1,860 of 2,090 cells).
+* **The truly ambiguous case** is a dense immune band at the surface with no glia limitans and only faint
+  fibroblast genes (see the subpial gallery): *balance* puts the pia at the edge, *glia* 25–30 µm deep. That is
+  what the six `core_at_surface` annotation boxes are for.
+* **It explains notebook 13:** meninges and lesion interleave at 10–30 µm, so a model trained on "outer ≤ 10 µm =
+  meninges" learns infiltrate, and no image feature separates them.
+* **Which pia to trust:** by the fibroblast control, *balance* (≈ 87 % of meningeal fibroblasts at 0–10 µm above
+  its pia) beats *glia* (60–75 % in EAE, ~40 % in controls); glia is the bracket with the opposite bias.
 * **Caveats.** Different cells, segmentation and tissue mask than our images: the depth scales are not
-  calibrated (treat µm values as ±5–10 µm). The pia is resolved in 5 µm rings; ~30 % of stretches (tears,
-  flaps, oblique cuts) have none. Low-density patches inside some sections (dark in the maps) are cut out of
-  the tissue mask and count as edge. The Xenium sections of "our" animals are probably not the same sections
+  calibrated (treat µm values as ±5–10 µm). The pia is resolved in 5 µm rings. ~30 % of stretches (tears,
+  flaps, oblique cuts) have none; false edges at missing fields of view are removed, but low-density patches
+  inside sections still count as edge. The Xenium sections of "our" animals are probably not the same sections
   (assumption above).
 """)]
 
