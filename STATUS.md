@@ -91,9 +91,10 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
    infiltrate extension. Regenerate: `scripts/xenium_transcript_rasters.py` on the remote (env `sq`, raw data
    in /Volumes/moldiassd; ~10 min) → copy `rasters/*.npz` to `outputs/xenium_rasters/` → `scripts/xenium_meninges.py`
    (needs the curated atlas, `$RRMAP2_H5AD`, and `../ImmunoTransformer/docs/sample_sheet/sections.csv`).
-   **Meningeal regions** (notebook 15, `scripts/xenium_meningeal_regions.py`): per 50 µm stretch. Dorsal/lateral
-   meninges carry ~1.5× the immune cells per 100 µm of ventral (paired, 37–41/59 animals) – dorsally because
-   they are thicker (immune *share* lower dorsally); subpial infiltrate highest laterally; infiltrate is patchy
+   **Meningeal regions** (notebook 15, `scripts/xenium_meningeal_regions.py`): per 50 µm stretch. **Geometric sectors:
+   lesions are ventral** (lesion-niche share 2.2× dorsal, 56/59 animals; immune 50–200 µm deep 2×) **but ventral
+   meninges are thinner and carry ~0.7× the meningeal infiltrate**. Niche-based regions: dorsal/lateral meninges
+   ~1.5× ventral per 100 µm, dorsally because thicker (immune *share* lower dorsally); infiltrate is patchy
    (Moran's I ~0.25, top 10 % of stretches hold ~70 %); vessels in the meninges ~2× (GEE); meningeal and subpial
    infiltrate co-localise (ρ > 0 in 95 % of sections); B cells are meningeal (21 % vs 9 % subpial, 48/55
    animals), DC/MDM subpial; onset meninges have almost no B cells.

@@ -2035,6 +2035,75 @@ plt.tight_layout(); plt.show()
 pr = pd.read_csv(OUT / "paired_regions.csv")
 pr["fold"] = 2 ** pr.median_log2_ratio
 pr[["value", "pair", "sections", "fold", "sections_higher", "animals", "animals_higher", "wilcoxon_p"]].round(3)
+'''), md("""
+## Geometric sectors: where are the lesions, and where is the meningeal infiltrate?
+
+The regions above come from the atlas niche of the cells under a stretch – and lesion cells are often labelled
+'Mixed', so they say little about where the *lesions* are. Here each section gets a dorso-ventral axis (from the
+centroid of ventral-funiculus / ventral-horn cells to that of dorsal-funiculus / dorsal-horn cells; 153 sections)
+and every stretch and cell a **sector** by its angle to that axis around the section centre: dorsal ≤ 50°,
+ventral ≥ 130°, lateral in between. Check map first (arrow = dorsal direction).
+"""), code('''
+ts = pd.read_parquet(WORK / "stretches_sector.parquet")
+axs = pd.read_csv(OUT / "sector_axes.csv").set_index("section")
+gs = pd.read_csv(OUT / "section_sector.csv")
+SCOL = {"dorsal": "#eb6834", "lateral": "#3987e5", "ventral": "#199e70"}
+fig, axes = plt.subplots(2, 3, figsize=(20, 13))
+for ax, s in zip(axes.ravel(), secs):
+    if s not in axs.index:
+        ax.axis("off"); continue
+    r = sh[sh.section == s].iloc[0]
+    c = cells_atlas[cells_atlas.section == s]
+    les = c.Global_niche_group.astype(str).str.startswith("Lesion")
+    ax.scatter(c.x_centroid[~les], c.y_centroid[~les], s=0.3, c="#c3c2b7")
+    ax.scatter(c.x_centroid[les], c.y_centroid[les], s=0.6, c="#e87ba4")
+    d = ts[ts.section == s]
+    ax.scatter((d.seg % 100000 + .5) * X.SEG_UM, (d.seg // 100000 + .5) * X.SEG_UM, s=14, c=d.sector.map(SCOL))
+    a = axs.loc[s]
+    ax.annotate("", xy=(a.cx + 600 * a.ax, a.cy + 600 * a.ay), xytext=(a.cx, a.cy), arrowprops=dict(arrowstyle="->", lw=2, color="#0b0b0b"))
+    ax.set_aspect("equal"); ax.invert_yaxis(); ax.set_xticks([]); ax.set_yticks([])
+    ax.set_title(f"{s} · {r.group} · {r.spinal_level}  (pink = lesion-niche cells)", loc="left", fontsize=9)
+fig.legend(handles=[Line2D([], [], marker="o", ls="", color=c, label=k) for k, c in SCOL.items()], loc="lower center", ncol=3, frameon=False)
+plt.tight_layout(rect=(0, 0.03, 1, 1)); plt.show()
+'''), md("""
+### Sectors compared within the same section (EAE)
+
+Lesion-niche and immune share of all cells in the sector; immune cells per 100 µm of surface in the deeper
+parenchyma (50–200 µm under the pia), the subpial band (0–50 µm) and the meninges; pia depth.
+"""), code('''
+SV = [("lesion_frac", "lesion-niche share of cells", False), ("immune_frac", "immune share of cells", False),
+      ("deep_per100", "immune / 100 µm, 50–200 µm deep", True), ("sub_per100", "immune / 100 µm, subpial 0–50 µm", True),
+      ("men_per100", "immune / 100 µm, meninges", True), ("pia_um", "pia depth (µm)", False)]
+e = gs[(gs.group != "CFA control") & (gs.surface_um >= 300)]
+SEC = ["dorsal", "lateral", "ventral"]
+fig, axes = plt.subplots(1, 6, figsize=(30, 4.6))
+for ax, (v, lab, logy) in zip(axes, SV):
+    w = e.pivot_table(index="section", columns="sector", values=v).reindex(columns=SEC)
+    for _, row in w.iterrows():
+        ax.plot(range(3), row.to_numpy(float), color="#c3c2b7", lw=0.6, alpha=0.6)
+    for i, r in enumerate(SEC):
+        ax.scatter(np.full(w[r].notna().sum(), i), w[r].dropna(), s=10, color=SCOL[r], zorder=3)
+        ax.plot([i - .25, i + .25], [w[r].median()] * 2, color="#0b0b0b", lw=2.5, zorder=4)
+    if logy:
+        ax.set_yscale("symlog", linthresh=1)
+    ax.set_xticks(range(3), SEC); ax.set_title(lab, loc="left", fontsize=10)
+plt.tight_layout(); plt.show()
+ps = pd.read_csv(OUT / "paired_sectors.csv")
+ps[["value", "pair", "sections", "fold", "sections_higher", "animals", "animals_higher", "wilcoxon_p"]].round(3)
+'''), code('''
+fig, axes = plt.subplots(1, 4, figsize=(24, 3.8))
+for ax, v, title in zip(axes, ["lesion_frac", "deep_per100", "sub_per100", "men_per100"],
+                        ["lesion-niche share of cells", "immune / 100 µm, 50–200 µm", "immune / 100 µm, subpial", "immune / 100 µm, meninges"]):
+    h = gs[gs.surface_um >= 300].pivot_table(index="sector", columns="group", values=v, aggfunc="median").reindex(index=SEC, columns=EAE)
+    im = ax.imshow(h, cmap="magma", aspect="auto")
+    ax.set_xticks(range(len(EAE)), EAE, rotation=35, ha="right", fontsize=8); ax.set_yticks(range(3), SEC)
+    for i in range(3):
+        for j in range(len(EAE)):
+            if pd.notna(h.iat[i, j]):
+                ax.text(j, i, f"{h.iat[i, j]:.2f}", ha="center", va="center", fontsize=7,
+                        color="white" if h.iat[i, j] < np.nanmax(h.values) * 0.6 else "black")
+    ax.set_title(title, loc="left", fontsize=10); plt.colorbar(im, ax=ax, shrink=0.8)
+plt.tight_layout(); plt.show()
 '''), md("## Meningeal immune load by region and phase (median over sections, per 100 µm of surface)"), code('''
 fig, axes = plt.subplots(1, 2, figsize=(17, 4.6))
 for ax, v, title in zip(axes, ["men_immune_per100", "sub_immune_per100"], ["meninges", "subpial band (0–50 µm under the pia)"]):
@@ -2220,23 +2289,24 @@ gallery(list(zip(p_.section, p_.seg)))
 '''), md("""
 ## Reading
 
-* **Meningeal infiltrate is regional.** Per 100 µm of surface, dorsal and lateral meninges carry ~1.5× the immune
-  cells of ventral meninges (paired within section; dorsal > ventral in 37/59 animals, lateral > ventral in
-  41/59; GEE: dorsal 1.26×, lateral 1.20× vs ventral). Root zones are not special once vessels are accounted for.
-* **…but dorsally because the meninges are thicker.** Dorsal meninges are thicker (pia ~2× deeper than ventral,
-  46/59 animals) and more often resolved as a layer; as a *share* of meningeal cells, immune cells are, if anything,
-  rarer dorsally (lower than lateral in 39/55 animals). Lateral meninges have both more cells per 100 µm and an
-  immune share like ventral.
-* **Subpial infiltrate follows a different map:** highest under the lateral surface (lateral > dorsal, p ≈ 0.001),
-  where the lateral funiculus lies – the classic EAE white-matter lesion site.
+* **Lesions are ventral; meningeal infiltrate is not.** By geometric sector, the ventral cord has ~2.2× the
+  lesion-niche share of dorsal (56/59 animals), ~2× the immune cells 50–200 µm deep (51/59) and ~1.35× in the
+  subpial band (41/59) – lateral in between. The meninges go the other way: ventral meninges are thinner (pia
+  ~0.56× dorsal) and carry ~0.7× the meningeal immune cells per 100 µm (fewer in 36/59 animals).
+* **By the niche-based regions** (anatomy of the parenchyma under a stretch) dorsal and lateral meninges carry
+  ~1.5× the immune cells per 100 µm of ventral – dorsally because the meninges are thicker (immune *share* among
+  meningeal cells is, if anything, lower dorsally). These regions under-represent lesioned surface (lesion cells
+  are often 'Mixed'), so use the sectors for where the lesions are.
 * **It is patchy.** In 80 % of EAE sections meningeal infiltrate clusters along the surface (Moran's I ~0.25, null
   ~0); the most infiltrated 10 % of stretches hold ~70 % of the meningeal immune cells.
 * **Vessels.** Stretches with vessels in the meninges hold ~2× the meningeal and ~1.4× the subpial immune cells
   (rate ratios, robust to region, phase and level) – infiltrate gathers around meningeal vessels.
-* **Meninges and lesion go together.** In 95 % of EAE sections, stretches with more meningeal infiltrate have more
+* **Locally, meninges and lesion go together.** In 95 % of EAE sections, stretches with more meningeal infiltrate have more
   subpial infiltrate beneath them (median ρ ~0.3), and stretches with a resolved meningeal layer have ~2.4× the
   subpial immune cells. The meningeal share of near-surface infiltrate is highest at onset (~30 %) and lowest at
-  peak (~19 %): the parenchyma fills up faster than the meninges.
+  peak (~19 %): the parenchyma fills up faster than the meninges. So the coupling is local (a stretch over a
+  subpial lesion), while across the cord the lesion-rich ventral side has the thinnest, least infiltrated
+  meninges.
 * **B cells are a meningeal population.** From peak on, B cells are ~20–35 % of meningeal immune cells but
   ~10–15 % of subpial ones (paired table above); CD4 T cells are also relatively meningeal, MDMs and DCs
   relatively subpial. At onset, meningeal infiltrate is CD4 T, DC and MDM with almost no B cells.

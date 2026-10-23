@@ -159,6 +159,52 @@ def gee(t: pd.DataFrame, response: str = "men_immune") -> pd.DataFrame:
                          "animals": e["animal"].nunique()}).reset_index(drop=True)
 
 
+def sectors(t: pd.DataFrame, cells: pd.DataFrame, work: Path, out: Path) -> pd.DataFrame:
+    """Geometric dorsal / lateral / ventral sectors (``X.sector_axes``: axis from ventral- to dorsal-niche cells),
+    independent of the niche of the cells under a stretch (lesion cells are often 'Mixed'). Per section × sector:
+    meningeal, subpial (0–50 µm) and deeper (50–200 µm) immune cells per 100 µm of surface, and over the whole
+    sector the share of lesion-niche and of immune cells; paired comparisons within EAE sections."""
+    ax = X.sector_axes(cells).set_index("section")
+    ax.reset_index().to_csv(out / "sector_axes.csv", index=False)
+    t = t[t["section"].isin(ax.index)].copy()
+    t["sector"] = ""
+    for s, d in t.groupby("section"):
+        t.loc[d.index, "sector"] = X.sector((d["seg"] % 100000 + .5) * X.SEG_UM, (d["seg"] // 100000 + .5) * X.SEG_UM,
+                                            ax.loc[s])
+    t["deep_immune"] = t[[f"deep_{g}" for g in X.IMMUNE_GROUPS if f"deep_{g}" in t]].sum(1)
+    t.to_parquet(work / "stretches_sector.parquet", index=False)
+    c = cells[cells["section"].isin(ax.index)].copy()
+    c["sector"] = ""
+    for s, d in c.groupby("section", observed=True):
+        c.loc[d.index, "sector"] = X.sector(d["x_centroid"], d["y_centroid"], ax.loc[s])
+    c["lesion"] = c["Global_niche_group"].astype(str).str.startswith("Lesion")
+    c["immune"] = c["Anno_L1_curated"].isin(X.IMMUNE_L1)
+    sc = c.groupby(["section", "sector"], observed=True).agg(cells=("lesion", "size"), lesion=("lesion", "sum"),
+                                                             immune=("immune", "sum")).reset_index()
+    sc["lesion_frac"], sc["immune_frac"] = sc["lesion"] / sc["cells"], sc["immune"] / sc["cells"]
+    g = t.groupby(["section", "group", "animal", "sector"]).agg(
+        surface_um=("surface_um", "sum"), men=("men_immune", "sum"), sub=("sub_immune", "sum"),
+        deep=("deep_immune", "sum"), pia_um=("pia_depth_um", "mean"), layer=("layer", "mean")).reset_index()
+    for k in ("men", "sub", "deep"):
+        g[f"{k}_per100"] = 100 * g[k] / g["surface_um"]
+    g = g.merge(sc, on=["section", "sector"])
+    g.to_csv(out / "section_sector.csv", index=False)
+    e = g[(g["group"] != "CFA control") & (g["surface_um"] >= MIN_SURFACE_UM)]
+    rows = []
+    for v in ("lesion_frac", "immune_frac", "deep_per100", "sub_per100", "men_per100", "pia_um", "layer"):
+        w = e.pivot_table(index=["section", "animal"], columns="sector", values=v)
+        for a, b in [("ventral", "dorsal"), ("ventral", "lateral"), ("lateral", "dorsal")]:
+            d = w[[a, b]].dropna()
+            lr = np.log2(d[a] + 0.01) - np.log2(d[b] + 0.01)
+            an = lr.groupby(level="animal").mean()
+            rows.append({"value": v, "pair": f"{a} vs {b}", "sections": len(lr), "fold": 2 ** lr.median(),
+                         "sections_higher": int((lr > 0).sum()), "animals": len(an),
+                         "animals_higher": int((an > 0).sum()), "wilcoxon_p": wilcoxon(lr).pvalue})
+    pr = pd.DataFrame(rows)
+    pr.to_csv(out / "paired_sectors.csv", index=False)
+    return pr
+
+
 def main():
     warnings.filterwarnings("ignore")
     ap = argparse.ArgumentParser()
@@ -182,6 +228,8 @@ def main():
     values = ("men_immune_per100", "men_immune_share", "sub_immune_per100", "layer", "pia_um")
     pd.concat([paired_regions(g, v) for v in values]).to_csv(out / "paired_regions.csv", index=False)
     composition(t).to_csv(out / "composition.csv", index=False)
+    cells = pd.read_parquet(work / "atlas_cells.parquet").rename(columns={"meta_sample_id": "section"})
+    print(sectors(t, cells, work, out).round(3).to_string(index=False))
     nb = neighbours(t)
     cl_ = clustering(t, nb)
     cl_.to_csv(out / "clustering.csv", index=False)

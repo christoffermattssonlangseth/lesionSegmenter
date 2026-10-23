@@ -268,3 +268,31 @@ def stretch_table(cells: pd.DataFrame, pia: pd.DataFrame, prof: pd.DataFrame, co
     t["root_zone"] = (t.get("men_schwann", 0) + t.get("men_perineural_FB", 0) + t.get("sub_schwann", 0)) >= 2
     t["layer"] = t[col] > 0
     return t
+
+
+DORSAL_NICHES = ["Dorsal funiculus", "DorsalHorn_sensory"]
+VENTRAL_NICHES = ["Ventral funiculus", "VentralHorn_motor"]
+
+
+def sector_axes(cells: pd.DataFrame, min_cells: int = 200) -> pd.DataFrame:
+    """Per section: centre (all cells) and the dorso-ventral axis (unit vector from the centroid of ventral-niche
+    cells to that of dorsal-niche cells). Sections with < ``min_cells`` of either are left out (no reliable axis)."""
+    rows = []
+    for sec, d in cells.groupby("section", observed=True):
+        n = d["Physiological_niche"].astype(str)
+        dors, vent = d[n.isin(DORSAL_NICHES)], d[n.isin(VENTRAL_NICHES)]
+        if len(dors) < min_cells or len(vent) < min_cells:
+            continue
+        v = dors[["x_centroid", "y_centroid"]].mean().to_numpy() - vent[["x_centroid", "y_centroid"]].mean().to_numpy()
+        if np.hypot(*v) < 100:
+            continue
+        rows.append({"section": sec, "cx": d["x_centroid"].mean(), "cy": d["y_centroid"].mean(),
+                     "ax": v[0] / np.hypot(*v), "ay": v[1] / np.hypot(*v)})
+    return pd.DataFrame(rows)
+
+
+def sector(x, y, ax_row, dorsal_deg: float = 50.0, ventral_deg: float = 130.0) -> np.ndarray:
+    """Dorsal / lateral / ventral by the angle between (x, y) − centre and the dorsal axis."""
+    dx, dy = np.asarray(x) - ax_row.cx, np.asarray(y) - ax_row.cy
+    ang = np.degrees(np.arccos(np.clip((dx * ax_row.ax + dy * ax_row.ay) / np.maximum(np.hypot(dx, dy), 1e-6), -1, 1)))
+    return np.select([ang <= dorsal_deg, ang >= ventral_deg], ["dorsal", "ventral"], "lateral")
