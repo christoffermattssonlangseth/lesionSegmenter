@@ -69,6 +69,15 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
    (`lesionseg/meninges_model.py`). Plumbing dry-run on rule-derived fake labels worked (~7k labelled
    cells). Feasibility (2026-10-23): shape alone predicts the *rule's* meninges only weakly (AUC 0.72);
    geometry dominates – real labels are the bottleneck. Open question for her: perivascular cuffs = meninges?
+   **Without annotations** (`scripts/meninges_weak_labels.py` → `results/meninges_weak/`, 2026-10-23): train on
+   confident labels only (outer ≤ 10 µm vs parenchyma ≥ 150 µm, cores left out), no position features, held out
+   by animal. Position-free shape + markers + image: AUC 0.96 vs deep parenchyma, 0.91 vs a *virtual cut* edge
+   (not an edge detector), but **0.50 vs manual lesion core at the surface** – it cannot tell meninges from subpial
+   lesion, the case that matters for collection. Density features are edge detectors (96 % of virtual-cut cells
+   called meninges) despite tissue normalisation. → The core_at_surface boxes are the decisive annotations.
+   Also found: 348 manual-core cells (59–137 per slide) are per-cell parenchyma (rule holds) but the coarse
+   grid `zone` layer still says meninges, so they get no core/rim zone; 36 of them (16 Pu.1⁺) are beyond the
+   40 µm edge exclusion and lost from lesion reactions. Not fixed.
 3. ~~Orientation analysis~~ done (nb 12).
 4. Meninges as its own **reaction compartment** (discussed, not decided): budget is 57/60, needs pooling.
 5. Cell identity needs markers (resident vs infiltrating myeloid: TMEM119/P2RY12 vs CCR2; meningeal

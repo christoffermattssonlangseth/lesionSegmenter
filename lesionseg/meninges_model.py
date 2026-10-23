@@ -17,9 +17,17 @@ so their contribution can be measured:
 * ``shape``    – own eccentricity / area / solidity; neighbours' elongated share and mean eccentricity, how
   well their long axes agree with each other (``align``) and with the cell's own (``self``);
 * ``markers``  – Pu.1⁺ flag and neighbourhood share, Pu.1 / Iba1 / nuclear intensity (scene-normalised);
-* ``density``  – neighbours within each radius;
-* ``geometry`` – one-sidedness (offset of the neighbours' centroid: an edge), depth below the traced
-  surface, alignment of the long axis with the surface, distance to the section edge.
+* ``density``  – cells per mm² of tissue within each radius;
+* ``image``    – tissue context from the image: nuclear packing, channel background between nuclei,
+  texture (:func:`image_features`), normalised to the tissue inside the window;
+* ``geometry`` – everything that knows where the edge is: raw neighbour counts, tissue fraction around the
+  cell, one-sidedness (offset of the neighbours' centroid), depth below the traced surface, alignment of
+  the long axis with the surface, distance to the section edge.
+
+``shape``, ``markers`` and ``image`` are *position-free*: a virtual cut through deep parenchyma
+(``scripts/meninges_weak_labels.py``) does not raise their prediction. ``density`` is not, despite the tissue
+normalisation: the tissue raster is drawn around the cells, so cells per tissue area still rise at any edge
+(96 % of cells at a virtual cut called meninges).
 
 Radii 15 / 30 / 60 µm. Model: ``HistGradientBoostingClassifier``. Evaluation: leave-one-animal-out (replicate
 slides and all sections of an animal stay together), falling back to leave-one-section-out with < 3 animals.
@@ -112,7 +120,7 @@ def neighbour_features(xy: np.ndarray, ecc: np.ndarray, orient: np.ndarray, pu1:
         a = _neighbours(xy, r)
         n = np.asarray(a.sum(axis=1)).ravel()
         s = a @ z
-        f[f"density_n_{r}"] = n
+        f[f"geometry_n_{r}"] = n        # raw count: halves at an edge, so it is an edge signal
         f[f"shape_el_{r}"] = a @ el / n
         f[f"shape_ecc_{r}"] = a @ ecc / n
         f[f"shape_align_{r}"] = np.abs(s) / np.maximum(a @ ecc, 1e-6)
@@ -122,8 +130,78 @@ def neighbour_features(xy: np.ndarray, ecc: np.ndarray, orient: np.ndarray, pu1:
     return pd.DataFrame(f)
 
 
-def cell_features(run) -> pd.DataFrame:
-    """All feature groups for every cell of ``run`` (index aligned with ``run.cells``)."""
+IMAGE_CHANNELS = {"nuc": "SYTOG", "pu1": "AF647", "iba1": "AF555"}
+IMAGE_SIGMAS_UM = (5.0, 15.0)
+IMAGE_CACHE = "meninges_image_features.parquet"
+
+
+def _disk(r_px: float) -> np.ndarray:
+    k = int(np.ceil(r_px))
+    yy, xx = np.mgrid[-k:k + 1, -k:k + 1]
+    d = (xx ** 2 + yy ** 2 <= r_px ** 2).astype(np.float32)
+    return d / d.sum()
+
+
+def image_features(run, refresh: bool = False) -> pd.DataFrame:
+    """Tissue context around each cell from the image (1.3 µm overview), all **normalised to the tissue
+    inside the window** so the empty space beyond the edge does not leak in:
+
+    * ``image_nucfrac_<σ>``      – nuclear area fraction (nuclei touching = compact tissue);
+    * ``image_<ch>_bg_<σ>``      – mean of each channel between nuclei (neuropil vs loose connective tissue),
+      relative to the scene's median background;
+    * ``image_nuc_sd_<σ>``       – texture: local SD of the nuclear channel;
+    * ``geometry_tissue_<r>``    – tissue fraction within each neighbour radius (the edge itself; geometry).
+
+    Per-label table, cached in the scene directory."""
+    from scipy import ndimage as ndi
+    from scipy.signal import fftconvolve
+    from skimage.filters import threshold_otsu
+
+    from .report import surface_tiers
+
+    f = run.dir / IMAGE_CACHE
+    if f.exists() and not refresh:
+        return pd.read_parquet(f)
+    tiers, res = surface_tiers(run)
+    rd = run.open_image()
+    if tiers is None or rd is None:
+        return pd.DataFrame({"label": run.cells["label"].to_numpy()})
+    tissue = tiers > 0
+    H, W = tissue.shape
+    scale = run.px / res
+
+    def fit(a):
+        a = a[:H, :W].astype(np.float32)
+        return np.pad(a, ((0, H - a.shape[0]), (0, W - a.shape[1])))
+
+    imgs = {k: fit(rd.read_overview(run.scene, scale, rd.channel_index(v)))
+            for k, v in IMAGE_CHANNELS.items() if v in rd.channel_names}
+    c = run.cells
+    iy = (c["y_um"] / res).astype(int).clip(0, H - 1).to_numpy()
+    ix = (c["x_um"] / res).astype(int).clip(0, W - 1).to_numpy()
+    t = tissue.astype(np.float32)
+    nuc = (imgs["nuc"] > threshold_otsu(imgs["nuc"][tissue])) & tissue
+    bg = (tissue & ~nuc).astype(np.float32)
+    out = {"label": c["label"].to_numpy()}
+    for s in IMAGE_SIGMAS_UM:
+        g = lambda a, s=s: ndi.gaussian_filter(a, s / res)[iy, ix]   # noqa: E731
+        wt, wb = np.maximum(g(t), 1e-6), np.maximum(g(bg), 1e-6)
+        out[f"image_nucfrac_{s:g}"] = g(nuc.astype(np.float32)) / wt
+        m1, m2 = g(imgs["nuc"] * t) / wt, g(imgs["nuc"] ** 2 * t) / wt
+        out[f"image_nuc_sd_{s:g}"] = np.sqrt(np.maximum(m2 - m1 ** 2, 0))
+        for k, im in imgs.items():
+            ref = float(np.median(im[bg > 0])) or 1.0
+            out[f"image_{k}_bg_{s:g}"] = g(im * bg) / wb / ref
+    for r in RADII_UM:
+        out[f"geometry_tissue_{r}"] = fftconvolve(t, _disk(r / res), mode="same")[iy, ix].clip(0, 1)
+    df = pd.DataFrame(out)
+    df.to_parquet(f)
+    return df
+
+
+def cell_features(run, image: bool = True) -> pd.DataFrame:
+    """All feature groups for every cell of ``run`` (index aligned with ``run.cells``). ``density_<r>`` is
+    cells per mm² of *tissue* within r (needs the image features' tissue fraction)."""
     from .orientation import cell_surface_angles
 
     c = run.cells
@@ -144,15 +222,24 @@ def cell_features(run) -> pd.DataFrame:
                                    * c["eccentricity"].to_numpy(float))
     f["geometry_edge_dist"] = (c["dist_to_section_edge_um"].to_numpy(float) if "dist_to_section_edge_um" in c
                                else np.nan)
+    if image:
+        im = c[["label"]].merge(image_features(run), on="label", how="left").drop(columns="label")
+        f = pd.concat([f, im.set_axis(f.index)], axis=1)
+        for r in RADII_UM:
+            if f"geometry_tissue_{r}" in f:
+                area_mm2 = np.pi * r ** 2 * 1e-6 * np.maximum(f[f"geometry_tissue_{r}"], 0.05)
+                f[f"density_{r}"] = f[f"geometry_n_{r}"] / area_mm2
     f.index = c.index
     return f
 
 
 FEATURE_SETS = {
     "shape": ("shape",),
-    "shape + markers + density": ("shape", "markers", "density"),
-    "geometry + density": ("geometry", "density"),
-    "all": ("shape", "markers", "density", "geometry"),
+    "shape + markers": ("shape", "markers"),
+    "position-free (shape + markers + image)": ("shape", "markers", "image"),
+    "+ density (edge-sensitive)": ("shape", "markers", "image", "density"),
+    "geometry only": ("geometry",),
+    "all": ("shape", "markers", "density", "image", "geometry"),
 }
 
 
