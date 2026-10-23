@@ -1393,6 +1393,204 @@ plt.show()
 """)]
 
 
+def nb_meninges_weak(run_dir):
+    return [md("""
+# 13 · Can a model find the meninges without hand annotations?
+
+The meninges are placed by a rule (outer 10 µm of the surface plus compact infiltrate connected to it).
+Until the collaborator annotates the boxes in `results/meninges_annotation/`, the only labels are the
+rule's own. This notebook asks how far those take a model – and where they stop.
+
+* **Confident labels only.** 1 = meninges in the outer ≤ 10 µm (meninges by any definition), 0 =
+  parenchyma ≥ 150 µm deep, outside manual lesion cores. Everything in between is left out of training,
+  so what a model says there is its own opinion.
+* **No position.** The models never see depth or distance to the edge. Feature sets: nuclear **shape**
+  (eccentricity, area, solidity, alignment of neighbours), **markers** (Pu.1, Iba1, nuclear intensity),
+  **image** (texture and background of the 1.3 µm overview around the cell, normalised to the tissue) and
+  **density** (cells per mm² of tissue around the cell).
+* **Held out by animal.** Each animal is predicted by a model trained on the other five.
+
+Three tests, as AUC (0.5 = chance, 1 = perfect):
+
+| test | positives | negatives | what it asks |
+|---|---|---|---|
+| vs deep | outer meninges | deep parenchyma | sanity check |
+| vs **virtual cut** | outer meninges | cells ≤ 10 µm from an artificial edge | did the model learn "edge" instead of meninges? |
+| vs **core at surface** | outer meninges | manual lesion-core cells ≤ 30 µm deep | meninges vs subpial lesion – decides what is collected |
+
+The **virtual cut**: in deep parenchyma (≥ 300 µm from any surface), all cells on one side of a random line
+are deleted and every feature is recomputed as if the line were a surface (25 cuts per slide). There are no
+meninges there, so a model that calls these cells meninges is an edge detector.
+
+Computed by `scripts/meninges_weak_labels.py` → `results/meninges_weak/` (this notebook only reads it).
+"""), code(SETUP.format(run_dir=run_dir) + '''
+from matplotlib.colors import LinearSegmentedColormap
+from sklearn.metrics import roc_auc_score
+OUT = Path("results/meninges_weak")
+ev = pd.read_csv(OUT / "evaluation.csv")
+pr = pd.read_parquet(OUT / "cell_predictions.parquet")
+SETS = list(ev.features)
+SCOL = dict(zip(SETS, ["#c3c2b7", "#898781", "#eb6834", "#3987e5", "#9085e9"]))
+BEST, EDGE = "shape + markers + image", "shape + markers + density"
+outer = pr.y == 1
+core_s = pr.core & (pr.depth <= 30)
+print(f"{len(pr):,} cells in sections · confident: {outer.sum():,} outer meninges, {(pr.y == 0).sum():,} deep parenchyma"
+      f" · {core_s.sum():,} manual-core cells ≤ 30 µm deep · {pr.animal.nunique()} animals")
+ev.set_index("features").round(3)
+'''), md("## The three tests per feature set"), code('''
+tests = [("outer_vs_deep_auc", "vs deep parenchyma"), ("outer_vs_cut_edge_auc", "vs virtual-cut edge"),
+         ("outer_vs_core_at_surface_auc", "vs lesion core at the surface")]
+fig, axes = plt.subplots(1, 4, figsize=(19, 3.6), sharey=True, gridspec_kw={"width_ratios": [1, 1, 1, 1.2]})
+yy = np.arange(len(SETS))[::-1]
+for ax, (col, title) in zip(axes, tests):
+    ax.barh(yy, ev[col] - 0.5, left=0.5, color=[SCOL[s] for s in SETS], height=0.6)
+    for y, v in zip(yy, ev[col]):
+        ax.text(max(v, 0.5) + 0.01, y, f"{v:.2f}", va="center", fontsize=9)
+    ax.axvline(0.5, color="#52514e", lw=1, ls=":"); ax.set_xlim(0.3, 1.08); ax.set_title(title, loc="left", fontsize=10)
+    ax.set_xlabel("AUC (0.5 = chance)")
+ax = axes[3]
+w = 0.27
+for i, (col, lab, c) in enumerate([("outer_called_pct", "outer meninges", "#eb6834"),
+                                  ("cut_edge_called_pct", "virtual-cut edge", "#52514e"),
+                                  ("core_at_surface_called_pct", "core at surface", "#e87ba4")]):
+    ax.barh(yy + (1 - i) * w, ev[col], height=w, color=c, label=lab)
+ax.set_xlim(0, 100); ax.set_xlabel("% called meninges (p ≥ 0.5)")
+ax.legend(fontsize=8, frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1))
+ax.set_title("how often each group is called meninges", loc="left", fontsize=10)
+axes[0].set_yticks(yy, SETS)
+plt.tight_layout(); plt.show()
+'''), md("""
+## Virtual cut: p(meninges) against distance to an artificial edge
+
+Mean held-out probability of cells near the 25 virtual cuts per slide, by distance to the cut line.
+Dotted: mean p of real outer meninges for the same model. A model that learned meninges stays flat and low;
+an edge detector rises towards the cut.
+"""), code('''
+cp = pd.read_csv(OUT / "virtual_cut_profile.csv")
+cp["left"] = cp.db.str.extract(r"\\(([-\\d.]+),")[0].astype(float).clip(lower=0)
+cp["right"] = cp.db.str.extract(r",\\s*([\\d.]+)\\]")[0].astype(float)
+cp["mid"] = (cp.left + cp.right) / 2
+fig, ax = plt.subplots(figsize=(10, 4.3))
+for s in SETS:
+    d = cp[cp.features == s].sort_values("mid")
+    ax.plot(d.mid, d["mean"], color=SCOL[s], lw=2.2, marker="o", ms=4, label=s)
+    ax.axhline(pr.loc[outer, f"p_{s}"].mean(), color=SCOL[s], lw=1, ls=":")
+ax.set_xlabel("distance to the virtual cut (µm)"); ax.set_ylabel("mean p(meninges)"); ax.set_ylim(0, 1)
+ax.set_title("density models light up at any edge; the position-free models barely notice it", loc="left")
+ax.legend(fontsize=8, frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1))
+plt.tight_layout(); plt.show()
+display(cp.pivot_table(index="mid", columns="features", values="mean").reindex(columns=SETS).round(2))
+'''), md("""
+## p(meninges) against depth below the real surface
+
+Held-out probability of every cell in the sections (also the unlabelled ones between 10 and 150 µm),
+by depth and lesion context. Manual lesion core = inside the collaborator's CORE polygons (any section).
+"""), code('''
+GROUPS = {"control section": "#898781", "far from lesion": "#3987e5", "≤ 100 µm from lesion": "#eda100",
+          "manual lesion core": "#e87ba4"}
+dbins = [0, 10, 20, 30, 40, 60, 80, 120, 160, 250, 400]
+pr["group"] = np.where(pr.core, "manual lesion core", pr.ctx)
+pr["db"] = pd.cut(pr.depth, dbins, include_lowest=True)
+mid = {iv: (iv.left + iv.right) / 2 for iv in pr.db.cat.categories}
+fig, axes = plt.subplots(1, 2, figsize=(17, 4.3), sharey=True)
+for ax, s in zip(axes, [BEST, EDGE]):
+    t = pr.groupby(["group", "db"], observed=True)[f"p_{s}"].agg(["mean", "size"]).reset_index()
+    for g, col in GROUPS.items():
+        d = t[(t.group == g) & (t["size"] >= 20)]
+        ax.plot(d.db.map(mid).astype(float), d["mean"], color=col, lw=2.2, marker="o", ms=4, label=g)
+    ax.axvspan(0, 10, color="#c3c2b7", alpha=0.3, lw=0); ax.axvspan(150, 400, color="#c3c2b7", alpha=0.15, lw=0)
+    ax.set_xscale("symlog", linthresh=40); ax.set_xlabel("depth below the surface (µm)")
+    ax.set_title(s, loc="left", fontsize=10)
+axes[0].set_ylabel("mean p(meninges)"); axes[0].set_ylim(0, 1); axes[0].legend(fontsize=8, frameon=False)
+plt.tight_layout(); plt.show()
+print("grey bands: the confident training labels (outer ≤ 10 µm = 1, ≥ 150 µm = 0)")
+'''), md("## Per held-out animal (position-free model)"), code('''
+def per_animal(s):
+    rows = []
+    for a, d in pr.groupby("animal"):
+        o, conf, cs = d.y == 1, d.y >= 0, d.core & (d.depth <= 30)
+        p = d[f"p_{s}"]
+        row = {"animal": a, "outer_cells": int(o.sum()), "core_at_surface_cells": int(cs.sum()),
+               "outer_vs_deep_auc": roc_auc_score(d.y[conf], p[conf]) if d.y[conf].nunique() == 2 else np.nan,
+               "outer_called_pct": 100 * (p[o] >= 0.5).mean()}
+        if cs.sum() >= 10:
+            row["outer_vs_core_auc"] = roc_auc_score(np.r_[np.ones(o.sum()), np.zeros(cs.sum())], np.r_[p[o], p[cs]])
+            row["core_called_pct"] = 100 * (p[cs] >= 0.5).mean()
+        rows.append(row)
+    return pd.DataFrame(rows).set_index("animal")
+per_animal(BEST).round(3)
+'''), md("""
+## Examples: the annotation boxes where a lesion core meets the surface
+
+The six `core_at_surface` boxes from `results/meninges_annotation/` (300 µm). Left: raw image with the
+rule's meninges edge (solid) and buffer (dashed) and the **manual CORE** (dashed, collaborator). Middle and
+right: every nucleus as a dot coloured by its held-out p(meninges), position-free model and density model.
+"""), code('''
+cmap = LinearSegmentedColormap.from_list("p", ["#3987e5", "#e9e8e2", "#eb6834"])
+tg = pd.read_csv("results/meninges_annotation/targets.csv")
+byname = {r.name: r for r in runs}
+SIZE = 300
+
+def box_row(axes, t):
+    r = byname[t.scene]
+    view = (t.x_um - SIZE / 2, t.x_um + SIZE / 2, t.y_um - SIZE / 2, t.y_um + SIZE / 2)
+    rgb, ext = R.read_crop_um(r, t.x_um, t.y_um, SIZE)
+    d = pr[(pr.scene == t.scene) & pr.x_um.between(*view[:2]) & pr.y_um.between(*view[2:])]
+    for j, ax in enumerate(axes):
+        if rgb is not None:
+            ax.imshow(np.clip(rgb * (0.8 if j == 0 else 0.35), 0, 1), extent=ext)
+        R.draw_surface(ax, r, view, lw=1.2)
+        R.draw_outlines(ax, r, lesion=False, core=False, manual=True, lw=1.4)
+        if j:
+            s = [BEST, EDGE][j - 1]
+            sc = ax.scatter(d.x_um, d.y_um, c=d[f"p_{s}"], cmap=cmap, vmin=0, vmax=1, s=16, lw=0)
+            ax.set_title(f"{s}", loc="left", fontsize=9)
+        else:
+            ax.set_title(f"{t.target_id} · {t.kind} · {t.why}", loc="left", fontsize=9)
+        ax.set_xlim(view[0], view[1]); ax.set_ylim(view[3], view[2]); ax.set_xticks([]); ax.set_yticks([])
+    return sc
+
+def gallery(rows):
+    fig, axes = plt.subplots(len(rows), 3, figsize=(16, 5.3 * len(rows)), layout="constrained", squeeze=False)
+    for ax3, t in zip(axes, rows.itertuples()):
+        sc = box_row(ax3, t)
+    fig.colorbar(sc, ax=axes.ravel().tolist(), shrink=0.3, label="p(meninges), held out by animal")
+    plt.show()
+
+gallery(tg[tg.kind == "core_at_surface"])
+'''), md("""
+## Examples: the other kinds of box (one each)
+
+`swollen` (most cellular meninges of the section), `internal` (meninges-like tissue > 80 µm deep), `bare`
+(surface without meningeal nuclei) and `typical`.
+"""), code('''
+gallery(tg[tg.kind != "core_at_surface"].drop_duplicates("kind"))
+'''), md("""
+## Reading
+
+* **Without annotations, the best honest model recognises meninges but cannot separate them from lesion
+  at the surface.** Shape + markers + image separates outer meninges from deep parenchyma well (AUC 0.96)
+  and is not fooled by an artificial edge (0.91; only ~20 % of virtual-cut edge cells called meninges).
+  Against manual lesion-core cells at the surface it is at chance (0.50) and calls most of them meninges:
+  subpial lesion infiltrate looks like meningeal infiltrate to it, as it does to the rule.
+* **What it picks up is "near the surface or in infiltrate", not meninges as such.** In the depth plot the
+  position-free model still gives p ≈ 0.6–0.7 to parenchyma 30–60 µm under the surface of *control* sections,
+  and ≈ 0.5 to lesion-core cells 100–200 µm deep. At the cores (examples below) it paints the subpial part
+  of the core as meninges, continuous with the real lining; per held-out animal its AUC against these cells is
+  0.45–0.62 in all four animals that have them.
+* **Density features are edge detectors.** Their near-perfect scores (0.998) are a leak: at a virtual cut
+  they call ~96 % of cells meninges, even with density counted per tissue area, because the tissue outline
+  is drawn around the cells themselves. Their better score against the cores (0.74) is the same leak –
+  core cells sit a little deeper than the outer layer. They are marked position-dependent in
+  `lesionseg/meninges_model.py` and should not be used.
+* **The deciding labels are the hand annotations at the cores.** The confident labels contain no example of
+  "lesion at the surface", so no model trained on them can learn that border. The six `core_at_surface`
+  boxes above are the ones to annotate first if the collaborator's time is short.
+* Caveat: "manual lesion core ≤ 30 µm deep" is the only independent negative at the surface, and the CORE
+  polygons were drawn for lesions, not for the meningeal border – some of those cells may be meninges.
+""")]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-dir", default="outputs/sdata")
@@ -1405,7 +1603,8 @@ def main():
              "06_collection_by_section": nb_collection, "07_expression_by_zone": nb_expression,
              "08_expression_by_animal_and_cell_type": nb_expression_split, "09_nuclear_elongation": nb_elongation,
              "10_meninges_elongation_reliability": nb_meninges_reliability, "11_meningeal_swelling": nb_swelling,
-             "12_nuclear_orientation": nb_orientation}
+             "12_nuclear_orientation": nb_orientation,
+             "13_meninges_model_without_annotations": nb_meninges_weak}
     if a.only:
         books = {k: v for k, v in books.items() if any(k.startswith(o) for o in a.only)}
     for name, fn in books.items():

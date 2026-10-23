@@ -69,7 +69,7 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
    (`lesionseg/meninges_model.py`). Plumbing dry-run on rule-derived fake labels worked (~7k labelled
    cells). Feasibility (2026-10-23): shape alone predicts the *rule's* meninges only weakly (AUC 0.72);
    geometry dominates – real labels are the bottleneck. Open question for her: perivascular cuffs = meninges?
-   **Without annotations** (`scripts/meninges_weak_labels.py` → `results/meninges_weak/`, 2026-10-23): train on
+   **Without annotations** (`scripts/meninges_weak_labels.py` → `results/meninges_weak/`, notebook 13, 2026-10-23): train on
    confident labels only (outer ≤ 10 µm vs parenchyma ≥ 150 µm, cores left out), no position features, held out
    by animal. Position-free shape + markers + image: AUC 0.96 vs deep parenchyma, 0.91 vs a *virtual cut* edge
    (not an edge detector), but **0.50 vs manual lesion core at the surface** – it cannot tell meninges from subpial

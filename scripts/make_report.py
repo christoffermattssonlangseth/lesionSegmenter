@@ -152,6 +152,7 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
 10. `10_meninges_elongation_reliability` – is the meningeal elongation reliable? Section-level tests over all 17 sections / 6 animals, hierarchical bootstrap, robustness checks incl. an edge-artefact control, depth profile, random galleries
 11. `11_meningeal_swelling` – meningeal swelling along the surface in 100 µm segments: cellularity, Pu.1⁺ per 100 µm and thickness vs distance to lesions, lesion vs control sections, maps and the most swollen spots
 12. `12_nuclear_orientation` – do the elongated meningeal nuclei lie along the surface? Long axis from the label image vs local surface direction: angle histograms, depth profile, per-section tests against near-surface and deep parenchyma, shuffle null, robustness, random examples
+13. `13_meninges_model_without_annotations` – can a model find the meninges from the rule's confident labels alone? Position-free vs density feature sets held out by animal, virtual-cut edge test, lesion cores at the surface, p(meninges) maps on the annotation boxes
 
 ## Open decisions
 

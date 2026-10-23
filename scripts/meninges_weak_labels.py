@@ -14,8 +14,9 @@ what they say in between is their own opinion. Checks, each animal predicted by 
 * ``outer vs core``   – manual lesion-core cells ≤ 30 µm from the surface (the collaborator's annotation, the only
   independent negatives at the surface): meninges vs subpial lesion, the case that decides what is collected.
 
-Writes ``evaluation.csv``, ``virtual_cut_profile.csv`` (p vs distance to the cut) and ``depth_profile.csv``
-(p of the chosen model vs depth, by lesion context).
+Writes ``evaluation.csv``, ``virtual_cut_profile.csv`` (p vs distance to the cut), ``depth_profile.csv``
+(p of the chosen model vs depth, by lesion context) and ``cell_predictions.parquet`` (held-out p of every feature
+set per cell; read by notebook 13).
 """
 from __future__ import annotations
 
@@ -59,7 +60,9 @@ def scene_tables(r, n_cuts: int, rng) -> tuple[pd.DataFrame, pd.DataFrame]:
     dles = c["dist_to_lesion_um"].replace(np.inf, np.nan).to_numpy(float)
     ctx = np.where(~c["section_has_lesion"].to_numpy(bool), "control section",
                    np.where(dles <= 100, "≤ 100 µm from lesion", "far from lesion"))
-    D = f[keep].assign(y=y[keep], tier=tier[keep], depth=d[keep], core=core[keep], ctx=ctx[keep], scene=r.name,
+    D = f[keep].assign(label=c["label"].to_numpy()[keep], x_um=c["x_um"].to_numpy()[keep],
+                       y_um=c["y_um"].to_numpy()[keep], y=y[keep], tier=tier[keep], depth=d[keep], core=core[keep],
+                       ctx=ctx[keep], scene=r.name,
                        section=sec[keep], animal=sec[keep].str.rsplit("_", n=1).str[0])
     tiers, res = surface_tiers(r)
     tissue = (tiers > 0).astype(np.float32)
@@ -177,6 +180,7 @@ def main():
     print(f"{len(D):,} cells; confident {outer.sum():,} outer / {(D.y == 0).sum():,} deep; "
           f"{C.cut.nunique()} virtual cuts ({cut10.sum()} cells ≤ 10 µm); {core_s.sum():,} core cells ≤ 30 µm deep")
     rows, prof, keep_p = [], [], None
+    preds = D[["scene", "section", "animal", "label", "x_um", "y_um", "depth", "tier", "core", "ctx", "y"]].copy()
     bins = [0, 10, 20, 30, 40, 60, 80, 150]
     for name, groups in SETS.items():
         cols = MM.columns(D, groups)
@@ -190,8 +194,10 @@ def main():
                      "core_at_surface_called_pct": 100 * np.nanmean(pD[core_s] >= 0.5)})
         prof.append(C.assign(p=pC, features=name, db=pd.cut(C["dist_cut"], bins, include_lowest=True))
                     .groupby(["features", "db"], observed=True)["p"].agg(["mean", "size"]).reset_index())
+        preds[f"p_{name}"] = pD
         if name == a.model:
             keep_p = pD
+    preds.to_parquet(out / "cell_predictions.parquet", index=False)
     rep = pd.DataFrame(rows)
     rep.to_csv(out / "evaluation.csv", index=False)
     print(rep.round(3).to_string(index=False))
