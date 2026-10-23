@@ -153,6 +153,7 @@ whether those are lesions is a decision for the reader (notebook 02, control-sec
 11. `11_meningeal_swelling` – meningeal swelling along the surface in 100 µm segments: cellularity, Pu.1⁺ per 100 µm and thickness vs distance to lesions, lesion vs control sections, maps and the most swollen spots
 12. `12_nuclear_orientation` – do the elongated meningeal nuclei lie along the surface? Long axis from the label image vs local surface direction: angle histograms, depth profile, per-section tests against near-surface and deep parenchyma, shuffle null, robustness, random examples
 13. `13_meninges_model_without_annotations` – can a model find the meninges from the rule's confident labels alone? Position-free vs density feature sets held out by animal, virtual-cut edge test, lesion cores at the surface, p(meninges) maps on the annotation boxes
+14. `14_xenium_meninges` – where are the meninges by gene expression? RRMAP2 Xenium 5k atlas (157 sections): meningeal-fibroblast and glia-limitans transcript layers, pia depth per 50 µm stretch, share of immune cells above vs below the pia by depth and phase, and the expected subpial share of our rule's Pu.1⁺ meninges cells per (twin) animal
 
 ## Open decisions
 

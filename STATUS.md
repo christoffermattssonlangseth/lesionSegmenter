@@ -6,7 +6,7 @@ reaction rules agreed with Ting. Last commit at handoff: `e6b8755` (main, pushed
 ## Where things stand
 
 The pipeline runs end to end on the 4 scenes (CML_1, CML_2_rescan, CML_metal scene 0/1), the mass-spec
-reaction plan is regenerated, and notebooks 01–12 are executed (`notebooks/`, copies in
+reaction plan is regenerated, and notebooks 01–14 are executed (`notebooks/`, copies in
 `results/notebooks/`, summary in `results/REPORT.md`).
 
 ### Decisions taken in this session (all in `configs/eae_dvp_sdata.yaml`)
@@ -78,6 +78,18 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
    Also found: 348 manual-core cells (59–137 per slide) are per-cell parenchyma (rule holds) but the coarse
    grid `zone` layer still says meninges, so they get no core/rim zone; 36 of them (16 Pu.1⁺) are beyond the
    40 µm edge exclusion and lost from lesion reactions. Not fixed.
+   **Gene-based answer from Xenium** (notebook 14, 2026-10-23; `lesionseg/xenium_meninges.py`,
+   `scripts/xenium_meninges.py`): RRMAP2 Xenium 5k atlas, 157 EAE/CFA spinal cord sections. Meningeal-FB genes
+   (Slc47a1, Foxc2, Crabp2, Osr1, Slc13a4, Smoc2, Wnt6, Klf5, Fmod, Cdh1) vs glia limitans (Aqp4, Gfap) place the
+   pia per 50 µm surface stretch. Meninges are thin (pia mostly 0–15 µm deep). In EAE only ~30–55 % of immune
+   cells at 0–10 µm, ~10–30 % at 20–30 µm and ≤ ~20 % beyond 30 µm are above the pia – **the rule's extension
+   of the meninges into infiltrate down to 80 µm takes in mostly subpial lesion**; expected subpial: ~63–67 %
+   of the rule's Pu.1⁺ meninges cells, ~82–86 % of those > 20 µm deep (two pia definitions with opposite
+   biases agree). Our animals OS1_2/P2_3/P3_1/R1_2/R1_3 appear in the atlas as RR_* (same names and levels) –
+   **confirm they are the same animals**. Suggested change (not made): cap the meninges at ~20 µm / drop the
+   infiltrate extension. Regenerate: `scripts/xenium_transcript_rasters.py` on the remote (env `sq`, raw data
+   in /Volumes/moldiassd; ~10 min) → copy `rasters/*.npz` to `outputs/xenium_rasters/` → `scripts/xenium_meninges.py`
+   (needs the curated atlas, `$RRMAP2_H5AD`, and `../ImmunoTransformer/docs/sample_sheet/sections.csv`).
 3. ~~Orientation analysis~~ done (nb 12).
 4. Meninges as its own **reaction compartment** (discussed, not decided): budget is 57/60, needs pooling.
 5. Cell identity needs markers (resident vs infiltrating myeloid: TMEM119/P2RY12 vs CCR2; meningeal

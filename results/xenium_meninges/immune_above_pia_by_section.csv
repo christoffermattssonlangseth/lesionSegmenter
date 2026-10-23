@@ -1,0 +1,1885 @@
+definition,section,group,depth_bin,above_pia,cells
+balance,C2_G1_Bot_0,early chronic (day 16),"(0, 10]",0.40476190476190477,210
+balance,C2_G1_Bot_0,early chronic (day 16),"(10, 20]",0.2922636103151863,349
+balance,C2_G1_Bot_0,early chronic (day 16),"(20, 30]",0.21813031161473087,353
+balance,C2_G1_Bot_0,early chronic (day 16),"(30, 50]",0.09558823529411764,544
+balance,C2_G1_Bot_0,early chronic (day 16),"(50, 80]",0.0035971223021582736,556
+balance,C2_G1_Bot_0,early chronic (day 16),"(80, 150]",0.0,898
+balance,C2_G1_Bot_1,early chronic (day 16),"(0, 10]",0.625,48
+balance,C2_G1_Bot_1,early chronic (day 16),"(10, 20]",0.6224489795918368,98
+balance,C2_G1_Bot_1,early chronic (day 16),"(20, 30]",0.38,100
+balance,C2_G1_Bot_1,early chronic (day 16),"(30, 50]",0.18181818181818182,154
+balance,C2_G1_Bot_1,early chronic (day 16),"(50, 80]",0.01020408163265306,98
+balance,C2_G1_Bot_1,early chronic (day 16),"(80, 150]",0.0,214
+balance,C2_G1_Bot_2,late chronic (day 30),"(0, 10]",0.5543478260869565,92
+balance,C2_G1_Bot_2,late chronic (day 30),"(10, 20]",0.3884297520661157,121
+balance,C2_G1_Bot_2,late chronic (day 30),"(20, 30]",0.22602739726027396,146
+balance,C2_G1_Bot_2,late chronic (day 30),"(30, 50]",0.22058823529411764,272
+balance,C2_G1_Bot_2,late chronic (day 30),"(50, 80]",0.037037037037037035,297
+balance,C2_G1_Bot_2,late chronic (day 30),"(80, 150]",0.0,511
+balance,C2_G1_Mid_0,onset,"(0, 10]",0.425531914893617,47
+balance,C2_G1_Mid_0,onset,"(10, 20]",0.40869565217391307,115
+balance,C2_G1_Mid_0,onset,"(20, 30]",0.21212121212121213,66
+balance,C2_G1_Mid_0,onset,"(30, 50]",0.09803921568627451,51
+balance,C2_G1_Mid_0,onset,"(50, 80]",0.07407407407407407,54
+balance,C2_G1_Mid_0,onset,"(80, 150]",0.014705882352941176,68
+balance,C2_G1_Mid_1,early chronic (day 16),"(0, 10]",0.5740740740740741,54
+balance,C2_G1_Mid_1,early chronic (day 16),"(10, 20]",0.21428571428571427,84
+balance,C2_G1_Mid_1,early chronic (day 16),"(20, 30]",0.17333333333333334,75
+balance,C2_G1_Mid_1,early chronic (day 16),"(30, 50]",0.07526881720430108,93
+balance,C2_G1_Mid_1,early chronic (day 16),"(50, 80]",0.036036036036036036,111
+balance,C2_G1_Mid_1,early chronic (day 16),"(80, 150]",0.011764705882352941,255
+balance,C2_G1_Mid_2,peak,"(0, 10]",0.5585585585585585,111
+balance,C2_G1_Mid_2,peak,"(10, 20]",0.4711111111111111,225
+balance,C2_G1_Mid_2,peak,"(20, 30]",0.35856573705179284,251
+balance,C2_G1_Mid_2,peak,"(30, 50]",0.09510086455331412,347
+balance,C2_G1_Mid_2,peak,"(50, 80]",0.006060606060606061,330
+balance,C2_G1_Mid_2,peak,"(80, 150]",0.0,416
+balance,C2_G1_Top_0,early chronic (day 16),"(0, 10]",0.45454545454545453,44
+balance,C2_G1_Top_0,early chronic (day 16),"(10, 20]",0.23863636363636365,88
+balance,C2_G1_Top_0,early chronic (day 16),"(20, 30]",0.17857142857142858,84
+balance,C2_G1_Top_0,early chronic (day 16),"(30, 50]",0.1111111111111111,153
+balance,C2_G1_Top_0,early chronic (day 16),"(50, 80]",0.050314465408805034,159
+balance,C2_G1_Top_0,early chronic (day 16),"(80, 150]",0.019498607242339833,359
+balance,C2_G1_Top_1,pre-symptomatic,"(0, 10]",0.375,8
+balance,C2_G1_Top_1,pre-symptomatic,"(10, 20]",0.0,8
+balance,C2_G1_Top_1,pre-symptomatic,"(20, 30]",0.125,8
+balance,C2_G1_Top_1,pre-symptomatic,"(30, 50]",0.14285714285714285,7
+balance,C2_G1_Top_1,pre-symptomatic,"(50, 80]",0.0,11
+balance,C2_G1_Top_1,pre-symptomatic,"(80, 150]",0.0,20
+balance,C2_G1_Top_2,late chronic (day 30),"(0, 10]",0.5384615384615384,39
+balance,C2_G1_Top_2,late chronic (day 30),"(10, 20]",0.4444444444444444,81
+balance,C2_G1_Top_2,late chronic (day 30),"(20, 30]",0.36904761904761907,84
+balance,C2_G1_Top_2,late chronic (day 30),"(30, 50]",0.12605042016806722,119
+balance,C2_G1_Top_2,late chronic (day 30),"(50, 80]",0.02962962962962963,135
+balance,C2_G1_Top_2,late chronic (day 30),"(80, 150]",0.0,260
+balance,C2_G2_Bot_0,peak,"(0, 10]",0.48484848484848486,99
+balance,C2_G2_Bot_0,peak,"(10, 20]",0.2814070351758794,199
+balance,C2_G2_Bot_0,peak,"(20, 30]",0.08583690987124463,233
+balance,C2_G2_Bot_0,peak,"(30, 50]",0.09508196721311475,305
+balance,C2_G2_Bot_0,peak,"(50, 80]",0.0035335689045936395,283
+balance,C2_G2_Bot_0,peak,"(80, 150]",0.0,423
+balance,C2_G2_Bot_2,late chronic (day 30),"(0, 10]",0.2608695652173913,23
+balance,C2_G2_Bot_2,late chronic (day 30),"(10, 20]",0.34177215189873417,79
+balance,C2_G2_Bot_2,late chronic (day 30),"(20, 30]",0.10588235294117647,85
+balance,C2_G2_Bot_2,late chronic (day 30),"(30, 50]",0.008620689655172414,116
+balance,C2_G2_Bot_2,late chronic (day 30),"(50, 80]",0.0,121
+balance,C2_G2_Bot_2,late chronic (day 30),"(80, 150]",0.0,224
+balance,C2_G2_Mid_0,early chronic (day 16),"(0, 10]",0.5263157894736842,19
+balance,C2_G2_Mid_0,early chronic (day 16),"(10, 20]",0.26666666666666666,45
+balance,C2_G2_Mid_0,early chronic (day 16),"(20, 30]",0.1590909090909091,44
+balance,C2_G2_Mid_0,early chronic (day 16),"(30, 50]",0.0,69
+balance,C2_G2_Mid_0,early chronic (day 16),"(50, 80]",0.0,88
+balance,C2_G2_Mid_0,early chronic (day 16),"(80, 150]",0.0,120
+balance,C2_G2_Mid_1,early chronic (day 16),"(0, 10]",0.14457831325301204,83
+balance,C2_G2_Mid_1,early chronic (day 16),"(10, 20]",0.16428571428571428,140
+balance,C2_G2_Mid_1,early chronic (day 16),"(20, 30]",0.036036036036036036,111
+balance,C2_G2_Mid_1,early chronic (day 16),"(30, 50]",0.05789473684210526,190
+balance,C2_G2_Mid_1,early chronic (day 16),"(50, 80]",0.0,187
+balance,C2_G2_Mid_1,early chronic (day 16),"(80, 150]",0.0,389
+balance,C2_G2_Mid_2,CFA control,"(0, 10]",0.36363636363636365,11
+balance,C2_G2_Mid_2,CFA control,"(10, 20]",0.18181818181818182,11
+balance,C2_G2_Mid_2,CFA control,"(20, 30]",0.21428571428571427,14
+balance,C2_G2_Mid_2,CFA control,"(30, 50]",0.23076923076923078,13
+balance,C2_G2_Mid_2,CFA control,"(50, 80]",0.0,14
+balance,C2_G2_Mid_2,CFA control,"(80, 150]",0.0,27
+balance,C2_G2_Top_1,early chronic (day 16),"(0, 10]",0.4864864864864865,74
+balance,C2_G2_Top_1,early chronic (day 16),"(10, 20]",0.281767955801105,181
+balance,C2_G2_Top_1,early chronic (day 16),"(20, 30]",0.1346153846153846,208
+balance,C2_G2_Top_1,early chronic (day 16),"(30, 50]",0.00273224043715847,366
+balance,C2_G2_Top_1,early chronic (day 16),"(50, 80]",0.0106951871657754,374
+balance,C2_G2_Top_1,early chronic (day 16),"(80, 150]",0.0,724
+balance,C2_G2_Top_2,early chronic (day 16),"(0, 10]",0.23529411764705882,51
+balance,C2_G2_Top_2,early chronic (day 16),"(10, 20]",0.18487394957983194,119
+balance,C2_G2_Top_2,early chronic (day 16),"(20, 30]",0.05,80
+balance,C2_G2_Top_2,early chronic (day 16),"(30, 50]",0.04040404040404041,99
+balance,C2_G2_Top_2,early chronic (day 16),"(50, 80]",0.0449438202247191,89
+balance,C2_G2_Top_2,early chronic (day 16),"(80, 150]",0.0,93
+balance,C2_G3_Bot_0,early chronic (day 16),"(0, 10]",0.5185185185185185,81
+balance,C2_G3_Bot_0,early chronic (day 16),"(10, 20]",0.3482142857142857,112
+balance,C2_G3_Bot_0,early chronic (day 16),"(20, 30]",0.176056338028169,142
+balance,C2_G3_Bot_0,early chronic (day 16),"(30, 50]",0.021052631578947368,190
+balance,C2_G3_Bot_0,early chronic (day 16),"(50, 80]",0.0056179775280898875,178
+balance,C2_G3_Bot_0,early chronic (day 16),"(80, 150]",0.0,288
+balance,C2_G3_Bot_2,late chronic (day 30),"(0, 10]",0.5111111111111111,45
+balance,C2_G3_Bot_2,late chronic (day 30),"(10, 20]",0.5192307692307693,52
+balance,C2_G3_Bot_2,late chronic (day 30),"(20, 30]",0.19607843137254902,102
+balance,C2_G3_Bot_2,late chronic (day 30),"(30, 50]",0.10679611650485436,206
+balance,C2_G3_Bot_2,late chronic (day 30),"(50, 80]",0.02,300
+balance,C2_G3_Bot_2,late chronic (day 30),"(80, 150]",0.0,515
+balance,C2_G3_Mid_0,early chronic (day 16),"(0, 10]",0.4296875,128
+balance,C2_G3_Mid_0,early chronic (day 16),"(10, 20]",0.325,160
+balance,C2_G3_Mid_0,early chronic (day 16),"(20, 30]",0.2962962962962963,189
+balance,C2_G3_Mid_0,early chronic (day 16),"(30, 50]",0.15625,288
+balance,C2_G3_Mid_0,early chronic (day 16),"(50, 80]",0.05405405405405406,259
+balance,C2_G3_Mid_0,early chronic (day 16),"(80, 150]",0.0022026431718061676,454
+balance,C2_G3_Mid_2,early chronic (day 16),"(0, 10]",0.8461538461538461,13
+balance,C2_G3_Mid_2,early chronic (day 16),"(10, 20]",0.46153846153846156,39
+balance,C2_G3_Mid_2,early chronic (day 16),"(20, 30]",0.15555555555555556,45
+balance,C2_G3_Mid_2,early chronic (day 16),"(30, 50]",0.05952380952380952,84
+balance,C2_G3_Mid_2,early chronic (day 16),"(50, 80]",0.0,108
+balance,C2_G3_Mid_2,early chronic (day 16),"(80, 150]",0.0,220
+balance,C2_G3_Top_0,peak,"(0, 10]",0.46215139442231074,251
+balance,C2_G3_Top_0,peak,"(10, 20]",0.2809278350515464,388
+balance,C2_G3_Top_0,peak,"(20, 30]",0.1455026455026455,378
+balance,C2_G3_Top_0,peak,"(30, 50]",0.12374581939799331,598
+balance,C2_G3_Top_0,peak,"(50, 80]",0.05189620758483034,501
+balance,C2_G3_Top_0,peak,"(80, 150]",0.0,643
+balance,C2_G3_Top_1,CFA control,"(0, 10]",0.3333333333333333,21
+balance,C2_G3_Top_1,CFA control,"(10, 20]",0.045454545454545456,22
+balance,C2_G3_Top_1,CFA control,"(20, 30]",0.0,10
+balance,C2_G3_Top_1,CFA control,"(30, 50]",0.1,20
+balance,C2_G3_Top_1,CFA control,"(50, 80]",0.07692307692307693,13
+balance,C2_G3_Top_1,CFA control,"(80, 150]",0.0,37
+balance,C2_G3_Top_2,pre-symptomatic,"(0, 10]",0.25,16
+balance,C2_G3_Top_2,pre-symptomatic,"(10, 20]",0.16666666666666666,18
+balance,C2_G3_Top_2,pre-symptomatic,"(20, 30]",0.0,4
+balance,C2_G3_Top_2,pre-symptomatic,"(30, 50]",0.4,15
+balance,C2_G3_Top_2,pre-symptomatic,"(50, 80]",0.2222222222222222,9
+balance,C2_G3_Top_2,pre-symptomatic,"(80, 150]",0.0,12
+balance,G3_L1_0,pre-symptomatic,"(0, 10]",0.13333333333333333,15
+balance,G3_L1_0,pre-symptomatic,"(10, 20]",0.0,19
+balance,G3_L1_0,pre-symptomatic,"(20, 30]",0.09090909090909091,11
+balance,G3_L1_0,pre-symptomatic,"(30, 50]",0.0,6
+balance,G3_L1_0,pre-symptomatic,"(50, 80]",0.0,7
+balance,G3_L1_0,pre-symptomatic,"(80, 150]",0.0,4
+balance,G3_L1_1,peak,"(0, 10]",0.3602150537634409,186
+balance,G3_L1_1,peak,"(10, 20]",0.2879746835443038,316
+balance,G3_L1_1,peak,"(20, 30]",0.19543973941368079,307
+balance,G3_L1_1,peak,"(30, 50]",0.05235602094240838,573
+balance,G3_L1_1,peak,"(50, 80]",0.007849293563579277,637
+balance,G3_L1_1,peak,"(80, 150]",0.001813236627379873,1103
+balance,G3_L1_2,onset,"(0, 10]",0.19718309859154928,71
+balance,G3_L1_2,onset,"(10, 20]",0.24489795918367346,147
+balance,G3_L1_2,onset,"(20, 30]",0.0967741935483871,93
+balance,G3_L1_2,onset,"(30, 50]",0.0896551724137931,145
+balance,G3_L1_2,onset,"(50, 80]",0.059782608695652176,184
+balance,G3_L1_2,onset,"(80, 150]",0.09523809523809523,210
+balance,G3_L2_0,pre-symptomatic,"(0, 10]",0.125,8
+balance,G3_L2_0,pre-symptomatic,"(10, 20]",0.125,16
+balance,G3_L2_0,pre-symptomatic,"(20, 30]",0.0,10
+balance,G3_L2_0,pre-symptomatic,"(30, 50]",0.0,5
+balance,G3_L2_0,pre-symptomatic,"(50, 80]",0.0,7
+balance,G3_L2_0,pre-symptomatic,"(80, 150]",0.0,11
+balance,G3_L2_1,onset,"(0, 10]",0.3902439024390244,82
+balance,G3_L2_1,onset,"(10, 20]",0.2824427480916031,131
+balance,G3_L2_1,onset,"(20, 30]",0.23170731707317074,82
+balance,G3_L2_1,onset,"(30, 50]",0.15294117647058825,85
+balance,G3_L2_1,onset,"(50, 80]",0.11224489795918367,98
+balance,G3_L2_1,onset,"(80, 150]",0.11888111888111888,143
+balance,G3_L2_2,peak,"(0, 10]",0.3900709219858156,141
+balance,G3_L2_2,peak,"(10, 20]",0.3466666666666667,225
+balance,G3_L2_2,peak,"(20, 30]",0.23333333333333334,180
+balance,G3_L2_2,peak,"(30, 50]",0.09565217391304348,230
+balance,G3_L2_2,peak,"(50, 80]",0.004629629629629629,216
+balance,G3_L2_2,peak,"(80, 150]",0.0,511
+balance,G3_L3_0,pre-symptomatic,"(0, 10]",0.2222222222222222,9
+balance,G3_L3_0,pre-symptomatic,"(10, 20]",0.16666666666666666,12
+balance,G3_L3_0,pre-symptomatic,"(20, 30]",0.0,4
+balance,G3_L3_0,pre-symptomatic,"(30, 50]",0.0,4
+balance,G3_L3_0,pre-symptomatic,"(50, 80]",0.0,9
+balance,G3_L3_0,pre-symptomatic,"(80, 150]",0.0,17
+balance,G3_L3_1,onset,"(0, 10]",0.5263157894736842,38
+balance,G3_L3_1,onset,"(10, 20]",0.3137254901960784,51
+balance,G3_L3_1,onset,"(20, 30]",0.17647058823529413,34
+balance,G3_L3_1,onset,"(30, 50]",0.29411764705882354,17
+balance,G3_L3_1,onset,"(50, 80]",0.07692307692307693,39
+balance,G3_L3_1,onset,"(80, 150]",0.0,40
+balance,G3_L3_2,peak,"(0, 10]",0.30666666666666664,150
+balance,G3_L3_2,peak,"(10, 20]",0.26996197718631176,263
+balance,G3_L3_2,peak,"(20, 30]",0.12244897959183673,196
+balance,G3_L3_2,peak,"(30, 50]",0.06578947368421052,304
+balance,G3_L3_2,peak,"(50, 80]",0.036939313984168866,379
+balance,G3_L3_2,peak,"(80, 150]",0.0,730
+balance,G4_L1_0,late chronic (day 30),"(0, 10]",0.2608695652173913,46
+balance,G4_L1_0,late chronic (day 30),"(10, 20]",0.18269230769230768,104
+balance,G4_L1_0,late chronic (day 30),"(20, 30]",0.030612244897959183,98
+balance,G4_L1_0,late chronic (day 30),"(30, 50]",0.014705882352941176,136
+balance,G4_L1_0,late chronic (day 30),"(50, 80]",0.0,174
+balance,G4_L1_0,late chronic (day 30),"(80, 150]",0.0,288
+balance,G4_L1_1,CFA control,"(0, 10]",0.0,10
+balance,G4_L1_1,CFA control,"(10, 20]",0.07692307692307693,13
+balance,G4_L1_1,CFA control,"(20, 30]",0.0,9
+balance,G4_L1_1,CFA control,"(30, 50]",0.0,8
+balance,G4_L1_1,CFA control,"(50, 80]",0.0,13
+balance,G4_L1_1,CFA control,"(80, 150]",0.0,21
+balance,G4_L1_2,late chronic (day 30),"(0, 10]",0.1836734693877551,49
+balance,G4_L1_2,late chronic (day 30),"(10, 20]",0.07692307692307693,78
+balance,G4_L1_2,late chronic (day 30),"(20, 30]",0.14814814814814814,54
+balance,G4_L1_2,late chronic (day 30),"(30, 50]",0.0,92
+balance,G4_L1_2,late chronic (day 30),"(50, 80]",0.0,110
+balance,G4_L1_2,late chronic (day 30),"(80, 150]",0.0,190
+balance,G4_L2_0,late chronic (day 30),"(0, 10]",0.2222222222222222,63
+balance,G4_L2_0,late chronic (day 30),"(10, 20]",0.06896551724137931,116
+balance,G4_L2_0,late chronic (day 30),"(20, 30]",0.02654867256637168,113
+balance,G4_L2_0,late chronic (day 30),"(30, 50]",0.015037593984962405,133
+balance,G4_L2_0,late chronic (day 30),"(50, 80]",0.015267175572519083,131
+balance,G4_L2_0,late chronic (day 30),"(80, 150]",0.012738853503184714,314
+balance,G4_L2_1,late chronic (day 30),"(0, 10]",0.5161290322580645,93
+balance,G4_L2_1,late chronic (day 30),"(10, 20]",0.2988505747126437,174
+balance,G4_L2_1,late chronic (day 30),"(20, 30]",0.1388888888888889,144
+balance,G4_L2_1,late chronic (day 30),"(30, 50]",0.12440191387559808,209
+balance,G4_L2_1,late chronic (day 30),"(50, 80]",0.00847457627118644,236
+balance,G4_L2_1,late chronic (day 30),"(80, 150]",0.0,258
+balance,G4_L2_2,CFA control,"(0, 10]",0.16666666666666666,12
+balance,G4_L2_2,CFA control,"(10, 20]",0.125,16
+balance,G4_L2_2,CFA control,"(20, 30]",0.0,6
+balance,G4_L2_2,CFA control,"(30, 50]",0.0,10
+balance,G4_L2_2,CFA control,"(50, 80]",0.0,12
+balance,G4_L2_2,CFA control,"(80, 150]",0.0,14
+balance,G4_L3_0,late chronic (day 30),"(0, 10]",0.525,40
+balance,G4_L3_0,late chronic (day 30),"(10, 20]",0.4318181818181818,88
+balance,G4_L3_0,late chronic (day 30),"(20, 30]",0.1651376146788991,109
+balance,G4_L3_0,late chronic (day 30),"(30, 50]",0.04242424242424243,165
+balance,G4_L3_0,late chronic (day 30),"(50, 80]",0.00909090909090909,220
+balance,G4_L3_0,late chronic (day 30),"(80, 150]",0.0,617
+balance,G4_L3_1,onset,"(0, 10]",0.5344827586206896,58
+balance,G4_L3_1,onset,"(10, 20]",0.27522935779816515,109
+balance,G4_L3_1,onset,"(20, 30]",0.3333333333333333,96
+balance,G4_L3_1,onset,"(30, 50]",0.2403846153846154,104
+balance,G4_L3_1,onset,"(50, 80]",0.012658227848101266,79
+balance,G4_L3_1,onset,"(80, 150]",0.0,130
+balance,G4_L3_2,CFA control,"(0, 10]",0.16666666666666666,12
+balance,G4_L3_2,CFA control,"(10, 20]",0.3157894736842105,19
+balance,G4_L3_2,CFA control,"(20, 30]",0.08333333333333333,12
+balance,G4_L3_2,CFA control,"(30, 50]",0.0625,16
+balance,G4_L3_2,CFA control,"(50, 80]",0.0,13
+balance,G4_L3_2,CFA control,"(80, 150]",0.0,35
+balance,G5_L1_0,pre-symptomatic,"(0, 10]",1.0,3
+balance,G5_L1_0,pre-symptomatic,"(10, 20]",0.4444444444444444,9
+balance,G5_L1_0,pre-symptomatic,"(20, 30]",0.0,5
+balance,G5_L1_0,pre-symptomatic,"(30, 50]",0.0,9
+balance,G5_L1_0,pre-symptomatic,"(50, 80]",0.0,6
+balance,G5_L1_0,pre-symptomatic,"(80, 150]",0.0,8
+balance,G5_L1_1,peak,"(0, 10]",0.23809523809523808,42
+balance,G5_L1_1,peak,"(10, 20]",0.2033898305084746,118
+balance,G5_L1_1,peak,"(20, 30]",0.16666666666666666,126
+balance,G5_L1_1,peak,"(30, 50]",0.24503311258278146,151
+balance,G5_L1_1,peak,"(50, 80]",0.10569105691056911,123
+balance,G5_L1_1,peak,"(80, 150]",0.01744186046511628,172
+balance,G5_L1_2,onset,"(0, 10]",0.39344262295081966,61
+balance,G5_L1_2,onset,"(10, 20]",0.1188118811881188,101
+balance,G5_L1_2,onset,"(20, 30]",0.32142857142857145,56
+balance,G5_L1_2,onset,"(30, 50]",0.22857142857142856,35
+balance,G5_L1_2,onset,"(50, 80]",0.13559322033898305,59
+balance,G5_L1_2,onset,"(80, 150]",0.0,83
+balance,G5_L2_0,pre-symptomatic,"(0, 10]",0.5,4
+balance,G5_L2_0,pre-symptomatic,"(10, 20]",0.2,10
+balance,G5_L2_0,pre-symptomatic,"(20, 30]",0.0,9
+balance,G5_L2_0,pre-symptomatic,"(30, 50]",0.0,5
+balance,G5_L2_0,pre-symptomatic,"(50, 80]",0.0,12
+balance,G5_L2_0,pre-symptomatic,"(80, 150]",0.0,19
+balance,G5_L2_1,onset,"(0, 10]",0.38636363636363635,44
+balance,G5_L2_1,onset,"(10, 20]",0.3368421052631579,95
+balance,G5_L2_1,onset,"(20, 30]",0.2073170731707317,82
+balance,G5_L2_1,onset,"(30, 50]",0.02857142857142857,105
+balance,G5_L2_1,onset,"(50, 80]",0.0,61
+balance,G5_L2_1,onset,"(80, 150]",0.0,82
+balance,G5_L2_2,peak,"(0, 10]",0.40816326530612246,98
+balance,G5_L2_2,peak,"(10, 20]",0.1507537688442211,199
+balance,G5_L2_2,peak,"(20, 30]",0.035211267605633804,142
+balance,G5_L2_2,peak,"(30, 50]",0.011904761904761904,168
+balance,G5_L2_2,peak,"(50, 80]",0.0,159
+balance,G5_L2_2,peak,"(80, 150]",0.0,369
+balance,G5_L3_0,pre-symptomatic,"(0, 10]",0.5833333333333334,12
+balance,G5_L3_0,pre-symptomatic,"(10, 20]",0.17647058823529413,17
+balance,G5_L3_0,pre-symptomatic,"(20, 30]",0.07142857142857142,14
+balance,G5_L3_0,pre-symptomatic,"(30, 50]",0.0,16
+balance,G5_L3_0,pre-symptomatic,"(50, 80]",0.0,22
+balance,G5_L3_0,pre-symptomatic,"(80, 150]",0.0,22
+balance,G5_L3_1,onset,"(0, 10]",0.42105263157894735,19
+balance,G5_L3_1,onset,"(10, 20]",0.4883720930232558,43
+balance,G5_L3_1,onset,"(20, 30]",0.4444444444444444,18
+balance,G5_L3_1,onset,"(30, 50]",0.125,16
+balance,G5_L3_1,onset,"(50, 80]",0.0,15
+balance,G5_L3_1,onset,"(80, 150]",0.0,27
+balance,G5_L3_2,peak,"(0, 10]",0.4827586206896552,87
+balance,G5_L3_2,peak,"(10, 20]",0.1952662721893491,169
+balance,G5_L3_2,peak,"(20, 30]",0.1267605633802817,142
+balance,G5_L3_2,peak,"(30, 50]",0.05426356589147287,129
+balance,G5_L3_2,peak,"(50, 80]",0.0,146
+balance,G5_L3_2,peak,"(80, 150]",0.0,271
+balance,G6_L1_0,late chronic (day 30),"(0, 10]",0.6296296296296297,27
+balance,G6_L1_0,late chronic (day 30),"(10, 20]",0.3088235294117647,68
+balance,G6_L1_0,late chronic (day 30),"(20, 30]",0.09836065573770492,61
+balance,G6_L1_0,late chronic (day 30),"(30, 50]",0.0594059405940594,101
+balance,G6_L1_0,late chronic (day 30),"(50, 80]",0.0,95
+balance,G6_L1_0,late chronic (day 30),"(80, 150]",0.0,244
+balance,G6_L1_1,late chronic (day 30),"(0, 10]",0.5714285714285714,21
+balance,G6_L1_1,late chronic (day 30),"(10, 20]",0.3191489361702128,47
+balance,G6_L1_1,late chronic (day 30),"(20, 30]",0.1,50
+balance,G6_L1_1,late chronic (day 30),"(30, 50]",0.023255813953488372,86
+balance,G6_L1_1,late chronic (day 30),"(50, 80]",0.0,107
+balance,G6_L1_1,late chronic (day 30),"(80, 150]",0.0,231
+balance,G6_L1_2,late chronic (day 30),"(0, 10]",0.2692307692307692,26
+balance,G6_L1_2,late chronic (day 30),"(10, 20]",0.078125,64
+balance,G6_L1_2,late chronic (day 30),"(20, 30]",0.06060606060606061,33
+balance,G6_L1_2,late chronic (day 30),"(30, 50]",0.03409090909090909,88
+balance,G6_L1_2,late chronic (day 30),"(50, 80]",0.0,86
+balance,G6_L1_2,late chronic (day 30),"(80, 150]",0.0,176
+balance,G6_L2_0,onset,"(0, 10]",0.3409090909090909,44
+balance,G6_L2_0,onset,"(10, 20]",0.33783783783783783,74
+balance,G6_L2_0,onset,"(20, 30]",0.10294117647058823,68
+balance,G6_L2_0,onset,"(30, 50]",0.015625,64
+balance,G6_L2_0,onset,"(50, 80]",0.0,36
+balance,G6_L2_0,onset,"(80, 150]",0.0,65
+balance,G6_L2_1,late chronic (day 30),"(0, 10]",0.1875,16
+balance,G6_L2_1,late chronic (day 30),"(10, 20]",0.24444444444444444,45
+balance,G6_L2_1,late chronic (day 30),"(20, 30]",0.09090909090909091,33
+balance,G6_L2_1,late chronic (day 30),"(30, 50]",0.0,58
+balance,G6_L2_1,late chronic (day 30),"(50, 80]",0.0,101
+balance,G6_L2_1,late chronic (day 30),"(80, 150]",0.0,199
+balance,G6_L2_2,CFA control,"(0, 10]",0.0,4
+balance,G6_L2_2,CFA control,"(10, 20]",0.0,5
+balance,G6_L2_2,CFA control,"(20, 30]",0.0,3
+balance,G6_L2_2,CFA control,"(30, 50]",0.0,2
+balance,G6_L2_2,CFA control,"(50, 80]",0.0,12
+balance,G6_L2_2,CFA control,"(80, 150]",0.0,15
+balance,G6_L3_0,CFA control,"(0, 10]",0.0,6
+balance,G6_L3_0,CFA control,"(10, 20]",0.05555555555555555,18
+balance,G6_L3_0,CFA control,"(20, 30]",0.0,7
+balance,G6_L3_0,CFA control,"(30, 50]",0.0,8
+balance,G6_L3_0,CFA control,"(50, 80]",0.0,9
+balance,G6_L3_0,CFA control,"(80, 150]",0.07692307692307693,13
+balance,G6_L3_1,CFA control,"(0, 10]",0.1111111111111111,9
+balance,G6_L3_1,CFA control,"(10, 20]",0.0,16
+balance,G6_L3_1,CFA control,"(20, 30]",0.0,7
+balance,G6_L3_1,CFA control,"(30, 50]",0.0,5
+balance,G6_L3_1,CFA control,"(50, 80]",0.0,8
+balance,G6_L3_1,CFA control,"(80, 150]",0.11764705882352941,17
+balance,G6_L3_2,late chronic (day 30),"(0, 10]",0.5555555555555556,9
+balance,G6_L3_2,late chronic (day 30),"(10, 20]",0.34375,32
+balance,G6_L3_2,late chronic (day 30),"(20, 30]",0.02,50
+balance,G6_L3_2,late chronic (day 30),"(30, 50]",0.07407407407407407,54
+balance,G6_L3_2,late chronic (day 30),"(50, 80]",0.014705882352941176,68
+balance,G6_L3_2,late chronic (day 30),"(80, 150]",0.0,187
+balance,S1_B1_0,remission,"(0, 10]",0.6349206349206349,126
+balance,S1_B1_0,remission,"(10, 20]",0.4900398406374502,251
+balance,S1_B1_0,remission,"(20, 30]",0.10900473933649289,211
+balance,S1_B1_0,remission,"(30, 50]",0.025,360
+balance,S1_B1_0,remission,"(50, 80]",0.09090909090909091,220
+balance,S1_B1_0,remission,"(80, 150]",0.004484304932735426,223
+balance,S1_B1_1,peak,"(0, 10]",0.5918367346938775,98
+balance,S1_B1_1,peak,"(10, 20]",0.36046511627906974,172
+balance,S1_B1_1,peak,"(20, 30]",0.16826923076923078,208
+balance,S1_B1_1,peak,"(30, 50]",0.03896103896103896,308
+balance,S1_B1_1,peak,"(50, 80]",0.0,283
+balance,S1_B1_1,peak,"(80, 150]",0.0,503
+balance,S1_B1_2,onset,"(0, 10]",0.3275862068965517,58
+balance,S1_B1_2,onset,"(10, 20]",0.21666666666666667,120
+balance,S1_B1_2,onset,"(20, 30]",0.3068181818181818,88
+balance,S1_B1_2,onset,"(30, 50]",0.2857142857142857,112
+balance,S1_B1_2,onset,"(50, 80]",0.2426470588235294,136
+balance,S1_B1_2,onset,"(80, 150]",0.12544802867383512,279
+balance,S1_B2_0,peak,"(0, 10]",0.6875,128
+balance,S1_B2_0,peak,"(10, 20]",0.5205479452054794,219
+balance,S1_B2_0,peak,"(20, 30]",0.2905982905982906,234
+balance,S1_B2_0,peak,"(30, 50]",0.174496644295302,298
+balance,S1_B2_0,peak,"(50, 80]",0.04838709677419355,248
+balance,S1_B2_0,peak,"(80, 150]",0.0,266
+balance,S1_B2_1,onset,"(0, 10]",1.0,16
+balance,S1_B2_1,onset,"(10, 20]",0.6122448979591837,49
+balance,S1_B2_1,onset,"(20, 30]",0.04,50
+balance,S1_B2_1,onset,"(30, 50]",0.1,40
+balance,S1_B2_1,onset,"(50, 80]",0.0,27
+balance,S1_B2_1,onset,"(80, 150]",0.0,57
+balance,S1_B2_2,remission,"(0, 10]",0.32116788321167883,137
+balance,S1_B2_2,remission,"(10, 20]",0.44280442804428044,271
+balance,S1_B2_2,remission,"(20, 30]",0.48186528497409326,193
+balance,S1_B2_2,remission,"(30, 50]",0.2072072072072072,222
+balance,S1_B2_2,remission,"(50, 80]",0.0,172
+balance,S1_B2_2,remission,"(80, 150]",0.0,277
+balance,S1_B3_0,onset,"(0, 10]",0.2777777777777778,18
+balance,S1_B3_0,onset,"(10, 20]",0.2777777777777778,18
+balance,S1_B3_0,onset,"(20, 30]",0.05263157894736842,19
+balance,S1_B3_0,onset,"(30, 50]",0.08695652173913043,23
+balance,S1_B3_0,onset,"(50, 80]",0.03125,32
+balance,S1_B3_0,onset,"(80, 150]",0.0,39
+balance,S1_B3_1,remission,"(0, 10]",0.6013071895424836,153
+balance,S1_B3_1,remission,"(10, 20]",0.5254237288135594,295
+balance,S1_B3_1,remission,"(20, 30]",0.2217741935483871,248
+balance,S1_B3_1,remission,"(30, 50]",0.020618556701030927,291
+balance,S1_B3_1,remission,"(50, 80]",0.004484304932735426,223
+balance,S1_B3_1,remission,"(80, 150]",0.0,330
+balance,S1_B3_2,peak,"(0, 10]",0.336734693877551,98
+balance,S1_B3_2,peak,"(10, 20]",0.27586206896551724,174
+balance,S1_B3_2,peak,"(20, 30]",0.1319796954314721,197
+balance,S1_B3_2,peak,"(30, 50]",0.07636363636363637,275
+balance,S1_B3_2,peak,"(50, 80]",0.016194331983805668,247
+balance,S1_B3_2,peak,"(80, 150]",0.0,332
+balance,S1_T1_0,late,"(0, 10]",0.4583333333333333,24
+balance,S1_T1_0,late,"(10, 20]",0.2972972972972973,74
+balance,S1_T1_0,late,"(20, 30]",0.05263157894736842,76
+balance,S1_T1_0,late,"(30, 50]",0.075,80
+balance,S1_T1_0,late,"(50, 80]",0.0,79
+balance,S1_T1_0,late,"(80, 150]",0.0,81
+balance,S1_T1_1,CFA control,"(0, 10]",0.16666666666666666,6
+balance,S1_T1_1,CFA control,"(10, 20]",0.09090909090909091,11
+balance,S1_T1_1,CFA control,"(20, 30]",0.0,3
+balance,S1_T1_1,CFA control,"(30, 50]",0.0,5
+balance,S1_T1_1,CFA control,"(50, 80]",0.0,14
+balance,S1_T1_1,CFA control,"(80, 150]",0.0,23
+balance,S1_T1_2,CFA control,"(0, 10]",0.0,12
+balance,S1_T1_2,CFA control,"(10, 20]",0.17647058823529413,17
+balance,S1_T1_2,CFA control,"(20, 30]",0.3,10
+balance,S1_T1_2,CFA control,"(30, 50]",0.19230769230769232,26
+balance,S1_T1_2,CFA control,"(50, 80]",0.0,14
+balance,S1_T1_2,CFA control,"(80, 150]",0.0,19
+balance,S1_T2_0,peak,"(0, 10]",0.234375,128
+balance,S1_T2_0,peak,"(10, 20]",0.18614718614718614,231
+balance,S1_T2_0,peak,"(20, 30]",0.295,200
+balance,S1_T2_0,peak,"(30, 50]",0.17295597484276728,318
+balance,S1_T2_0,peak,"(50, 80]",0.03859649122807018,285
+balance,S1_T2_0,peak,"(80, 150]",0.015945330296127564,439
+balance,S1_T2_1,CFA control,"(0, 10]",0.3076923076923077,13
+balance,S1_T2_1,CFA control,"(10, 20]",0.0,13
+balance,S1_T2_1,CFA control,"(20, 30]",0.3333333333333333,3
+balance,S1_T2_1,CFA control,"(30, 50]",0.0,4
+balance,S1_T2_1,CFA control,"(50, 80]",0.0,12
+balance,S1_T2_1,CFA control,"(80, 150]",0.0,23
+balance,S1_T2_2,late,"(0, 10]",0.15384615384615385,65
+balance,S1_T2_2,late,"(10, 20]",0.0989010989010989,91
+balance,S1_T2_2,late,"(20, 30]",0.05454545454545454,55
+balance,S1_T2_2,late,"(30, 50]",0.11290322580645161,62
+balance,S1_T2_2,late,"(50, 80]",0.02564102564102564,39
+balance,S1_T2_2,late,"(80, 150]",0.0,85
+balance,S1_T3_0,peak,"(0, 10]",0.4857142857142857,210
+balance,S1_T3_0,peak,"(10, 20]",0.2811791383219955,441
+balance,S1_T3_0,peak,"(20, 30]",0.11188811188811189,429
+balance,S1_T3_0,peak,"(30, 50]",0.05324459234608985,601
+balance,S1_T3_0,peak,"(50, 80]",0.03302752293577982,545
+balance,S1_T3_0,peak,"(80, 150]",0.0,784
+balance,S1_T3_1,late,"(0, 10]",0.3469387755102041,49
+balance,S1_T3_1,late,"(10, 20]",0.2702702702702703,74
+balance,S1_T3_1,late,"(20, 30]",0.1744186046511628,86
+balance,S1_T3_1,late,"(30, 50]",0.041666666666666664,96
+balance,S1_T3_1,late,"(50, 80]",0.0,101
+balance,S1_T3_1,late,"(80, 150]",0.006134969325153374,163
+balance,S1_T3_2,peak,"(0, 10]",0.29508196721311475,122
+balance,S1_T3_2,peak,"(10, 20]",0.17391304347826086,253
+balance,S1_T3_2,peak,"(20, 30]",0.047619047619047616,231
+balance,S1_T3_2,peak,"(30, 50]",0.02181818181818182,275
+balance,S1_T3_2,peak,"(50, 80]",0.027649769585253458,217
+balance,S1_T3_2,peak,"(80, 150]",0.02364864864864865,296
+balance,S2_B1_0,onset,"(0, 10]",0.3191489361702128,47
+balance,S2_B1_0,onset,"(10, 20]",0.2714285714285714,70
+balance,S2_B1_0,onset,"(20, 30]",0.14285714285714285,42
+balance,S2_B1_0,onset,"(30, 50]",0.020833333333333332,48
+balance,S2_B1_0,onset,"(50, 80]",0.0,58
+balance,S2_B1_0,onset,"(80, 150]",0.0,150
+balance,S2_B1_1,peak,"(0, 10]",0.37142857142857144,140
+balance,S2_B1_1,peak,"(10, 20]",0.3237410071942446,278
+balance,S2_B1_1,peak,"(20, 30]",0.15542521994134897,341
+balance,S2_B1_1,peak,"(30, 50]",0.0425531914893617,376
+balance,S2_B1_1,peak,"(50, 80]",0.0,280
+balance,S2_B1_1,peak,"(80, 150]",0.0,415
+balance,S2_B1_2,onset,"(0, 10]",0.35294117647058826,17
+balance,S2_B1_2,onset,"(10, 20]",0.21428571428571427,28
+balance,S2_B1_2,onset,"(20, 30]",0.23076923076923078,26
+balance,S2_B1_2,onset,"(30, 50]",0.1891891891891892,37
+balance,S2_B1_2,onset,"(50, 80]",0.0,39
+balance,S2_B1_2,onset,"(80, 150]",0.0,74
+balance,S2_B2_0,peak,"(0, 10]",0.4666666666666667,105
+balance,S2_B2_0,peak,"(10, 20]",0.49700598802395207,167
+balance,S2_B2_0,peak,"(20, 30]",0.3279569892473118,186
+balance,S2_B2_0,peak,"(30, 50]",0.03873239436619718,284
+balance,S2_B2_0,peak,"(50, 80]",0.0,282
+balance,S2_B2_0,peak,"(80, 150]",0.0,368
+balance,S2_B2_1,late,"(0, 10]",0.3717948717948718,78
+balance,S2_B2_1,late,"(10, 20]",0.3425414364640884,181
+balance,S2_B2_1,late,"(20, 30]",0.1949685534591195,159
+balance,S2_B2_1,late,"(30, 50]",0.013888888888888888,144
+balance,S2_B2_1,late,"(50, 80]",0.0,124
+balance,S2_B2_1,late,"(80, 150]",0.0,155
+balance,S2_B2_2,late,"(0, 10]",0.4222222222222222,90
+balance,S2_B2_2,late,"(10, 20]",0.3033175355450237,211
+balance,S2_B2_2,late,"(20, 30]",0.09803921568627451,204
+balance,S2_B2_2,late,"(30, 50]",0.05327868852459016,244
+balance,S2_B2_2,late,"(50, 80]",0.08641975308641975,243
+balance,S2_B2_2,late,"(80, 150]",0.03260869565217391,368
+balance,S2_B3_0,onset,"(0, 10]",0.47540983606557374,61
+balance,S2_B3_0,onset,"(10, 20]",0.23404255319148937,94
+balance,S2_B3_0,onset,"(20, 30]",0.15151515151515152,66
+balance,S2_B3_0,onset,"(30, 50]",0.24271844660194175,103
+balance,S2_B3_0,onset,"(50, 80]",0.08888888888888889,135
+balance,S2_B3_0,onset,"(80, 150]",0.004784688995215311,209
+balance,S2_B3_1,late,"(0, 10]",0.4166666666666667,84
+balance,S2_B3_1,late,"(10, 20]",0.39069767441860465,215
+balance,S2_B3_1,late,"(20, 30]",0.18032786885245902,183
+balance,S2_B3_1,late,"(30, 50]",0.09950248756218906,201
+balance,S2_B3_1,late,"(50, 80]",0.016877637130801686,237
+balance,S2_B3_1,late,"(80, 150]",0.012195121951219513,328
+balance,S2_B3_2,peak,"(0, 10]",0.5283018867924528,106
+balance,S2_B3_2,peak,"(10, 20]",0.47619047619047616,189
+balance,S2_B3_2,peak,"(20, 30]",0.34507042253521125,142
+balance,S2_B3_2,peak,"(30, 50]",0.1073170731707317,205
+balance,S2_B3_2,peak,"(50, 80]",0.02247191011235955,178
+balance,S2_B3_2,peak,"(80, 150]",0.0,313
+balance,S2_T1_0,remission,"(0, 10]",0.5973451327433629,226
+balance,S2_T1_0,remission,"(10, 20]",0.491183879093199,397
+balance,S2_T1_0,remission,"(20, 30]",0.2436548223350254,394
+balance,S2_T1_0,remission,"(30, 50]",0.022429906542056073,535
+balance,S2_T1_0,remission,"(50, 80]",0.026936026936026935,594
+balance,S2_T1_0,remission,"(80, 150]",0.0,921
+balance,S2_T1_1,CFA control,"(0, 10]",0.125,16
+balance,S2_T1_1,CFA control,"(10, 20]",0.15384615384615385,26
+balance,S2_T1_1,CFA control,"(20, 30]",0.1111111111111111,9
+balance,S2_T1_1,CFA control,"(30, 50]",0.1111111111111111,9
+balance,S2_T1_1,CFA control,"(50, 80]",0.0,15
+balance,S2_T1_1,CFA control,"(80, 150]",0.0,21
+balance,S2_T1_2,CFA control,"(0, 10]",0.0,15
+balance,S2_T1_2,CFA control,"(10, 20]",0.15,20
+balance,S2_T1_2,CFA control,"(20, 30]",0.0,11
+balance,S2_T1_2,CFA control,"(30, 50]",0.0,20
+balance,S2_T1_2,CFA control,"(50, 80]",0.0,10
+balance,S2_T1_2,CFA control,"(80, 150]",0.0,33
+balance,S2_T2_0,peak,"(0, 10]",0.6931818181818182,176
+balance,S2_T2_0,peak,"(10, 20]",0.5486725663716814,339
+balance,S2_T2_0,peak,"(20, 30]",0.2920892494929006,493
+balance,S2_T2_0,peak,"(30, 50]",0.10040705563093623,737
+balance,S2_T2_0,peak,"(50, 80]",0.005025125628140704,796
+balance,S2_T2_0,peak,"(80, 150]",0.0,1204
+balance,S2_T2_1,CFA control,"(0, 10]",0.3333333333333333,9
+balance,S2_T2_1,CFA control,"(10, 20]",0.08333333333333333,12
+balance,S2_T2_1,CFA control,"(20, 30]",0.0,5
+balance,S2_T2_1,CFA control,"(30, 50]",0.0,4
+balance,S2_T2_1,CFA control,"(50, 80]",0.0,7
+balance,S2_T2_1,CFA control,"(80, 150]",0.0,13
+balance,S2_T2_2,remission,"(0, 10]",0.2911392405063291,79
+balance,S2_T2_2,remission,"(10, 20]",0.43478260869565216,138
+balance,S2_T2_2,remission,"(20, 30]",0.45751633986928103,153
+balance,S2_T2_2,remission,"(30, 50]",0.11442786069651742,201
+balance,S2_T2_2,remission,"(50, 80]",0.007874015748031496,127
+balance,S2_T2_2,remission,"(80, 150]",0.027972027972027972,143
+balance,S2_T3_0,peak,"(0, 10]",0.2978723404255319,47
+balance,S2_T3_0,peak,"(10, 20]",0.16666666666666666,108
+balance,S2_T3_0,peak,"(20, 30]",0.06363636363636363,110
+balance,S2_T3_0,peak,"(30, 50]",0.07142857142857142,126
+balance,S2_T3_0,peak,"(50, 80]",0.09345794392523364,107
+balance,S2_T3_0,peak,"(80, 150]",0.0,143
+balance,S2_T3_1,peak,"(0, 10]",0.6610169491525424,118
+balance,S2_T3_1,peak,"(10, 20]",0.34050179211469533,279
+balance,S2_T3_1,peak,"(20, 30]",0.25925925925925924,243
+balance,S2_T3_1,peak,"(30, 50]",0.0311284046692607,257
+balance,S2_T3_1,peak,"(50, 80]",0.028901734104046242,173
+balance,S2_T3_1,peak,"(80, 150]",0.0,306
+balance,S3_B1_0,onset,"(0, 10]",0.37142857142857144,35
+balance,S3_B1_0,onset,"(10, 20]",0.3611111111111111,72
+balance,S3_B1_0,onset,"(20, 30]",0.3125,32
+balance,S3_B1_0,onset,"(30, 50]",0.12962962962962962,54
+balance,S3_B1_0,onset,"(50, 80]",0.12280701754385964,57
+balance,S3_B1_0,onset,"(80, 150]",0.011494252873563218,87
+balance,S3_B1_1,peak,"(0, 10]",0.20496894409937888,161
+balance,S3_B1_1,peak,"(10, 20]",0.1566265060240964,249
+balance,S3_B1_1,peak,"(20, 30]",0.05371900826446281,242
+balance,S3_B1_1,peak,"(30, 50]",0.06490384615384616,416
+balance,S3_B1_1,peak,"(50, 80]",0.04697986577181208,298
+balance,S3_B1_1,peak,"(80, 150]",0.0,473
+balance,S3_B1_2,peak,"(0, 10]",0.2246376811594203,138
+balance,S3_B1_2,peak,"(10, 20]",0.15172413793103448,290
+balance,S3_B1_2,peak,"(20, 30]",0.10543130990415335,313
+balance,S3_B1_2,peak,"(30, 50]",0.01910828025477707,471
+balance,S3_B1_2,peak,"(50, 80]",0.0,605
+balance,S3_B1_2,peak,"(80, 150]",0.0,1150
+balance,S3_B2_0,onset,"(0, 10]",0.38333333333333336,60
+balance,S3_B2_0,onset,"(10, 20]",0.264,125
+balance,S3_B2_0,onset,"(20, 30]",0.16417910447761194,67
+balance,S3_B2_0,onset,"(30, 50]",0.06611570247933884,121
+balance,S3_B2_0,onset,"(50, 80]",0.06140350877192982,114
+balance,S3_B2_0,onset,"(80, 150]",0.0,180
+balance,S3_B2_1,onset,"(0, 10]",0.38461538461538464,26
+balance,S3_B2_1,onset,"(10, 20]",0.4107142857142857,56
+balance,S3_B2_1,onset,"(20, 30]",0.3888888888888889,36
+balance,S3_B2_1,onset,"(30, 50]",0.05,40
+balance,S3_B2_1,onset,"(50, 80]",0.04878048780487805,41
+balance,S3_B2_1,onset,"(80, 150]",0.0,69
+balance,S3_B2_2,peak,"(0, 10]",0.3821656050955414,157
+balance,S3_B2_2,peak,"(10, 20]",0.2826855123674912,283
+balance,S3_B2_2,peak,"(20, 30]",0.17625899280575538,278
+balance,S3_B2_2,peak,"(30, 50]",0.06451612903225806,372
+balance,S3_B2_2,peak,"(50, 80]",0.019704433497536946,406
+balance,S3_B2_2,peak,"(80, 150]",0.0,784
+balance,S3_B3_0,peak,"(0, 10]",0.3,40
+balance,S3_B3_0,peak,"(10, 20]",0.21951219512195122,123
+balance,S3_B3_0,peak,"(20, 30]",0.11557788944723618,199
+balance,S3_B3_0,peak,"(30, 50]",0.0665024630541872,406
+balance,S3_B3_0,peak,"(50, 80]",0.013725490196078431,510
+balance,S3_B3_0,peak,"(80, 150]",0.0011641443538998836,859
+balance,S3_B3_1,peak,"(0, 10]",0.44871794871794873,156
+balance,S3_B3_1,peak,"(10, 20]",0.5034013605442177,294
+balance,S3_B3_1,peak,"(20, 30]",0.40483383685800606,331
+balance,S3_B3_1,peak,"(30, 50]",0.11400651465798045,307
+balance,S3_B3_1,peak,"(50, 80]",0.0199203187250996,251
+balance,S3_B3_1,peak,"(80, 150]",0.0,503
+balance,S3_B3_2,peak,"(0, 10]",0.624031007751938,258
+balance,S3_B3_2,peak,"(10, 20]",0.3697674418604651,430
+balance,S3_B3_2,peak,"(20, 30]",0.09749303621169916,359
+balance,S3_B3_2,peak,"(30, 50]",0.010526315789473684,475
+balance,S3_B3_2,peak,"(50, 80]",0.0,632
+balance,S3_B3_2,peak,"(80, 150]",0.0,1479
+balance,S3_T1_0,CFA control,"(0, 10]",0.2,10
+balance,S3_T1_0,CFA control,"(10, 20]",0.0625,16
+balance,S3_T1_0,CFA control,"(20, 30]",0.09090909090909091,11
+balance,S3_T1_0,CFA control,"(30, 50]",0.0,13
+balance,S3_T1_0,CFA control,"(50, 80]",0.0,12
+balance,S3_T1_0,CFA control,"(80, 150]",0.0,28
+balance,S3_T1_1,late,"(0, 10]",0.3125,48
+balance,S3_T1_1,late,"(10, 20]",0.23684210526315788,76
+balance,S3_T1_1,late,"(20, 30]",0.057692307692307696,52
+balance,S3_T1_1,late,"(30, 50]",0.12121212121212122,66
+balance,S3_T1_1,late,"(50, 80]",0.061224489795918366,98
+balance,S3_T1_1,late,"(80, 150]",0.019230769230769232,104
+balance,S3_T1_2,remission,"(0, 10]",0.23809523809523808,21
+balance,S3_T1_2,remission,"(10, 20]",0.12121212121212122,33
+balance,S3_T1_2,remission,"(20, 30]",0.15384615384615385,39
+balance,S3_T1_2,remission,"(30, 50]",0.022727272727272728,44
+balance,S3_T1_2,remission,"(50, 80]",0.0,60
+balance,S3_T1_2,remission,"(80, 150]",0.0,136
+balance,S3_T2_0,remission,"(0, 10]",0.2916666666666667,24
+balance,S3_T2_0,remission,"(10, 20]",0.3055555555555556,36
+balance,S3_T2_0,remission,"(20, 30]",0.23636363636363636,55
+balance,S3_T2_0,remission,"(30, 50]",0.05194805194805195,154
+balance,S3_T2_0,remission,"(50, 80]",0.024390243902439025,123
+balance,S3_T2_0,remission,"(80, 150]",0.0,248
+balance,S3_T2_1,late,"(0, 10]",0.21818181818181817,55
+balance,S3_T2_1,late,"(10, 20]",0.22580645161290322,93
+balance,S3_T2_1,late,"(20, 30]",0.05357142857142857,56
+balance,S3_T2_1,late,"(30, 50]",0.04225352112676056,71
+balance,S3_T2_1,late,"(50, 80]",0.10256410256410256,78
+balance,S3_T2_1,late,"(80, 150]",0.0,102
+balance,S3_T2_2,late,"(0, 10]",0.5925925925925926,54
+balance,S3_T2_2,late,"(10, 20]",0.4583333333333333,96
+balance,S3_T2_2,late,"(20, 30]",0.5268817204301075,93
+balance,S3_T2_2,late,"(30, 50]",0.1553398058252427,103
+balance,S3_T2_2,late,"(50, 80]",0.013888888888888888,72
+balance,S3_T2_2,late,"(80, 150]",0.0,152
+balance,S3_T3_0,CFA control,"(0, 10]",0.14285714285714285,14
+balance,S3_T3_0,CFA control,"(10, 20]",0.0,5
+balance,S3_T3_0,CFA control,"(20, 30]",0.125,8
+balance,S3_T3_0,CFA control,"(30, 50]",0.16666666666666666,12
+balance,S3_T3_0,CFA control,"(50, 80]",0.0,14
+balance,S3_T3_0,CFA control,"(80, 150]",0.0,18
+balance,S3_T3_1,remission,"(0, 10]",0.20689655172413793,29
+balance,S3_T3_1,remission,"(10, 20]",0.13846153846153847,65
+balance,S3_T3_1,remission,"(20, 30]",0.140625,64
+balance,S3_T3_1,remission,"(30, 50]",0.0,76
+balance,S3_T3_1,remission,"(50, 80]",0.0,61
+balance,S3_T3_1,remission,"(80, 150]",0.0,103
+balance,S3_T3_2,CFA control,"(0, 10]",0.4,5
+balance,S3_T3_2,CFA control,"(10, 20]",0.0,14
+balance,S3_T3_2,CFA control,"(20, 30]",0.14285714285714285,7
+balance,S3_T3_2,CFA control,"(30, 50]",0.0,6
+balance,S3_T3_2,CFA control,"(50, 80]",0.0,9
+balance,S3_T3_2,CFA control,"(80, 150]",0.0,14
+balance,S4_B1_0,peak,"(0, 10]",0.08982035928143713,167
+balance,S4_B1_0,peak,"(10, 20]",0.076,250
+balance,S4_B1_0,peak,"(20, 30]",0.00966183574879227,207
+balance,S4_B1_0,peak,"(30, 50]",0.045,200
+balance,S4_B1_0,peak,"(50, 80]",0.009389671361502348,213
+balance,S4_B1_0,peak,"(80, 150]",0.018518518518518517,324
+balance,S4_B1_1,late,"(0, 10]",0.631578947368421,38
+balance,S4_B1_1,late,"(10, 20]",0.1958762886597938,97
+balance,S4_B1_1,late,"(20, 30]",0.12142857142857143,140
+balance,S4_B1_1,late,"(30, 50]",0.08695652173913043,253
+balance,S4_B1_1,late,"(50, 80]",0.0593607305936073,219
+balance,S4_B1_1,late,"(80, 150]",0.025925925925925925,270
+balance,S4_B1_2,late,"(0, 10]",0.3883495145631068,103
+balance,S4_B1_2,late,"(10, 20]",0.45517241379310347,145
+balance,S4_B1_2,late,"(20, 30]",0.33766233766233766,154
+balance,S4_B1_2,late,"(30, 50]",0.17751479289940827,169
+balance,S4_B1_2,late,"(50, 80]",0.012658227848101266,158
+balance,S4_B1_2,late,"(80, 150]",0.0,226
+balance,S4_B2_0,peak,"(0, 10]",0.4473684210526316,76
+balance,S4_B2_0,peak,"(10, 20]",0.23030303030303031,165
+balance,S4_B2_0,peak,"(20, 30]",0.16587677725118483,211
+balance,S4_B2_0,peak,"(30, 50]",0.04365079365079365,252
+balance,S4_B2_0,peak,"(50, 80]",0.0,245
+balance,S4_B2_0,peak,"(80, 150]",0.0,336
+balance,S4_B2_1,late,"(0, 10]",0.30357142857142855,112
+balance,S4_B2_1,late,"(10, 20]",0.29081632653061223,196
+balance,S4_B2_1,late,"(20, 30]",0.08823529411764706,204
+balance,S4_B2_1,late,"(30, 50]",0.05752212389380531,226
+balance,S4_B2_1,late,"(50, 80]",0.05063291139240506,237
+balance,S4_B2_1,late,"(80, 150]",0.0,338
+balance,S4_B2_2,peak,"(0, 10]",0.5431472081218274,197
+balance,S4_B2_2,peak,"(10, 20]",0.4954682779456193,331
+balance,S4_B2_2,peak,"(20, 30]",0.1893939393939394,264
+balance,S4_B2_2,peak,"(30, 50]",0.04607046070460705,369
+balance,S4_B2_2,peak,"(50, 80]",0.005865102639296188,341
+balance,S4_B2_2,peak,"(80, 150]",0.0,449
+balance,S4_B3_0,peak,"(0, 10]",0.39072847682119205,151
+balance,S4_B3_0,peak,"(10, 20]",0.3425196850393701,254
+balance,S4_B3_0,peak,"(20, 30]",0.2215568862275449,334
+balance,S4_B3_0,peak,"(30, 50]",0.043209876543209874,486
+balance,S4_B3_0,peak,"(50, 80]",0.012345679012345678,486
+balance,S4_B3_0,peak,"(80, 150]",0.0,701
+balance,S4_B3_1,peak,"(0, 10]",0.35135135135135137,74
+balance,S4_B3_1,peak,"(10, 20]",0.24444444444444444,135
+balance,S4_B3_1,peak,"(20, 30]",0.24031007751937986,129
+balance,S4_B3_1,peak,"(30, 50]",0.2581967213114754,244
+balance,S4_B3_1,peak,"(50, 80]",0.1625441696113074,283
+balance,S4_B3_1,peak,"(80, 150]",0.00847457627118644,472
+balance,S4_B3_2,peak,"(0, 10]",0.4423076923076923,52
+balance,S4_B3_2,peak,"(10, 20]",0.22522522522522523,111
+balance,S4_B3_2,peak,"(20, 30]",0.13709677419354838,124
+balance,S4_B3_2,peak,"(30, 50]",0.10181818181818182,275
+balance,S4_B3_2,peak,"(50, 80]",0.07262569832402235,358
+balance,S4_B3_2,peak,"(80, 150]",0.04472049689440994,805
+balance,S4_T1_0,peak,"(0, 10]",0.2582781456953642,151
+balance,S4_T1_0,peak,"(10, 20]",0.15447154471544716,246
+balance,S4_T1_0,peak,"(20, 30]",0.10952380952380952,210
+balance,S4_T1_0,peak,"(30, 50]",0.0,257
+balance,S4_T1_0,peak,"(50, 80]",0.0,262
+balance,S4_T1_0,peak,"(80, 150]",0.0,435
+balance,S4_T1_1,onset,"(0, 10]",0.2857142857142857,28
+balance,S4_T1_1,onset,"(10, 20]",0.16,50
+balance,S4_T1_1,onset,"(20, 30]",0.07407407407407407,27
+balance,S4_T1_1,onset,"(30, 50]",0.0,38
+balance,S4_T1_1,onset,"(50, 80]",0.0,39
+balance,S4_T1_1,onset,"(80, 150]",0.0,54
+balance,S4_T1_2,onset,"(0, 10]",0.0,15
+balance,S4_T1_2,onset,"(10, 20]",0.125,16
+balance,S4_T1_2,onset,"(20, 30]",0.0,9
+balance,S4_T1_2,onset,"(30, 50]",0.16666666666666666,18
+balance,S4_T1_2,onset,"(50, 80]",0.0,20
+balance,S4_T1_2,onset,"(80, 150]",0.0,32
+balance,S4_T2_0,remission,"(0, 10]",0.42727272727272725,110
+balance,S4_T2_0,remission,"(10, 20]",0.44274809160305345,131
+balance,S4_T2_0,remission,"(20, 30]",0.4264705882352941,136
+balance,S4_T2_0,remission,"(30, 50]",0.05232558139534884,172
+balance,S4_T2_0,remission,"(50, 80]",0.046875,128
+balance,S4_T2_0,remission,"(80, 150]",0.11065573770491803,244
+balance,S4_T2_1,onset,"(0, 10]",0.48,25
+balance,S4_T2_1,onset,"(10, 20]",0.25806451612903225,31
+balance,S4_T2_1,onset,"(20, 30]",0.5,6
+balance,S4_T2_1,onset,"(30, 50]",0.0,16
+balance,S4_T2_1,onset,"(50, 80]",0.0,12
+balance,S4_T2_1,onset,"(80, 150]",0.0,27
+balance,S4_T2_2,peak,"(0, 10]",0.2988505747126437,174
+balance,S4_T2_2,peak,"(10, 20]",0.21033210332103322,271
+balance,S4_T2_2,peak,"(20, 30]",0.13089005235602094,191
+balance,S4_T2_2,peak,"(30, 50]",0.058394160583941604,274
+balance,S4_T2_2,peak,"(50, 80]",0.02413793103448276,290
+balance,S4_T2_2,peak,"(80, 150]",0.0,439
+balance,S4_T3_0,remission,"(0, 10]",0.30303030303030304,66
+balance,S4_T3_0,remission,"(10, 20]",0.4583333333333333,120
+balance,S4_T3_0,remission,"(20, 30]",0.344,125
+balance,S4_T3_0,remission,"(30, 50]",0.21839080459770116,174
+balance,S4_T3_0,remission,"(50, 80]",0.10714285714285714,168
+balance,S4_T3_0,remission,"(80, 150]",0.005128205128205128,195
+balance,S4_T3_1,peak,"(0, 10]",0.41739130434782606,115
+balance,S4_T3_1,peak,"(10, 20]",0.45689655172413796,232
+balance,S4_T3_1,peak,"(20, 30]",0.4675324675324675,154
+balance,S4_T3_1,peak,"(30, 50]",0.21649484536082475,194
+balance,S4_T3_1,peak,"(50, 80]",0.03977272727272727,176
+balance,S4_T3_1,peak,"(80, 150]",0.0,217
+balance,S4_T3_2,remission,"(0, 10]",0.21333333333333335,75
+balance,S4_T3_2,remission,"(10, 20]",0.25,116
+balance,S4_T3_2,remission,"(20, 30]",0.10526315789473684,95
+balance,S4_T3_2,remission,"(30, 50]",0.05504587155963303,109
+balance,S4_T3_2,remission,"(50, 80]",0.06086956521739131,115
+balance,S4_T3_2,remission,"(80, 150]",0.0718232044198895,181
+balance,S5_B1_0,remission,"(0, 10]",0.5608465608465608,189
+balance,S5_B1_0,remission,"(10, 20]",0.37708830548926014,419
+balance,S5_B1_0,remission,"(20, 30]",0.1013215859030837,454
+balance,S5_B1_0,remission,"(30, 50]",0.045627376425855515,526
+balance,S5_B1_0,remission,"(50, 80]",0.0057306590257879654,349
+balance,S5_B1_0,remission,"(80, 150]",0.0,337
+balance,S5_B1_1,peak,"(0, 10]",0.53,100
+balance,S5_B1_1,peak,"(10, 20]",0.34256055363321797,289
+balance,S5_B1_1,peak,"(20, 30]",0.09162303664921466,382
+balance,S5_B1_1,peak,"(30, 50]",0.08957952468007313,547
+balance,S5_B1_1,peak,"(50, 80]",0.03260869565217391,460
+balance,S5_B1_1,peak,"(80, 150]",0.0,878
+balance,S5_B1_2,remission,"(0, 10]",0.6071428571428571,28
+balance,S5_B1_2,remission,"(10, 20]",0.24210526315789474,95
+balance,S5_B1_2,remission,"(20, 30]",0.11392405063291139,158
+balance,S5_B1_2,remission,"(30, 50]",0.0,133
+balance,S5_B1_2,remission,"(50, 80]",0.0,151
+balance,S5_B1_2,remission,"(80, 150]",0.0,284
+balance,S5_B2_0,remission,"(0, 10]",0.5853658536585366,41
+balance,S5_B2_0,remission,"(10, 20]",0.33783783783783783,148
+balance,S5_B2_0,remission,"(20, 30]",0.21818181818181817,165
+balance,S5_B2_0,remission,"(30, 50]",0.04316546762589928,278
+balance,S5_B2_0,remission,"(50, 80]",0.0,251
+balance,S5_B2_0,remission,"(80, 150]",0.0,531
+balance,S5_B2_1,remission,"(0, 10]",0.2987012987012987,77
+balance,S5_B2_1,remission,"(10, 20]",0.22566371681415928,226
+balance,S5_B2_1,remission,"(20, 30]",0.10138248847926268,217
+balance,S5_B2_1,remission,"(30, 50]",0.10071942446043165,278
+balance,S5_B2_1,remission,"(50, 80]",0.0,239
+balance,S5_B2_1,remission,"(80, 150]",0.0,390
+balance,S5_B2_2,peak,"(0, 10]",0.5330396475770925,227
+balance,S5_B2_2,peak,"(10, 20]",0.3170212765957447,470
+balance,S5_B2_2,peak,"(20, 30]",0.10673234811165845,609
+balance,S5_B2_2,peak,"(30, 50]",0.04880581516095535,963
+balance,S5_B2_2,peak,"(50, 80]",0.013297872340425532,1128
+balance,S5_B2_2,peak,"(80, 150]",0.0,1865
+balance,S5_B3_0,peak,"(0, 10]",0.40329218106995884,243
+balance,S5_B3_0,peak,"(10, 20]",0.22699386503067484,326
+balance,S5_B3_0,peak,"(20, 30]",0.14121037463976946,347
+balance,S5_B3_0,peak,"(30, 50]",0.07201309328968904,611
+balance,S5_B3_0,peak,"(50, 80]",0.031484257871064465,667
+balance,S5_B3_0,peak,"(80, 150]",0.002333722287047841,857
+balance,S5_B3_1,remission,"(0, 10]",0.4533333333333333,75
+balance,S5_B3_1,remission,"(10, 20]",0.36065573770491804,122
+balance,S5_B3_1,remission,"(20, 30]",0.2037037037037037,108
+balance,S5_B3_1,remission,"(30, 50]",0.036036036036036036,111
+balance,S5_B3_1,remission,"(50, 80]",0.0,87
+balance,S5_B3_1,remission,"(80, 150]",0.0,143
+balance,S5_B3_2,remission,"(0, 10]",0.22857142857142856,70
+balance,S5_B3_2,remission,"(10, 20]",0.29545454545454547,132
+balance,S5_B3_2,remission,"(20, 30]",0.0963855421686747,83
+balance,S5_B3_2,remission,"(30, 50]",0.19879518072289157,166
+balance,S5_B3_2,remission,"(50, 80]",0.10112359550561797,178
+balance,S5_B3_2,remission,"(80, 150]",0.012987012987012988,231
+balance,S5_T1_0,remission,"(0, 10]",0.2222222222222222,9
+balance,S5_T1_0,remission,"(10, 20]",0.14893617021276595,47
+balance,S5_T1_0,remission,"(20, 30]",0.1388888888888889,72
+balance,S5_T1_0,remission,"(30, 50]",0.0625,112
+balance,S5_T1_0,remission,"(50, 80]",0.006802721088435374,147
+balance,S5_T1_0,remission,"(80, 150]",0.0,292
+balance,S5_T1_1,peak,"(0, 10]",0.4127906976744186,172
+balance,S5_T1_1,peak,"(10, 20]",0.24825174825174826,286
+balance,S5_T1_1,peak,"(20, 30]",0.1828793774319066,257
+balance,S5_T1_1,peak,"(30, 50]",0.1037463976945245,347
+balance,S5_T1_1,peak,"(50, 80]",0.023936170212765957,376
+balance,S5_T1_1,peak,"(80, 150]",0.0,414
+balance,S5_T1_2,peak,"(0, 10]",0.11794871794871795,195
+balance,S5_T1_2,peak,"(10, 20]",0.09187279151943463,283
+balance,S5_T1_2,peak,"(20, 30]",0.07380073800738007,271
+balance,S5_T1_2,peak,"(30, 50]",0.030303030303030304,495
+balance,S5_T1_2,peak,"(50, 80]",0.015444015444015444,518
+balance,S5_T1_2,peak,"(80, 150]",0.0,804
+balance,S5_T2_0,peak,"(0, 10]",0.19444444444444445,36
+balance,S5_T2_0,peak,"(10, 20]",0.4019607843137255,102
+balance,S5_T2_0,peak,"(20, 30]",0.2672413793103448,116
+balance,S5_T2_0,peak,"(30, 50]",0.07389162561576355,203
+balance,S5_T2_0,peak,"(50, 80]",0.008130081300813009,246
+balance,S5_T2_0,peak,"(80, 150]",0.0,461
+balance,S5_T2_1,peak,"(0, 10]",0.5324675324675324,77
+balance,S5_T2_1,peak,"(10, 20]",0.41762452107279696,261
+balance,S5_T2_1,peak,"(20, 30]",0.22535211267605634,213
+balance,S5_T2_1,peak,"(30, 50]",0.10661764705882353,272
+balance,S5_T2_1,peak,"(50, 80]",0.0,188
+balance,S5_T2_1,peak,"(80, 150]",0.0,282
+balance,S5_T2_2,remission,"(0, 10]",0.6233766233766234,77
+balance,S5_T2_2,remission,"(10, 20]",0.38596491228070173,114
+balance,S5_T2_2,remission,"(20, 30]",0.13186813186813187,91
+balance,S5_T2_2,remission,"(30, 50]",0.05,100
+balance,S5_T2_2,remission,"(50, 80]",0.07291666666666667,96
+balance,S5_T2_2,remission,"(80, 150]",0.0,122
+balance,S5_T3_0,peak,"(0, 10]",0.7213114754098361,61
+balance,S5_T3_0,peak,"(10, 20]",0.41911764705882354,136
+balance,S5_T3_0,peak,"(20, 30]",0.14534883720930233,172
+balance,S5_T3_0,peak,"(30, 50]",0.09415584415584416,308
+balance,S5_T3_0,peak,"(50, 80]",0.03862660944206009,233
+balance,S5_T3_0,peak,"(80, 150]",0.0,442
+balance,S5_T3_1,remission,"(0, 10]",0.5384615384615384,26
+balance,S5_T3_1,remission,"(10, 20]",0.44642857142857145,56
+balance,S5_T3_1,remission,"(20, 30]",0.1346153846153846,104
+balance,S5_T3_1,remission,"(30, 50]",0.09929078014184398,141
+balance,S5_T3_1,remission,"(50, 80]",0.0,137
+balance,S5_T3_1,remission,"(80, 150]",0.0,258
+balance,S5_T3_2,peak,"(0, 10]",0.5588235294117647,34
+balance,S5_T3_2,peak,"(10, 20]",0.49473684210526314,95
+balance,S5_T3_2,peak,"(20, 30]",0.029411764705882353,102
+balance,S5_T3_2,peak,"(30, 50]",0.0,134
+balance,S5_T3_2,peak,"(50, 80]",0.0,131
+balance,S5_T3_2,peak,"(80, 150]",0.0,272
+balance,S6_T1_0,remission,"(0, 10]",0.4375,48
+balance,S6_T1_0,remission,"(10, 20]",0.5192307692307693,156
+balance,S6_T1_0,remission,"(20, 30]",0.12745098039215685,102
+balance,S6_T1_0,remission,"(30, 50]",0.0,63
+balance,S6_T1_0,remission,"(50, 80]",0.0,92
+balance,S6_T1_0,remission,"(80, 150]",0.0,144
+balance,S6_T1_1,remission,"(0, 10]",0.6235294117647059,85
+balance,S6_T1_1,remission,"(10, 20]",0.4444444444444444,252
+balance,S6_T1_1,remission,"(20, 30]",0.19626168224299065,214
+balance,S6_T1_1,remission,"(30, 50]",0.03731343283582089,268
+balance,S6_T1_1,remission,"(50, 80]",0.00851063829787234,235
+balance,S6_T1_1,remission,"(80, 150]",0.0,388
+balance,S6_T1_2,remission,"(0, 10]",0.5,10
+balance,S6_T1_2,remission,"(10, 20]",0.21153846153846154,52
+balance,S6_T1_2,remission,"(20, 30]",0.05263157894736842,76
+balance,S6_T1_2,remission,"(30, 50]",0.06741573033707865,89
+balance,S6_T1_2,remission,"(50, 80]",0.0,80
+balance,S6_T1_2,remission,"(80, 150]",0.0,150
+balance,S6_T2_0,remission,"(0, 10]",0.5769230769230769,26
+balance,S6_T2_0,remission,"(10, 20]",0.2911392405063291,79
+balance,S6_T2_0,remission,"(20, 30]",0.14545454545454545,110
+balance,S6_T2_0,remission,"(30, 50]",0.16091954022988506,174
+balance,S6_T2_0,remission,"(50, 80]",0.008264462809917356,242
+balance,S6_T2_0,remission,"(80, 150]",0.0,368
+balance,S6_T2_1,remission,"(0, 10]",0.23809523809523808,21
+balance,S6_T2_1,remission,"(10, 20]",0.2857142857142857,56
+balance,S6_T2_1,remission,"(20, 30]",0.14814814814814814,27
+balance,S6_T2_1,remission,"(30, 50]",0.043478260869565216,46
+balance,S6_T2_1,remission,"(50, 80]",0.0,59
+balance,S6_T2_1,remission,"(80, 150]",0.0,108
+balance,S6_T2_2,peak,"(0, 10]",0.358695652173913,92
+balance,S6_T2_2,peak,"(10, 20]",0.22435897435897437,156
+balance,S6_T2_2,peak,"(20, 30]",0.20689655172413793,145
+balance,S6_T2_2,peak,"(30, 50]",0.04391891891891892,296
+balance,S6_T2_2,peak,"(50, 80]",0.01818181818181818,330
+balance,S6_T2_2,peak,"(80, 150]",0.0,600
+balance,S6_T3_0,peak,"(0, 10]",0.5172413793103449,29
+balance,S6_T3_0,peak,"(10, 20]",0.425531914893617,94
+balance,S6_T3_0,peak,"(20, 30]",0.189873417721519,158
+balance,S6_T3_0,peak,"(30, 50]",0.040697674418604654,172
+balance,S6_T3_0,peak,"(50, 80]",0.0,150
+balance,S6_T3_0,peak,"(80, 150]",0.0,310
+balance,S6_T3_1,remission,"(0, 10]",0.45454545454545453,22
+balance,S6_T3_1,remission,"(10, 20]",0.2857142857142857,98
+balance,S6_T3_1,remission,"(20, 30]",0.15942028985507245,69
+balance,S6_T3_1,remission,"(30, 50]",0.1728395061728395,81
+balance,S6_T3_1,remission,"(50, 80]",0.0970873786407767,103
+balance,S6_T3_1,remission,"(80, 150]",0.0,259
+balance,S6_T3_2,peak,"(0, 10]",0.410958904109589,73
+balance,S6_T3_2,peak,"(10, 20]",0.41025641025641024,117
+balance,S6_T3_2,peak,"(20, 30]",0.2767857142857143,112
+balance,S6_T3_2,peak,"(30, 50]",0.21641791044776118,134
+balance,S6_T3_2,peak,"(50, 80]",0.0,69
+balance,S6_T3_2,peak,"(80, 150]",0.0,112
+glia,C2_G1_Bot_0,early chronic (day 16),"(0, 10]",0.44761904761904764,210
+glia,C2_G1_Bot_0,early chronic (day 16),"(10, 20]",0.23782234957020057,349
+glia,C2_G1_Bot_0,early chronic (day 16),"(20, 30]",0.14730878186968838,353
+glia,C2_G1_Bot_0,early chronic (day 16),"(30, 50]",0.07352941176470588,544
+glia,C2_G1_Bot_0,early chronic (day 16),"(50, 80]",0.008992805755395683,556
+glia,C2_G1_Bot_0,early chronic (day 16),"(80, 150]",0.0,898
+glia,C2_G1_Bot_1,early chronic (day 16),"(0, 10]",0.5208333333333334,48
+glia,C2_G1_Bot_1,early chronic (day 16),"(10, 20]",0.4387755102040816,98
+glia,C2_G1_Bot_1,early chronic (day 16),"(20, 30]",0.26,100
+glia,C2_G1_Bot_1,early chronic (day 16),"(30, 50]",0.09740259740259741,154
+glia,C2_G1_Bot_1,early chronic (day 16),"(50, 80]",0.01020408163265306,98
+glia,C2_G1_Bot_1,early chronic (day 16),"(80, 150]",0.0,214
+glia,C2_G1_Bot_2,late chronic (day 30),"(0, 10]",0.5652173913043478,92
+glia,C2_G1_Bot_2,late chronic (day 30),"(10, 20]",0.512396694214876,121
+glia,C2_G1_Bot_2,late chronic (day 30),"(20, 30]",0.4041095890410959,146
+glia,C2_G1_Bot_2,late chronic (day 30),"(30, 50]",0.33455882352941174,272
+glia,C2_G1_Bot_2,late chronic (day 30),"(50, 80]",0.050505050505050504,297
+glia,C2_G1_Bot_2,late chronic (day 30),"(80, 150]",0.003913894324853229,511
+glia,C2_G1_Mid_0,onset,"(0, 10]",0.19148936170212766,47
+glia,C2_G1_Mid_0,onset,"(10, 20]",0.33043478260869563,115
+glia,C2_G1_Mid_0,onset,"(20, 30]",0.16666666666666666,66
+glia,C2_G1_Mid_0,onset,"(30, 50]",0.13725490196078433,51
+glia,C2_G1_Mid_0,onset,"(50, 80]",0.037037037037037035,54
+glia,C2_G1_Mid_0,onset,"(80, 150]",0.0,68
+glia,C2_G1_Mid_1,early chronic (day 16),"(0, 10]",0.4074074074074074,54
+glia,C2_G1_Mid_1,early chronic (day 16),"(10, 20]",0.15476190476190477,84
+glia,C2_G1_Mid_1,early chronic (day 16),"(20, 30]",0.08,75
+glia,C2_G1_Mid_1,early chronic (day 16),"(30, 50]",0.0,93
+glia,C2_G1_Mid_1,early chronic (day 16),"(50, 80]",0.018018018018018018,111
+glia,C2_G1_Mid_1,early chronic (day 16),"(80, 150]",0.00784313725490196,255
+glia,C2_G1_Mid_2,peak,"(0, 10]",0.6486486486486487,111
+glia,C2_G1_Mid_2,peak,"(10, 20]",0.4577777777777778,225
+glia,C2_G1_Mid_2,peak,"(20, 30]",0.41434262948207173,251
+glia,C2_G1_Mid_2,peak,"(30, 50]",0.2622478386167147,347
+glia,C2_G1_Mid_2,peak,"(50, 80]",0.13333333333333333,330
+glia,C2_G1_Mid_2,peak,"(80, 150]",0.04807692307692308,416
+glia,C2_G1_Top_0,early chronic (day 16),"(0, 10]",0.45454545454545453,44
+glia,C2_G1_Top_0,early chronic (day 16),"(10, 20]",0.2840909090909091,88
+glia,C2_G1_Top_0,early chronic (day 16),"(20, 30]",0.32142857142857145,84
+glia,C2_G1_Top_0,early chronic (day 16),"(30, 50]",0.13071895424836602,153
+glia,C2_G1_Top_0,early chronic (day 16),"(50, 80]",0.12578616352201258,159
+glia,C2_G1_Top_0,early chronic (day 16),"(80, 150]",0.05013927576601671,359
+glia,C2_G1_Top_1,pre-symptomatic,"(0, 10]",0.125,8
+glia,C2_G1_Top_1,pre-symptomatic,"(10, 20]",0.0,8
+glia,C2_G1_Top_1,pre-symptomatic,"(20, 30]",0.0,8
+glia,C2_G1_Top_1,pre-symptomatic,"(30, 50]",0.0,7
+glia,C2_G1_Top_1,pre-symptomatic,"(50, 80]",0.0,11
+glia,C2_G1_Top_1,pre-symptomatic,"(80, 150]",0.0,20
+glia,C2_G1_Top_2,late chronic (day 30),"(0, 10]",0.5897435897435898,39
+glia,C2_G1_Top_2,late chronic (day 30),"(10, 20]",0.4567901234567901,81
+glia,C2_G1_Top_2,late chronic (day 30),"(20, 30]",0.39285714285714285,84
+glia,C2_G1_Top_2,late chronic (day 30),"(30, 50]",0.15966386554621848,119
+glia,C2_G1_Top_2,late chronic (day 30),"(50, 80]",0.1111111111111111,135
+glia,C2_G1_Top_2,late chronic (day 30),"(80, 150]",0.0038461538461538464,260
+glia,C2_G2_Bot_0,peak,"(0, 10]",0.47474747474747475,99
+glia,C2_G2_Bot_0,peak,"(10, 20]",0.4020100502512563,199
+glia,C2_G2_Bot_0,peak,"(20, 30]",0.3218884120171674,233
+glia,C2_G2_Bot_0,peak,"(30, 50]",0.4557377049180328,305
+glia,C2_G2_Bot_0,peak,"(50, 80]",0.22968197879858657,283
+glia,C2_G2_Bot_0,peak,"(80, 150]",0.07565011820330969,423
+glia,C2_G2_Bot_2,late chronic (day 30),"(0, 10]",0.34782608695652173,23
+glia,C2_G2_Bot_2,late chronic (day 30),"(10, 20]",0.21518987341772153,79
+glia,C2_G2_Bot_2,late chronic (day 30),"(20, 30]",0.08235294117647059,85
+glia,C2_G2_Bot_2,late chronic (day 30),"(30, 50]",0.0,116
+glia,C2_G2_Bot_2,late chronic (day 30),"(50, 80]",0.0,121
+glia,C2_G2_Bot_2,late chronic (day 30),"(80, 150]",0.0,224
+glia,C2_G2_Mid_0,early chronic (day 16),"(0, 10]",0.42105263157894735,19
+glia,C2_G2_Mid_0,early chronic (day 16),"(10, 20]",0.24444444444444444,45
+glia,C2_G2_Mid_0,early chronic (day 16),"(20, 30]",0.09090909090909091,44
+glia,C2_G2_Mid_0,early chronic (day 16),"(30, 50]",0.0,69
+glia,C2_G2_Mid_0,early chronic (day 16),"(50, 80]",0.022727272727272728,88
+glia,C2_G2_Mid_0,early chronic (day 16),"(80, 150]",0.016666666666666666,120
+glia,C2_G2_Mid_1,early chronic (day 16),"(0, 10]",0.03614457831325301,83
+glia,C2_G2_Mid_1,early chronic (day 16),"(10, 20]",0.04285714285714286,140
+glia,C2_G2_Mid_1,early chronic (day 16),"(20, 30]",0.018018018018018018,111
+glia,C2_G2_Mid_1,early chronic (day 16),"(30, 50]",0.015789473684210527,190
+glia,C2_G2_Mid_1,early chronic (day 16),"(50, 80]",0.0,187
+glia,C2_G2_Mid_1,early chronic (day 16),"(80, 150]",0.0,389
+glia,C2_G2_Mid_2,CFA control,"(0, 10]",0.2727272727272727,11
+glia,C2_G2_Mid_2,CFA control,"(10, 20]",0.09090909090909091,11
+glia,C2_G2_Mid_2,CFA control,"(20, 30]",0.0,14
+glia,C2_G2_Mid_2,CFA control,"(30, 50]",0.23076923076923078,13
+glia,C2_G2_Mid_2,CFA control,"(50, 80]",0.0,14
+glia,C2_G2_Mid_2,CFA control,"(80, 150]",0.0,27
+glia,C2_G2_Top_1,early chronic (day 16),"(0, 10]",0.6486486486486487,74
+glia,C2_G2_Top_1,early chronic (day 16),"(10, 20]",0.4198895027624309,181
+glia,C2_G2_Top_1,early chronic (day 16),"(20, 30]",0.3557692307692308,208
+glia,C2_G2_Top_1,early chronic (day 16),"(30, 50]",0.19672131147540983,366
+glia,C2_G2_Top_1,early chronic (day 16),"(50, 80]",0.053475935828877004,374
+glia,C2_G2_Top_1,early chronic (day 16),"(80, 150]",0.008287292817679558,724
+glia,C2_G2_Top_2,early chronic (day 16),"(0, 10]",0.23529411764705882,51
+glia,C2_G2_Top_2,early chronic (day 16),"(10, 20]",0.10084033613445378,119
+glia,C2_G2_Top_2,early chronic (day 16),"(20, 30]",0.0625,80
+glia,C2_G2_Top_2,early chronic (day 16),"(30, 50]",0.09090909090909091,99
+glia,C2_G2_Top_2,early chronic (day 16),"(50, 80]",0.011235955056179775,89
+glia,C2_G2_Top_2,early chronic (day 16),"(80, 150]",0.03225806451612903,93
+glia,C2_G3_Bot_0,early chronic (day 16),"(0, 10]",0.3333333333333333,81
+glia,C2_G3_Bot_0,early chronic (day 16),"(10, 20]",0.29464285714285715,112
+glia,C2_G3_Bot_0,early chronic (day 16),"(20, 30]",0.2535211267605634,142
+glia,C2_G3_Bot_0,early chronic (day 16),"(30, 50]",0.14736842105263157,190
+glia,C2_G3_Bot_0,early chronic (day 16),"(50, 80]",0.02247191011235955,178
+glia,C2_G3_Bot_0,early chronic (day 16),"(80, 150]",0.0,288
+glia,C2_G3_Bot_2,late chronic (day 30),"(0, 10]",0.4444444444444444,45
+glia,C2_G3_Bot_2,late chronic (day 30),"(10, 20]",0.34615384615384615,52
+glia,C2_G3_Bot_2,late chronic (day 30),"(20, 30]",0.19607843137254902,102
+glia,C2_G3_Bot_2,late chronic (day 30),"(30, 50]",0.1941747572815534,206
+glia,C2_G3_Bot_2,late chronic (day 30),"(50, 80]",0.04,300
+glia,C2_G3_Bot_2,late chronic (day 30),"(80, 150]",0.0,515
+glia,C2_G3_Mid_0,early chronic (day 16),"(0, 10]",0.4140625,128
+glia,C2_G3_Mid_0,early chronic (day 16),"(10, 20]",0.4,160
+glia,C2_G3_Mid_0,early chronic (day 16),"(20, 30]",0.35978835978835977,189
+glia,C2_G3_Mid_0,early chronic (day 16),"(30, 50]",0.11805555555555555,288
+glia,C2_G3_Mid_0,early chronic (day 16),"(50, 80]",0.019305019305019305,259
+glia,C2_G3_Mid_0,early chronic (day 16),"(80, 150]",0.0022026431718061676,454
+glia,C2_G3_Mid_2,early chronic (day 16),"(0, 10]",0.8461538461538461,13
+glia,C2_G3_Mid_2,early chronic (day 16),"(10, 20]",0.3076923076923077,39
+glia,C2_G3_Mid_2,early chronic (day 16),"(20, 30]",0.1111111111111111,45
+glia,C2_G3_Mid_2,early chronic (day 16),"(30, 50]",0.011904761904761904,84
+glia,C2_G3_Mid_2,early chronic (day 16),"(50, 80]",0.009259259259259259,108
+glia,C2_G3_Mid_2,early chronic (day 16),"(80, 150]",0.0,220
+glia,C2_G3_Top_0,peak,"(0, 10]",0.601593625498008,251
+glia,C2_G3_Top_0,peak,"(10, 20]",0.48711340206185566,388
+glia,C2_G3_Top_0,peak,"(20, 30]",0.4021164021164021,378
+glia,C2_G3_Top_0,peak,"(30, 50]",0.3210702341137124,598
+glia,C2_G3_Top_0,peak,"(50, 80]",0.21956087824351297,501
+glia,C2_G3_Top_0,peak,"(80, 150]",0.04354587869362364,643
+glia,C2_G3_Top_1,CFA control,"(0, 10]",0.38095238095238093,21
+glia,C2_G3_Top_1,CFA control,"(10, 20]",0.09090909090909091,22
+glia,C2_G3_Top_1,CFA control,"(20, 30]",0.1,10
+glia,C2_G3_Top_1,CFA control,"(30, 50]",0.15,20
+glia,C2_G3_Top_1,CFA control,"(50, 80]",0.07692307692307693,13
+glia,C2_G3_Top_1,CFA control,"(80, 150]",0.02702702702702703,37
+glia,C2_G3_Top_2,pre-symptomatic,"(0, 10]",0.0,16
+glia,C2_G3_Top_2,pre-symptomatic,"(10, 20]",0.0,18
+glia,C2_G3_Top_2,pre-symptomatic,"(20, 30]",0.0,4
+glia,C2_G3_Top_2,pre-symptomatic,"(30, 50]",0.06666666666666667,15
+glia,C2_G3_Top_2,pre-symptomatic,"(50, 80]",0.0,9
+glia,C2_G3_Top_2,pre-symptomatic,"(80, 150]",0.0,12
+glia,G3_L1_0,pre-symptomatic,"(0, 10]",0.06666666666666667,15
+glia,G3_L1_0,pre-symptomatic,"(10, 20]",0.0,19
+glia,G3_L1_0,pre-symptomatic,"(20, 30]",0.09090909090909091,11
+glia,G3_L1_0,pre-symptomatic,"(30, 50]",0.0,6
+glia,G3_L1_0,pre-symptomatic,"(50, 80]",0.0,7
+glia,G3_L1_0,pre-symptomatic,"(80, 150]",0.0,4
+glia,G3_L1_1,peak,"(0, 10]",0.5645161290322581,186
+glia,G3_L1_1,peak,"(10, 20]",0.5537974683544303,316
+glia,G3_L1_1,peak,"(20, 30]",0.5700325732899023,307
+glia,G3_L1_1,peak,"(30, 50]",0.462478184991274,573
+glia,G3_L1_1,peak,"(50, 80]",0.28885400313971743,637
+glia,G3_L1_1,peak,"(80, 150]",0.12239347234814144,1103
+glia,G3_L1_2,onset,"(0, 10]",0.22535211267605634,71
+glia,G3_L1_2,onset,"(10, 20]",0.12244897959183673,147
+glia,G3_L1_2,onset,"(20, 30]",0.15053763440860216,93
+glia,G3_L1_2,onset,"(30, 50]",0.1310344827586207,145
+glia,G3_L1_2,onset,"(50, 80]",0.09239130434782608,184
+glia,G3_L1_2,onset,"(80, 150]",0.11428571428571428,210
+glia,G3_L2_0,pre-symptomatic,"(0, 10]",0.125,8
+glia,G3_L2_0,pre-symptomatic,"(10, 20]",0.0,16
+glia,G3_L2_0,pre-symptomatic,"(20, 30]",0.0,10
+glia,G3_L2_0,pre-symptomatic,"(30, 50]",0.0,5
+glia,G3_L2_0,pre-symptomatic,"(50, 80]",0.0,7
+glia,G3_L2_0,pre-symptomatic,"(80, 150]",0.0,11
+glia,G3_L2_1,onset,"(0, 10]",0.3048780487804878,82
+glia,G3_L2_1,onset,"(10, 20]",0.26717557251908397,131
+glia,G3_L2_1,onset,"(20, 30]",0.2804878048780488,82
+glia,G3_L2_1,onset,"(30, 50]",0.0,85
+glia,G3_L2_1,onset,"(50, 80]",0.0,98
+glia,G3_L2_1,onset,"(80, 150]",0.0,143
+glia,G3_L2_2,peak,"(0, 10]",0.3333333333333333,141
+glia,G3_L2_2,peak,"(10, 20]",0.2222222222222222,225
+glia,G3_L2_2,peak,"(20, 30]",0.20555555555555555,180
+glia,G3_L2_2,peak,"(30, 50]",0.20434782608695654,230
+glia,G3_L2_2,peak,"(50, 80]",0.023148148148148147,216
+glia,G3_L2_2,peak,"(80, 150]",0.005870841487279843,511
+glia,G3_L3_0,pre-symptomatic,"(0, 10]",0.0,9
+glia,G3_L3_0,pre-symptomatic,"(10, 20]",0.0,12
+glia,G3_L3_0,pre-symptomatic,"(20, 30]",0.0,4
+glia,G3_L3_0,pre-symptomatic,"(30, 50]",0.0,4
+glia,G3_L3_0,pre-symptomatic,"(50, 80]",0.0,9
+glia,G3_L3_0,pre-symptomatic,"(80, 150]",0.0,17
+glia,G3_L3_1,onset,"(0, 10]",0.39473684210526316,38
+glia,G3_L3_1,onset,"(10, 20]",0.058823529411764705,51
+glia,G3_L3_1,onset,"(20, 30]",0.058823529411764705,34
+glia,G3_L3_1,onset,"(30, 50]",0.058823529411764705,17
+glia,G3_L3_1,onset,"(50, 80]",0.05128205128205128,39
+glia,G3_L3_1,onset,"(80, 150]",0.0,40
+glia,G3_L3_2,peak,"(0, 10]",0.37333333333333335,150
+glia,G3_L3_2,peak,"(10, 20]",0.3726235741444867,263
+glia,G3_L3_2,peak,"(20, 30]",0.25510204081632654,196
+glia,G3_L3_2,peak,"(30, 50]",0.14802631578947367,304
+glia,G3_L3_2,peak,"(50, 80]",0.0633245382585752,379
+glia,G3_L3_2,peak,"(80, 150]",0.0027397260273972603,730
+glia,G4_L1_0,late chronic (day 30),"(0, 10]",0.21739130434782608,46
+glia,G4_L1_0,late chronic (day 30),"(10, 20]",0.0673076923076923,104
+glia,G4_L1_0,late chronic (day 30),"(20, 30]",0.04081632653061224,98
+glia,G4_L1_0,late chronic (day 30),"(30, 50]",0.014705882352941176,136
+glia,G4_L1_0,late chronic (day 30),"(50, 80]",0.011494252873563218,174
+glia,G4_L1_0,late chronic (day 30),"(80, 150]",0.013888888888888888,288
+glia,G4_L1_1,CFA control,"(0, 10]",0.0,10
+glia,G4_L1_1,CFA control,"(10, 20]",0.07692307692307693,13
+glia,G4_L1_1,CFA control,"(20, 30]",0.0,9
+glia,G4_L1_1,CFA control,"(30, 50]",0.0,8
+glia,G4_L1_1,CFA control,"(50, 80]",0.0,13
+glia,G4_L1_1,CFA control,"(80, 150]",0.0,21
+glia,G4_L1_2,late chronic (day 30),"(0, 10]",0.14285714285714285,49
+glia,G4_L1_2,late chronic (day 30),"(10, 20]",0.02564102564102564,78
+glia,G4_L1_2,late chronic (day 30),"(20, 30]",0.037037037037037035,54
+glia,G4_L1_2,late chronic (day 30),"(30, 50]",0.010869565217391304,92
+glia,G4_L1_2,late chronic (day 30),"(50, 80]",0.0,110
+glia,G4_L1_2,late chronic (day 30),"(80, 150]",0.0,190
+glia,G4_L2_0,late chronic (day 30),"(0, 10]",0.23809523809523808,63
+glia,G4_L2_0,late chronic (day 30),"(10, 20]",0.05172413793103448,116
+glia,G4_L2_0,late chronic (day 30),"(20, 30]",0.061946902654867256,113
+glia,G4_L2_0,late chronic (day 30),"(30, 50]",0.007518796992481203,133
+glia,G4_L2_0,late chronic (day 30),"(50, 80]",0.015267175572519083,131
+glia,G4_L2_0,late chronic (day 30),"(80, 150]",0.006369426751592357,314
+glia,G4_L2_1,late chronic (day 30),"(0, 10]",0.3010752688172043,93
+glia,G4_L2_1,late chronic (day 30),"(10, 20]",0.040229885057471264,174
+glia,G4_L2_1,late chronic (day 30),"(20, 30]",0.027777777777777776,144
+glia,G4_L2_1,late chronic (day 30),"(30, 50]",0.03349282296650718,209
+glia,G4_L2_1,late chronic (day 30),"(50, 80]",0.0,236
+glia,G4_L2_1,late chronic (day 30),"(80, 150]",0.0,258
+glia,G4_L2_2,CFA control,"(0, 10]",0.16666666666666666,12
+glia,G4_L2_2,CFA control,"(10, 20]",0.0,16
+glia,G4_L2_2,CFA control,"(20, 30]",0.0,6
+glia,G4_L2_2,CFA control,"(30, 50]",0.0,10
+glia,G4_L2_2,CFA control,"(50, 80]",0.0,12
+glia,G4_L2_2,CFA control,"(80, 150]",0.0,14
+glia,G4_L3_0,late chronic (day 30),"(0, 10]",0.55,40
+glia,G4_L3_0,late chronic (day 30),"(10, 20]",0.3522727272727273,88
+glia,G4_L3_0,late chronic (day 30),"(20, 30]",0.1743119266055046,109
+glia,G4_L3_0,late chronic (day 30),"(30, 50]",0.21212121212121213,165
+glia,G4_L3_0,late chronic (day 30),"(50, 80]",0.04090909090909091,220
+glia,G4_L3_0,late chronic (day 30),"(80, 150]",0.0032414910858995136,617
+glia,G4_L3_1,onset,"(0, 10]",0.3620689655172414,58
+glia,G4_L3_1,onset,"(10, 20]",0.3211009174311927,109
+glia,G4_L3_1,onset,"(20, 30]",0.3229166666666667,96
+glia,G4_L3_1,onset,"(30, 50]",0.09615384615384616,104
+glia,G4_L3_1,onset,"(50, 80]",0.0379746835443038,79
+glia,G4_L3_1,onset,"(80, 150]",0.0,130
+glia,G4_L3_2,CFA control,"(0, 10]",0.16666666666666666,12
+glia,G4_L3_2,CFA control,"(10, 20]",0.05263157894736842,19
+glia,G4_L3_2,CFA control,"(20, 30]",0.0,12
+glia,G4_L3_2,CFA control,"(30, 50]",0.0,16
+glia,G4_L3_2,CFA control,"(50, 80]",0.0,13
+glia,G4_L3_2,CFA control,"(80, 150]",0.0,35
+glia,G5_L1_0,pre-symptomatic,"(0, 10]",0.3333333333333333,3
+glia,G5_L1_0,pre-symptomatic,"(10, 20]",0.1111111111111111,9
+glia,G5_L1_0,pre-symptomatic,"(20, 30]",0.0,5
+glia,G5_L1_0,pre-symptomatic,"(30, 50]",0.0,9
+glia,G5_L1_0,pre-symptomatic,"(50, 80]",0.0,6
+glia,G5_L1_0,pre-symptomatic,"(80, 150]",0.0,8
+glia,G5_L1_1,peak,"(0, 10]",0.6190476190476191,42
+glia,G5_L1_1,peak,"(10, 20]",0.4661016949152542,118
+glia,G5_L1_1,peak,"(20, 30]",0.5396825396825397,126
+glia,G5_L1_1,peak,"(30, 50]",0.31125827814569534,151
+glia,G5_L1_1,peak,"(50, 80]",0.16260162601626016,123
+glia,G5_L1_1,peak,"(80, 150]",0.03488372093023256,172
+glia,G5_L1_2,onset,"(0, 10]",0.2786885245901639,61
+glia,G5_L1_2,onset,"(10, 20]",0.13861386138613863,101
+glia,G5_L1_2,onset,"(20, 30]",0.03571428571428571,56
+glia,G5_L1_2,onset,"(30, 50]",0.3142857142857143,35
+glia,G5_L1_2,onset,"(50, 80]",0.4576271186440678,59
+glia,G5_L1_2,onset,"(80, 150]",0.14457831325301204,83
+glia,G5_L2_0,pre-symptomatic,"(0, 10]",0.0,4
+glia,G5_L2_0,pre-symptomatic,"(10, 20]",0.1,10
+glia,G5_L2_0,pre-symptomatic,"(20, 30]",0.0,9
+glia,G5_L2_0,pre-symptomatic,"(30, 50]",0.0,5
+glia,G5_L2_0,pre-symptomatic,"(50, 80]",0.0,12
+glia,G5_L2_0,pre-symptomatic,"(80, 150]",0.0,19
+glia,G5_L2_1,onset,"(0, 10]",0.38636363636363635,44
+glia,G5_L2_1,onset,"(10, 20]",0.21052631578947367,95
+glia,G5_L2_1,onset,"(20, 30]",0.3170731707317073,82
+glia,G5_L2_1,onset,"(30, 50]",0.23809523809523808,105
+glia,G5_L2_1,onset,"(50, 80]",0.01639344262295082,61
+glia,G5_L2_1,onset,"(80, 150]",0.024390243902439025,82
+glia,G5_L2_2,peak,"(0, 10]",0.42857142857142855,98
+glia,G5_L2_2,peak,"(10, 20]",0.1658291457286432,199
+glia,G5_L2_2,peak,"(20, 30]",0.1267605633802817,142
+glia,G5_L2_2,peak,"(30, 50]",0.03571428571428571,168
+glia,G5_L2_2,peak,"(50, 80]",0.0,159
+glia,G5_L2_2,peak,"(80, 150]",0.0,369
+glia,G5_L3_0,pre-symptomatic,"(0, 10]",0.4166666666666667,12
+glia,G5_L3_0,pre-symptomatic,"(10, 20]",0.058823529411764705,17
+glia,G5_L3_0,pre-symptomatic,"(20, 30]",0.0,14
+glia,G5_L3_0,pre-symptomatic,"(30, 50]",0.0,16
+glia,G5_L3_0,pre-symptomatic,"(50, 80]",0.0,22
+glia,G5_L3_0,pre-symptomatic,"(80, 150]",0.0,22
+glia,G5_L3_1,onset,"(0, 10]",0.2631578947368421,19
+glia,G5_L3_1,onset,"(10, 20]",0.09302325581395349,43
+glia,G5_L3_1,onset,"(20, 30]",0.2222222222222222,18
+glia,G5_L3_1,onset,"(30, 50]",0.125,16
+glia,G5_L3_1,onset,"(50, 80]",0.0,15
+glia,G5_L3_1,onset,"(80, 150]",0.0,27
+glia,G5_L3_2,peak,"(0, 10]",0.3563218390804598,87
+glia,G5_L3_2,peak,"(10, 20]",0.13609467455621302,169
+glia,G5_L3_2,peak,"(20, 30]",0.09154929577464789,142
+glia,G5_L3_2,peak,"(30, 50]",0.10077519379844961,129
+glia,G5_L3_2,peak,"(50, 80]",0.0410958904109589,146
+glia,G5_L3_2,peak,"(80, 150]",0.0036900369003690036,271
+glia,G6_L1_0,late chronic (day 30),"(0, 10]",0.7777777777777778,27
+glia,G6_L1_0,late chronic (day 30),"(10, 20]",0.4117647058823529,68
+glia,G6_L1_0,late chronic (day 30),"(20, 30]",0.19672131147540983,61
+glia,G6_L1_0,late chronic (day 30),"(30, 50]",0.12871287128712872,101
+glia,G6_L1_0,late chronic (day 30),"(50, 80]",0.042105263157894736,95
+glia,G6_L1_0,late chronic (day 30),"(80, 150]",0.0,244
+glia,G6_L1_1,late chronic (day 30),"(0, 10]",0.6190476190476191,21
+glia,G6_L1_1,late chronic (day 30),"(10, 20]",0.2553191489361702,47
+glia,G6_L1_1,late chronic (day 30),"(20, 30]",0.04,50
+glia,G6_L1_1,late chronic (day 30),"(30, 50]",0.03488372093023256,86
+glia,G6_L1_1,late chronic (day 30),"(50, 80]",0.018691588785046728,107
+glia,G6_L1_1,late chronic (day 30),"(80, 150]",0.004329004329004329,231
+glia,G6_L1_2,late chronic (day 30),"(0, 10]",0.15384615384615385,26
+glia,G6_L1_2,late chronic (day 30),"(10, 20]",0.03125,64
+glia,G6_L1_2,late chronic (day 30),"(20, 30]",0.0,33
+glia,G6_L1_2,late chronic (day 30),"(30, 50]",0.0,88
+glia,G6_L1_2,late chronic (day 30),"(50, 80]",0.0,86
+glia,G6_L1_2,late chronic (day 30),"(80, 150]",0.0,176
+glia,G6_L2_0,onset,"(0, 10]",0.29545454545454547,44
+glia,G6_L2_0,onset,"(10, 20]",0.10810810810810811,74
+glia,G6_L2_0,onset,"(20, 30]",0.0,68
+glia,G6_L2_0,onset,"(30, 50]",0.015625,64
+glia,G6_L2_0,onset,"(50, 80]",0.0,36
+glia,G6_L2_0,onset,"(80, 150]",0.015384615384615385,65
+glia,G6_L2_1,late chronic (day 30),"(0, 10]",0.125,16
+glia,G6_L2_1,late chronic (day 30),"(10, 20]",0.17777777777777778,45
+glia,G6_L2_1,late chronic (day 30),"(20, 30]",0.06060606060606061,33
+glia,G6_L2_1,late chronic (day 30),"(30, 50]",0.034482758620689655,58
+glia,G6_L2_1,late chronic (day 30),"(50, 80]",0.0,101
+glia,G6_L2_1,late chronic (day 30),"(80, 150]",0.0,199
+glia,G6_L2_2,CFA control,"(0, 10]",0.0,4
+glia,G6_L2_2,CFA control,"(10, 20]",0.0,5
+glia,G6_L2_2,CFA control,"(20, 30]",0.0,3
+glia,G6_L2_2,CFA control,"(30, 50]",0.0,2
+glia,G6_L2_2,CFA control,"(50, 80]",0.0,12
+glia,G6_L2_2,CFA control,"(80, 150]",0.0,15
+glia,G6_L3_0,CFA control,"(0, 10]",0.16666666666666666,6
+glia,G6_L3_0,CFA control,"(10, 20]",0.0,18
+glia,G6_L3_0,CFA control,"(20, 30]",0.0,7
+glia,G6_L3_0,CFA control,"(30, 50]",0.0,8
+glia,G6_L3_0,CFA control,"(50, 80]",0.0,9
+glia,G6_L3_0,CFA control,"(80, 150]",0.0,13
+glia,G6_L3_1,CFA control,"(0, 10]",0.0,9
+glia,G6_L3_1,CFA control,"(10, 20]",0.0,16
+glia,G6_L3_1,CFA control,"(20, 30]",0.0,7
+glia,G6_L3_1,CFA control,"(30, 50]",0.0,5
+glia,G6_L3_1,CFA control,"(50, 80]",0.0,8
+glia,G6_L3_1,CFA control,"(80, 150]",0.11764705882352941,17
+glia,G6_L3_2,late chronic (day 30),"(0, 10]",0.3333333333333333,9
+glia,G6_L3_2,late chronic (day 30),"(10, 20]",0.28125,32
+glia,G6_L3_2,late chronic (day 30),"(20, 30]",0.12,50
+glia,G6_L3_2,late chronic (day 30),"(30, 50]",0.037037037037037035,54
+glia,G6_L3_2,late chronic (day 30),"(50, 80]",0.058823529411764705,68
+glia,G6_L3_2,late chronic (day 30),"(80, 150]",0.0,187
+glia,S1_B1_0,remission,"(0, 10]",0.5396825396825397,126
+glia,S1_B1_0,remission,"(10, 20]",0.5378486055776892,251
+glia,S1_B1_0,remission,"(20, 30]",0.41706161137440756,211
+glia,S1_B1_0,remission,"(30, 50]",0.4444444444444444,360
+glia,S1_B1_0,remission,"(50, 80]",0.2727272727272727,220
+glia,S1_B1_0,remission,"(80, 150]",0.004484304932735426,223
+glia,S1_B1_1,peak,"(0, 10]",0.6632653061224489,98
+glia,S1_B1_1,peak,"(10, 20]",0.38372093023255816,172
+glia,S1_B1_1,peak,"(20, 30]",0.23076923076923078,208
+glia,S1_B1_1,peak,"(30, 50]",0.21103896103896103,308
+glia,S1_B1_1,peak,"(50, 80]",0.0636042402826855,283
+glia,S1_B1_1,peak,"(80, 150]",0.0,503
+glia,S1_B1_2,onset,"(0, 10]",0.2413793103448276,58
+glia,S1_B1_2,onset,"(10, 20]",0.19166666666666668,120
+glia,S1_B1_2,onset,"(20, 30]",0.2159090909090909,88
+glia,S1_B1_2,onset,"(30, 50]",0.29464285714285715,112
+glia,S1_B1_2,onset,"(50, 80]",0.39705882352941174,136
+glia,S1_B1_2,onset,"(80, 150]",0.0967741935483871,279
+glia,S1_B2_0,peak,"(0, 10]",0.6171875,128
+glia,S1_B2_0,peak,"(10, 20]",0.4063926940639269,219
+glia,S1_B2_0,peak,"(20, 30]",0.20085470085470086,234
+glia,S1_B2_0,peak,"(30, 50]",0.2080536912751678,298
+glia,S1_B2_0,peak,"(50, 80]",0.012096774193548387,248
+glia,S1_B2_0,peak,"(80, 150]",0.0,266
+glia,S1_B2_1,onset,"(0, 10]",0.9375,16
+glia,S1_B2_1,onset,"(10, 20]",0.4489795918367347,49
+glia,S1_B2_1,onset,"(20, 30]",0.06,50
+glia,S1_B2_1,onset,"(30, 50]",0.2,40
+glia,S1_B2_1,onset,"(50, 80]",0.2222222222222222,27
+glia,S1_B2_1,onset,"(80, 150]",0.03508771929824561,57
+glia,S1_B2_2,remission,"(0, 10]",0.22627737226277372,137
+glia,S1_B2_2,remission,"(10, 20]",0.28413284132841327,271
+glia,S1_B2_2,remission,"(20, 30]",0.38860103626943004,193
+glia,S1_B2_2,remission,"(30, 50]",0.11711711711711711,222
+glia,S1_B2_2,remission,"(50, 80]",0.005813953488372093,172
+glia,S1_B2_2,remission,"(80, 150]",0.0,277
+glia,S1_B3_0,onset,"(0, 10]",0.05555555555555555,18
+glia,S1_B3_0,onset,"(10, 20]",0.05555555555555555,18
+glia,S1_B3_0,onset,"(20, 30]",0.05263157894736842,19
+glia,S1_B3_0,onset,"(30, 50]",0.0,23
+glia,S1_B3_0,onset,"(50, 80]",0.0,32
+glia,S1_B3_0,onset,"(80, 150]",0.0,39
+glia,S1_B3_1,remission,"(0, 10]",0.5032679738562091,153
+glia,S1_B3_1,remission,"(10, 20]",0.41694915254237286,295
+glia,S1_B3_1,remission,"(20, 30]",0.23790322580645162,248
+glia,S1_B3_1,remission,"(30, 50]",0.2542955326460481,291
+glia,S1_B3_1,remission,"(50, 80]",0.017937219730941704,223
+glia,S1_B3_1,remission,"(80, 150]",0.0,330
+glia,S1_B3_2,peak,"(0, 10]",0.5306122448979592,98
+glia,S1_B3_2,peak,"(10, 20]",0.4540229885057471,174
+glia,S1_B3_2,peak,"(20, 30]",0.25380710659898476,197
+glia,S1_B3_2,peak,"(30, 50]",0.11636363636363636,275
+glia,S1_B3_2,peak,"(50, 80]",0.06882591093117409,247
+glia,S1_B3_2,peak,"(80, 150]",0.0030120481927710845,332
+glia,S1_T1_0,late,"(0, 10]",0.3333333333333333,24
+glia,S1_T1_0,late,"(10, 20]",0.14864864864864866,74
+glia,S1_T1_0,late,"(20, 30]",0.06578947368421052,76
+glia,S1_T1_0,late,"(30, 50]",0.0,80
+glia,S1_T1_0,late,"(50, 80]",0.0,79
+glia,S1_T1_0,late,"(80, 150]",0.0,81
+glia,S1_T1_1,CFA control,"(0, 10]",0.0,6
+glia,S1_T1_1,CFA control,"(10, 20]",0.09090909090909091,11
+glia,S1_T1_1,CFA control,"(20, 30]",0.0,3
+glia,S1_T1_1,CFA control,"(30, 50]",0.0,5
+glia,S1_T1_1,CFA control,"(50, 80]",0.0,14
+glia,S1_T1_1,CFA control,"(80, 150]",0.0,23
+glia,S1_T1_2,CFA control,"(0, 10]",0.0,12
+glia,S1_T1_2,CFA control,"(10, 20]",0.058823529411764705,17
+glia,S1_T1_2,CFA control,"(20, 30]",0.3,10
+glia,S1_T1_2,CFA control,"(30, 50]",0.11538461538461539,26
+glia,S1_T1_2,CFA control,"(50, 80]",0.0,14
+glia,S1_T1_2,CFA control,"(80, 150]",0.0,19
+glia,S1_T2_0,peak,"(0, 10]",0.5078125,128
+glia,S1_T2_0,peak,"(10, 20]",0.3939393939393939,231
+glia,S1_T2_0,peak,"(20, 30]",0.505,200
+glia,S1_T2_0,peak,"(30, 50]",0.41509433962264153,318
+glia,S1_T2_0,peak,"(50, 80]",0.1649122807017544,285
+glia,S1_T2_0,peak,"(80, 150]",0.12300683371298406,439
+glia,S1_T2_1,CFA control,"(0, 10]",0.15384615384615385,13
+glia,S1_T2_1,CFA control,"(10, 20]",0.0,13
+glia,S1_T2_1,CFA control,"(20, 30]",0.3333333333333333,3
+glia,S1_T2_1,CFA control,"(30, 50]",0.0,4
+glia,S1_T2_1,CFA control,"(50, 80]",0.0,12
+glia,S1_T2_1,CFA control,"(80, 150]",0.0,23
+glia,S1_T2_2,late,"(0, 10]",0.03076923076923077,65
+glia,S1_T2_2,late,"(10, 20]",0.01098901098901099,91
+glia,S1_T2_2,late,"(20, 30]",0.0,55
+glia,S1_T2_2,late,"(30, 50]",0.0,62
+glia,S1_T2_2,late,"(50, 80]",0.0,39
+glia,S1_T2_2,late,"(80, 150]",0.0,85
+glia,S1_T3_0,peak,"(0, 10]",0.5952380952380952,210
+glia,S1_T3_0,peak,"(10, 20]",0.41950113378684806,441
+glia,S1_T3_0,peak,"(20, 30]",0.4358974358974359,429
+glia,S1_T3_0,peak,"(30, 50]",0.30615640599001664,601
+glia,S1_T3_0,peak,"(50, 80]",0.29724770642201837,545
+glia,S1_T3_0,peak,"(80, 150]",0.044642857142857144,784
+glia,S1_T3_1,late,"(0, 10]",0.22448979591836735,49
+glia,S1_T3_1,late,"(10, 20]",0.13513513513513514,74
+glia,S1_T3_1,late,"(20, 30]",0.023255813953488372,86
+glia,S1_T3_1,late,"(30, 50]",0.020833333333333332,96
+glia,S1_T3_1,late,"(50, 80]",0.009900990099009901,101
+glia,S1_T3_1,late,"(80, 150]",0.0,163
+glia,S1_T3_2,peak,"(0, 10]",0.6557377049180327,122
+glia,S1_T3_2,peak,"(10, 20]",0.40711462450592883,253
+glia,S1_T3_2,peak,"(20, 30]",0.30303030303030304,231
+glia,S1_T3_2,peak,"(30, 50]",0.31272727272727274,275
+glia,S1_T3_2,peak,"(50, 80]",0.2350230414746544,217
+glia,S1_T3_2,peak,"(80, 150]",0.06756756756756757,296
+glia,S2_B1_0,onset,"(0, 10]",0.2127659574468085,47
+glia,S2_B1_0,onset,"(10, 20]",0.08571428571428572,70
+glia,S2_B1_0,onset,"(20, 30]",0.11904761904761904,42
+glia,S2_B1_0,onset,"(30, 50]",0.0625,48
+glia,S2_B1_0,onset,"(50, 80]",0.034482758620689655,58
+glia,S2_B1_0,onset,"(80, 150]",0.0,150
+glia,S2_B1_1,peak,"(0, 10]",0.6214285714285714,140
+glia,S2_B1_1,peak,"(10, 20]",0.5683453237410072,278
+glia,S2_B1_1,peak,"(20, 30]",0.3020527859237537,341
+glia,S2_B1_1,peak,"(30, 50]",0.09042553191489362,376
+glia,S2_B1_1,peak,"(50, 80]",0.0,280
+glia,S2_B1_1,peak,"(80, 150]",0.0,415
+glia,S2_B1_2,onset,"(0, 10]",0.23529411764705882,17
+glia,S2_B1_2,onset,"(10, 20]",0.14285714285714285,28
+glia,S2_B1_2,onset,"(20, 30]",0.038461538461538464,26
+glia,S2_B1_2,onset,"(30, 50]",0.05405405405405406,37
+glia,S2_B1_2,onset,"(50, 80]",0.0,39
+glia,S2_B1_2,onset,"(80, 150]",0.0,74
+glia,S2_B2_0,peak,"(0, 10]",0.3619047619047619,105
+glia,S2_B2_0,peak,"(10, 20]",0.3473053892215569,167
+glia,S2_B2_0,peak,"(20, 30]",0.1881720430107527,186
+glia,S2_B2_0,peak,"(30, 50]",0.01056338028169014,284
+glia,S2_B2_0,peak,"(50, 80]",0.0035460992907801418,282
+glia,S2_B2_0,peak,"(80, 150]",0.0,368
+glia,S2_B2_1,late,"(0, 10]",0.3076923076923077,78
+glia,S2_B2_1,late,"(10, 20]",0.17679558011049723,181
+glia,S2_B2_1,late,"(20, 30]",0.09433962264150944,159
+glia,S2_B2_1,late,"(30, 50]",0.020833333333333332,144
+glia,S2_B2_1,late,"(50, 80]",0.008064516129032258,124
+glia,S2_B2_1,late,"(80, 150]",0.0064516129032258064,155
+glia,S2_B2_2,late,"(0, 10]",0.5222222222222223,90
+glia,S2_B2_2,late,"(10, 20]",0.3459715639810427,211
+glia,S2_B2_2,late,"(20, 30]",0.17647058823529413,204
+glia,S2_B2_2,late,"(30, 50]",0.036885245901639344,244
+glia,S2_B2_2,late,"(50, 80]",0.07818930041152264,243
+glia,S2_B2_2,late,"(80, 150]",0.01358695652173913,368
+glia,S2_B3_0,onset,"(0, 10]",0.5081967213114754,61
+glia,S2_B3_0,onset,"(10, 20]",0.23404255319148937,94
+glia,S2_B3_0,onset,"(20, 30]",0.18181818181818182,66
+glia,S2_B3_0,onset,"(30, 50]",0.18446601941747573,103
+glia,S2_B3_0,onset,"(50, 80]",0.08148148148148149,135
+glia,S2_B3_0,onset,"(80, 150]",0.03827751196172249,209
+glia,S2_B3_1,late,"(0, 10]",0.39285714285714285,84
+glia,S2_B3_1,late,"(10, 20]",0.2744186046511628,215
+glia,S2_B3_1,late,"(20, 30]",0.11475409836065574,183
+glia,S2_B3_1,late,"(30, 50]",0.009950248756218905,201
+glia,S2_B3_1,late,"(50, 80]",0.0,237
+glia,S2_B3_1,late,"(80, 150]",0.012195121951219513,328
+glia,S2_B3_2,peak,"(0, 10]",0.3490566037735849,106
+glia,S2_B3_2,peak,"(10, 20]",0.21693121693121692,189
+glia,S2_B3_2,peak,"(20, 30]",0.08450704225352113,142
+glia,S2_B3_2,peak,"(30, 50]",0.04878048780487805,205
+glia,S2_B3_2,peak,"(50, 80]",0.0449438202247191,178
+glia,S2_B3_2,peak,"(80, 150]",0.01597444089456869,313
+glia,S2_T1_0,remission,"(0, 10]",0.6504424778761062,226
+glia,S2_T1_0,remission,"(10, 20]",0.3148614609571788,397
+glia,S2_T1_0,remission,"(20, 30]",0.2233502538071066,394
+glia,S2_T1_0,remission,"(30, 50]",0.07476635514018691,535
+glia,S2_T1_0,remission,"(50, 80]",0.03872053872053872,594
+glia,S2_T1_0,remission,"(80, 150]",0.0,921
+glia,S2_T1_1,CFA control,"(0, 10]",0.0625,16
+glia,S2_T1_1,CFA control,"(10, 20]",0.0,26
+glia,S2_T1_1,CFA control,"(20, 30]",0.0,9
+glia,S2_T1_1,CFA control,"(30, 50]",0.1111111111111111,9
+glia,S2_T1_1,CFA control,"(50, 80]",0.06666666666666667,15
+glia,S2_T1_1,CFA control,"(80, 150]",0.0,21
+glia,S2_T1_2,CFA control,"(0, 10]",0.0,15
+glia,S2_T1_2,CFA control,"(10, 20]",0.1,20
+glia,S2_T1_2,CFA control,"(20, 30]",0.0,11
+glia,S2_T1_2,CFA control,"(30, 50]",0.0,20
+glia,S2_T1_2,CFA control,"(50, 80]",0.0,10
+glia,S2_T1_2,CFA control,"(80, 150]",0.0,33
+glia,S2_T2_0,peak,"(0, 10]",0.8125,176
+glia,S2_T2_0,peak,"(10, 20]",0.6224188790560472,339
+glia,S2_T2_0,peak,"(20, 30]",0.4340770791075051,493
+glia,S2_T2_0,peak,"(30, 50]",0.2198100407055631,737
+glia,S2_T2_0,peak,"(50, 80]",0.0829145728643216,796
+glia,S2_T2_0,peak,"(80, 150]",0.0024916943521594683,1204
+glia,S2_T2_1,CFA control,"(0, 10]",0.1111111111111111,9
+glia,S2_T2_1,CFA control,"(10, 20]",0.0,12
+glia,S2_T2_1,CFA control,"(20, 30]",0.0,5
+glia,S2_T2_1,CFA control,"(30, 50]",0.0,4
+glia,S2_T2_1,CFA control,"(50, 80]",0.0,7
+glia,S2_T2_1,CFA control,"(80, 150]",0.0,13
+glia,S2_T2_2,remission,"(0, 10]",0.21518987341772153,79
+glia,S2_T2_2,remission,"(10, 20]",0.3333333333333333,138
+glia,S2_T2_2,remission,"(20, 30]",0.3006535947712418,153
+glia,S2_T2_2,remission,"(30, 50]",0.06467661691542288,201
+glia,S2_T2_2,remission,"(50, 80]",0.023622047244094488,127
+glia,S2_T2_2,remission,"(80, 150]",0.027972027972027972,143
+glia,S2_T3_0,peak,"(0, 10]",0.19148936170212766,47
+glia,S2_T3_0,peak,"(10, 20]",0.06481481481481481,108
+glia,S2_T3_0,peak,"(20, 30]",0.01818181818181818,110
+glia,S2_T3_0,peak,"(30, 50]",0.007936507936507936,126
+glia,S2_T3_0,peak,"(50, 80]",0.04672897196261682,107
+glia,S2_T3_0,peak,"(80, 150]",0.0,143
+glia,S2_T3_1,peak,"(0, 10]",0.6016949152542372,118
+glia,S2_T3_1,peak,"(10, 20]",0.4050179211469534,279
+glia,S2_T3_1,peak,"(20, 30]",0.35802469135802467,243
+glia,S2_T3_1,peak,"(30, 50]",0.19455252918287938,257
+glia,S2_T3_1,peak,"(50, 80]",0.1676300578034682,173
+glia,S2_T3_1,peak,"(80, 150]",0.0,306
+glia,S3_B1_0,onset,"(0, 10]",0.14285714285714285,35
+glia,S3_B1_0,onset,"(10, 20]",0.1388888888888889,72
+glia,S3_B1_0,onset,"(20, 30]",0.1875,32
+glia,S3_B1_0,onset,"(30, 50]",0.09259259259259259,54
+glia,S3_B1_0,onset,"(50, 80]",0.12280701754385964,57
+glia,S3_B1_0,onset,"(80, 150]",0.0,87
+glia,S3_B1_1,peak,"(0, 10]",0.577639751552795,161
+glia,S3_B1_1,peak,"(10, 20]",0.4939759036144578,249
+glia,S3_B1_1,peak,"(20, 30]",0.48760330578512395,242
+glia,S3_B1_1,peak,"(30, 50]",0.34134615384615385,416
+glia,S3_B1_1,peak,"(50, 80]",0.1912751677852349,298
+glia,S3_B1_1,peak,"(80, 150]",0.09090909090909091,473
+glia,S3_B1_2,peak,"(0, 10]",0.42028985507246375,138
+glia,S3_B1_2,peak,"(10, 20]",0.2482758620689655,290
+glia,S3_B1_2,peak,"(20, 30]",0.18210862619808307,313
+glia,S3_B1_2,peak,"(30, 50]",0.14012738853503184,471
+glia,S3_B1_2,peak,"(50, 80]",0.07768595041322314,605
+glia,S3_B1_2,peak,"(80, 150]",0.010434782608695653,1150
+glia,S3_B2_0,onset,"(0, 10]",0.26666666666666666,60
+glia,S3_B2_0,onset,"(10, 20]",0.176,125
+glia,S3_B2_0,onset,"(20, 30]",0.26865671641791045,67
+glia,S3_B2_0,onset,"(30, 50]",0.10743801652892562,121
+glia,S3_B2_0,onset,"(50, 80]",0.08771929824561403,114
+glia,S3_B2_0,onset,"(80, 150]",0.03333333333333333,180
+glia,S3_B2_1,onset,"(0, 10]",0.23076923076923078,26
+glia,S3_B2_1,onset,"(10, 20]",0.19642857142857142,56
+glia,S3_B2_1,onset,"(20, 30]",0.1388888888888889,36
+glia,S3_B2_1,onset,"(30, 50]",0.075,40
+glia,S3_B2_1,onset,"(50, 80]",0.024390243902439025,41
+glia,S3_B2_1,onset,"(80, 150]",0.0,69
+glia,S3_B2_2,peak,"(0, 10]",0.3248407643312102,157
+glia,S3_B2_2,peak,"(10, 20]",0.2226148409893993,283
+glia,S3_B2_2,peak,"(20, 30]",0.27697841726618705,278
+glia,S3_B2_2,peak,"(30, 50]",0.21774193548387097,372
+glia,S3_B2_2,peak,"(50, 80]",0.10098522167487685,406
+glia,S3_B2_2,peak,"(80, 150]",0.007653061224489796,784
+glia,S3_B3_0,peak,"(0, 10]",0.85,40
+glia,S3_B3_0,peak,"(10, 20]",0.4878048780487805,123
+glia,S3_B3_0,peak,"(20, 30]",0.4371859296482412,199
+glia,S3_B3_0,peak,"(30, 50]",0.3620689655172414,406
+glia,S3_B3_0,peak,"(50, 80]",0.2725490196078431,510
+glia,S3_B3_0,peak,"(80, 150]",0.15948777648428406,859
+glia,S3_B3_1,peak,"(0, 10]",0.4551282051282051,156
+glia,S3_B3_1,peak,"(10, 20]",0.46258503401360546,294
+glia,S3_B3_1,peak,"(20, 30]",0.28700906344410876,331
+glia,S3_B3_1,peak,"(30, 50]",0.04560260586319218,307
+glia,S3_B3_1,peak,"(50, 80]",0.0,251
+glia,S3_B3_1,peak,"(80, 150]",0.0,503
+glia,S3_B3_2,peak,"(0, 10]",0.6085271317829457,258
+glia,S3_B3_2,peak,"(10, 20]",0.3395348837209302,430
+glia,S3_B3_2,peak,"(20, 30]",0.22562674094707522,359
+glia,S3_B3_2,peak,"(30, 50]",0.05473684210526316,475
+glia,S3_B3_2,peak,"(50, 80]",0.0015822784810126582,632
+glia,S3_B3_2,peak,"(80, 150]",0.0,1479
+glia,S3_T1_0,CFA control,"(0, 10]",0.1,10
+glia,S3_T1_0,CFA control,"(10, 20]",0.0,16
+glia,S3_T1_0,CFA control,"(20, 30]",0.09090909090909091,11
+glia,S3_T1_0,CFA control,"(30, 50]",0.0,13
+glia,S3_T1_0,CFA control,"(50, 80]",0.0,12
+glia,S3_T1_0,CFA control,"(80, 150]",0.0,28
+glia,S3_T1_1,late,"(0, 10]",0.14583333333333334,48
+glia,S3_T1_1,late,"(10, 20]",0.07894736842105263,76
+glia,S3_T1_1,late,"(20, 30]",0.038461538461538464,52
+glia,S3_T1_1,late,"(30, 50]",0.10606060606060606,66
+glia,S3_T1_1,late,"(50, 80]",0.11224489795918367,98
+glia,S3_T1_1,late,"(80, 150]",0.0,104
+glia,S3_T1_2,remission,"(0, 10]",0.23809523809523808,21
+glia,S3_T1_2,remission,"(10, 20]",0.09090909090909091,33
+glia,S3_T1_2,remission,"(20, 30]",0.15384615384615385,39
+glia,S3_T1_2,remission,"(30, 50]",0.045454545454545456,44
+glia,S3_T1_2,remission,"(50, 80]",0.11666666666666667,60
+glia,S3_T1_2,remission,"(80, 150]",0.014705882352941176,136
+glia,S3_T2_0,remission,"(0, 10]",0.3333333333333333,24
+glia,S3_T2_0,remission,"(10, 20]",0.3333333333333333,36
+glia,S3_T2_0,remission,"(20, 30]",0.2909090909090909,55
+glia,S3_T2_0,remission,"(30, 50]",0.17532467532467533,154
+glia,S3_T2_0,remission,"(50, 80]",0.16260162601626016,123
+glia,S3_T2_0,remission,"(80, 150]",0.036290322580645164,248
+glia,S3_T2_1,late,"(0, 10]",0.12727272727272726,55
+glia,S3_T2_1,late,"(10, 20]",0.13978494623655913,93
+glia,S3_T2_1,late,"(20, 30]",0.03571428571428571,56
+glia,S3_T2_1,late,"(30, 50]",0.04225352112676056,71
+glia,S3_T2_1,late,"(50, 80]",0.0641025641025641,78
+glia,S3_T2_1,late,"(80, 150]",0.0,102
+glia,S3_T2_2,late,"(0, 10]",0.4074074074074074,54
+glia,S3_T2_2,late,"(10, 20]",0.3333333333333333,96
+glia,S3_T2_2,late,"(20, 30]",0.25806451612903225,93
+glia,S3_T2_2,late,"(30, 50]",0.019417475728155338,103
+glia,S3_T2_2,late,"(50, 80]",0.0,72
+glia,S3_T2_2,late,"(80, 150]",0.0,152
+glia,S3_T3_0,CFA control,"(0, 10]",0.14285714285714285,14
+glia,S3_T3_0,CFA control,"(10, 20]",0.0,5
+glia,S3_T3_0,CFA control,"(20, 30]",0.125,8
+glia,S3_T3_0,CFA control,"(30, 50]",0.08333333333333333,12
+glia,S3_T3_0,CFA control,"(50, 80]",0.0,14
+glia,S3_T3_0,CFA control,"(80, 150]",0.0,18
+glia,S3_T3_1,remission,"(0, 10]",0.06896551724137931,29
+glia,S3_T3_1,remission,"(10, 20]",0.03076923076923077,65
+glia,S3_T3_1,remission,"(20, 30]",0.0,64
+glia,S3_T3_1,remission,"(30, 50]",0.0,76
+glia,S3_T3_1,remission,"(50, 80]",0.0,61
+glia,S3_T3_1,remission,"(80, 150]",0.0,103
+glia,S3_T3_2,CFA control,"(0, 10]",0.2,5
+glia,S3_T3_2,CFA control,"(10, 20]",0.0,14
+glia,S3_T3_2,CFA control,"(20, 30]",0.14285714285714285,7
+glia,S3_T3_2,CFA control,"(30, 50]",0.0,6
+glia,S3_T3_2,CFA control,"(50, 80]",0.0,9
+glia,S3_T3_2,CFA control,"(80, 150]",0.0,14
+glia,S4_B1_0,peak,"(0, 10]",0.49700598802395207,167
+glia,S4_B1_0,peak,"(10, 20]",0.324,250
+glia,S4_B1_0,peak,"(20, 30]",0.30917874396135264,207
+glia,S4_B1_0,peak,"(30, 50]",0.27,200
+glia,S4_B1_0,peak,"(50, 80]",0.13615023474178403,213
+glia,S4_B1_0,peak,"(80, 150]",0.07407407407407407,324
+glia,S4_B1_1,late,"(0, 10]",0.9210526315789473,38
+glia,S4_B1_1,late,"(10, 20]",0.4329896907216495,97
+glia,S4_B1_1,late,"(20, 30]",0.17857142857142858,140
+glia,S4_B1_1,late,"(30, 50]",0.08695652173913043,253
+glia,S4_B1_1,late,"(50, 80]",0.045662100456621,219
+glia,S4_B1_1,late,"(80, 150]",0.003703703703703704,270
+glia,S4_B1_2,late,"(0, 10]",0.32038834951456313,103
+glia,S4_B1_2,late,"(10, 20]",0.1793103448275862,145
+glia,S4_B1_2,late,"(20, 30]",0.07792207792207792,154
+glia,S4_B1_2,late,"(30, 50]",0.05917159763313609,169
+glia,S4_B1_2,late,"(50, 80]",0.0,158
+glia,S4_B1_2,late,"(80, 150]",0.0,226
+glia,S4_B2_0,peak,"(0, 10]",0.4473684210526316,76
+glia,S4_B2_0,peak,"(10, 20]",0.24242424242424243,165
+glia,S4_B2_0,peak,"(20, 30]",0.13744075829383887,211
+glia,S4_B2_0,peak,"(30, 50]",0.027777777777777776,252
+glia,S4_B2_0,peak,"(50, 80]",0.0,245
+glia,S4_B2_0,peak,"(80, 150]",0.0,336
+glia,S4_B2_1,late,"(0, 10]",0.5,112
+glia,S4_B2_1,late,"(10, 20]",0.27040816326530615,196
+glia,S4_B2_1,late,"(20, 30]",0.14215686274509803,204
+glia,S4_B2_1,late,"(30, 50]",0.11504424778761062,226
+glia,S4_B2_1,late,"(50, 80]",0.12236286919831224,237
+glia,S4_B2_1,late,"(80, 150]",0.03550295857988166,338
+glia,S4_B2_2,peak,"(0, 10]",0.6142131979695431,197
+glia,S4_B2_2,peak,"(10, 20]",0.3867069486404834,331
+glia,S4_B2_2,peak,"(20, 30]",0.2878787878787879,264
+glia,S4_B2_2,peak,"(30, 50]",0.2005420054200542,369
+glia,S4_B2_2,peak,"(50, 80]",0.03519061583577713,341
+glia,S4_B2_2,peak,"(80, 150]",0.015590200445434299,449
+glia,S4_B3_0,peak,"(0, 10]",0.48344370860927155,151
+glia,S4_B3_0,peak,"(10, 20]",0.33858267716535434,254
+glia,S4_B3_0,peak,"(20, 30]",0.17065868263473055,334
+glia,S4_B3_0,peak,"(30, 50]",0.10699588477366255,486
+glia,S4_B3_0,peak,"(50, 80]",0.024691358024691357,486
+glia,S4_B3_0,peak,"(80, 150]",0.011412268188302425,701
+glia,S4_B3_1,peak,"(0, 10]",0.33783783783783783,74
+glia,S4_B3_1,peak,"(10, 20]",0.3333333333333333,135
+glia,S4_B3_1,peak,"(20, 30]",0.2558139534883721,129
+glia,S4_B3_1,peak,"(30, 50]",0.1885245901639344,244
+glia,S4_B3_1,peak,"(50, 80]",0.1166077738515901,283
+glia,S4_B3_1,peak,"(80, 150]",0.023305084745762712,472
+glia,S4_B3_2,peak,"(0, 10]",0.6923076923076923,52
+glia,S4_B3_2,peak,"(10, 20]",0.4594594594594595,111
+glia,S4_B3_2,peak,"(20, 30]",0.41935483870967744,124
+glia,S4_B3_2,peak,"(30, 50]",0.2109090909090909,275
+glia,S4_B3_2,peak,"(50, 80]",0.1787709497206704,358
+glia,S4_B3_2,peak,"(80, 150]",0.11428571428571428,805
+glia,S4_T1_0,peak,"(0, 10]",0.609271523178808,151
+glia,S4_T1_0,peak,"(10, 20]",0.3943089430894309,246
+glia,S4_T1_0,peak,"(20, 30]",0.22380952380952382,210
+glia,S4_T1_0,peak,"(30, 50]",0.1867704280155642,257
+glia,S4_T1_0,peak,"(50, 80]",0.14122137404580154,262
+glia,S4_T1_0,peak,"(80, 150]",0.05057471264367816,435
+glia,S4_T1_1,onset,"(0, 10]",0.32142857142857145,28
+glia,S4_T1_1,onset,"(10, 20]",0.14,50
+glia,S4_T1_1,onset,"(20, 30]",0.037037037037037035,27
+glia,S4_T1_1,onset,"(30, 50]",0.02631578947368421,38
+glia,S4_T1_1,onset,"(50, 80]",0.0,39
+glia,S4_T1_1,onset,"(80, 150]",0.0,54
+glia,S4_T1_2,onset,"(0, 10]",0.0,15
+glia,S4_T1_2,onset,"(10, 20]",0.1875,16
+glia,S4_T1_2,onset,"(20, 30]",0.0,9
+glia,S4_T1_2,onset,"(30, 50]",0.1111111111111111,18
+glia,S4_T1_2,onset,"(50, 80]",0.0,20
+glia,S4_T1_2,onset,"(80, 150]",0.0,32
+glia,S4_T2_0,remission,"(0, 10]",0.4,110
+glia,S4_T2_0,remission,"(10, 20]",0.3282442748091603,131
+glia,S4_T2_0,remission,"(20, 30]",0.14705882352941177,136
+glia,S4_T2_0,remission,"(30, 50]",0.040697674418604654,172
+glia,S4_T2_0,remission,"(50, 80]",0.046875,128
+glia,S4_T2_0,remission,"(80, 150]",0.06967213114754098,244
+glia,S4_T2_1,onset,"(0, 10]",0.08,25
+glia,S4_T2_1,onset,"(10, 20]",0.0,31
+glia,S4_T2_1,onset,"(20, 30]",0.0,6
+glia,S4_T2_1,onset,"(30, 50]",0.0,16
+glia,S4_T2_1,onset,"(50, 80]",0.0,12
+glia,S4_T2_1,onset,"(80, 150]",0.0,27
+glia,S4_T2_2,peak,"(0, 10]",0.6264367816091954,174
+glia,S4_T2_2,peak,"(10, 20]",0.4059040590405904,271
+glia,S4_T2_2,peak,"(20, 30]",0.3769633507853403,191
+glia,S4_T2_2,peak,"(30, 50]",0.19343065693430658,274
+glia,S4_T2_2,peak,"(50, 80]",0.09655172413793103,290
+glia,S4_T2_2,peak,"(80, 150]",0.002277904328018223,439
+glia,S4_T3_0,remission,"(0, 10]",0.4696969696969697,66
+glia,S4_T3_0,remission,"(10, 20]",0.44166666666666665,120
+glia,S4_T3_0,remission,"(20, 30]",0.224,125
+glia,S4_T3_0,remission,"(30, 50]",0.11494252873563218,174
+glia,S4_T3_0,remission,"(50, 80]",0.041666666666666664,168
+glia,S4_T3_0,remission,"(80, 150]",0.005128205128205128,195
+glia,S4_T3_1,peak,"(0, 10]",0.5217391304347826,115
+glia,S4_T3_1,peak,"(10, 20]",0.3448275862068966,232
+glia,S4_T3_1,peak,"(20, 30]",0.37012987012987014,154
+glia,S4_T3_1,peak,"(30, 50]",0.14432989690721648,194
+glia,S4_T3_1,peak,"(50, 80]",0.06818181818181818,176
+glia,S4_T3_1,peak,"(80, 150]",0.0,217
+glia,S4_T3_2,remission,"(0, 10]",0.21333333333333335,75
+glia,S4_T3_2,remission,"(10, 20]",0.11206896551724138,116
+glia,S4_T3_2,remission,"(20, 30]",0.05263157894736842,95
+glia,S4_T3_2,remission,"(30, 50]",0.05504587155963303,109
+glia,S4_T3_2,remission,"(50, 80]",0.09565217391304348,115
+glia,S4_T3_2,remission,"(80, 150]",0.016574585635359115,181
+glia,S5_B1_0,remission,"(0, 10]",0.49206349206349204,189
+glia,S5_B1_0,remission,"(10, 20]",0.3794749403341289,419
+glia,S5_B1_0,remission,"(20, 30]",0.18502202643171806,454
+glia,S5_B1_0,remission,"(30, 50]",0.13878326996197718,526
+glia,S5_B1_0,remission,"(50, 80]",0.10888252148997135,349
+glia,S5_B1_0,remission,"(80, 150]",0.0,337
+glia,S5_B1_1,peak,"(0, 10]",0.67,100
+glia,S5_B1_1,peak,"(10, 20]",0.4186851211072664,289
+glia,S5_B1_1,peak,"(20, 30]",0.21727748691099477,382
+glia,S5_B1_1,peak,"(30, 50]",0.1590493601462523,547
+glia,S5_B1_1,peak,"(50, 80]",0.05652173913043478,460
+glia,S5_B1_1,peak,"(80, 150]",0.0,878
+glia,S5_B1_2,remission,"(0, 10]",0.5357142857142857,28
+glia,S5_B1_2,remission,"(10, 20]",0.17894736842105263,95
+glia,S5_B1_2,remission,"(20, 30]",0.12025316455696203,158
+glia,S5_B1_2,remission,"(30, 50]",0.022556390977443608,133
+glia,S5_B1_2,remission,"(50, 80]",0.0,151
+glia,S5_B1_2,remission,"(80, 150]",0.0,284
+glia,S5_B2_0,remission,"(0, 10]",0.5365853658536586,41
+glia,S5_B2_0,remission,"(10, 20]",0.22972972972972974,148
+glia,S5_B2_0,remission,"(20, 30]",0.17575757575757575,165
+glia,S5_B2_0,remission,"(30, 50]",0.07553956834532374,278
+glia,S5_B2_0,remission,"(50, 80]",0.00398406374501992,251
+glia,S5_B2_0,remission,"(80, 150]",0.0,531
+glia,S5_B2_1,remission,"(0, 10]",0.37662337662337664,77
+glia,S5_B2_1,remission,"(10, 20]",0.3053097345132743,226
+glia,S5_B2_1,remission,"(20, 30]",0.12442396313364056,217
+glia,S5_B2_1,remission,"(30, 50]",0.06115107913669065,278
+glia,S5_B2_1,remission,"(50, 80]",0.016736401673640166,239
+glia,S5_B2_1,remission,"(80, 150]",0.03076923076923077,390
+glia,S5_B2_2,peak,"(0, 10]",0.7973568281938326,227
+glia,S5_B2_2,peak,"(10, 20]",0.4957446808510638,470
+glia,S5_B2_2,peak,"(20, 30]",0.33004926108374383,609
+glia,S5_B2_2,peak,"(30, 50]",0.19106957424714435,963
+glia,S5_B2_2,peak,"(50, 80]",0.0726950354609929,1128
+glia,S5_B2_2,peak,"(80, 150]",0.03806970509383378,1865
+glia,S5_B3_0,peak,"(0, 10]",0.6584362139917695,243
+glia,S5_B3_0,peak,"(10, 20]",0.5245398773006135,326
+glia,S5_B3_0,peak,"(20, 30]",0.4265129682997118,347
+glia,S5_B3_0,peak,"(30, 50]",0.28477905073649756,611
+glia,S5_B3_0,peak,"(50, 80]",0.07946026986506746,667
+glia,S5_B3_0,peak,"(80, 150]",0.012835472578763127,857
+glia,S5_B3_1,remission,"(0, 10]",0.32,75
+glia,S5_B3_1,remission,"(10, 20]",0.11475409836065574,122
+glia,S5_B3_1,remission,"(20, 30]",0.12037037037037036,108
+glia,S5_B3_1,remission,"(30, 50]",0.0,111
+glia,S5_B3_1,remission,"(50, 80]",0.0,87
+glia,S5_B3_1,remission,"(80, 150]",0.0,143
+glia,S5_B3_2,remission,"(0, 10]",0.1,70
+glia,S5_B3_2,remission,"(10, 20]",0.11363636363636363,132
+glia,S5_B3_2,remission,"(20, 30]",0.20481927710843373,83
+glia,S5_B3_2,remission,"(30, 50]",0.2469879518072289,166
+glia,S5_B3_2,remission,"(50, 80]",0.0449438202247191,178
+glia,S5_B3_2,remission,"(80, 150]",0.008658008658008658,231
+glia,S5_T1_0,remission,"(0, 10]",0.3333333333333333,9
+glia,S5_T1_0,remission,"(10, 20]",0.1702127659574468,47
+glia,S5_T1_0,remission,"(20, 30]",0.16666666666666666,72
+glia,S5_T1_0,remission,"(30, 50]",0.25892857142857145,112
+glia,S5_T1_0,remission,"(50, 80]",0.16326530612244897,147
+glia,S5_T1_0,remission,"(80, 150]",0.00684931506849315,292
+glia,S5_T1_1,peak,"(0, 10]",0.46511627906976744,172
+glia,S5_T1_1,peak,"(10, 20]",0.42657342657342656,286
+glia,S5_T1_1,peak,"(20, 30]",0.4474708171206226,257
+glia,S5_T1_1,peak,"(30, 50]",0.48703170028818443,347
+glia,S5_T1_1,peak,"(50, 80]",0.3882978723404255,376
+glia,S5_T1_1,peak,"(80, 150]",0.14009661835748793,414
+glia,S5_T1_2,peak,"(0, 10]",0.5282051282051282,195
+glia,S5_T1_2,peak,"(10, 20]",0.3003533568904594,283
+glia,S5_T1_2,peak,"(20, 30]",0.2693726937269373,271
+glia,S5_T1_2,peak,"(30, 50]",0.21212121212121213,495
+glia,S5_T1_2,peak,"(50, 80]",0.14092664092664092,518
+glia,S5_T1_2,peak,"(80, 150]",0.06467661691542288,804
+glia,S5_T2_0,peak,"(0, 10]",0.2222222222222222,36
+glia,S5_T2_0,peak,"(10, 20]",0.37254901960784315,102
+glia,S5_T2_0,peak,"(20, 30]",0.3448275862068966,116
+glia,S5_T2_0,peak,"(30, 50]",0.21674876847290642,203
+glia,S5_T2_0,peak,"(50, 80]",0.08536585365853659,246
+glia,S5_T2_0,peak,"(80, 150]",0.02386117136659436,461
+glia,S5_T2_1,peak,"(0, 10]",0.6103896103896104,77
+glia,S5_T2_1,peak,"(10, 20]",0.4099616858237548,261
+glia,S5_T2_1,peak,"(20, 30]",0.3615023474178404,213
+glia,S5_T2_1,peak,"(30, 50]",0.25,272
+glia,S5_T2_1,peak,"(50, 80]",0.13829787234042554,188
+glia,S5_T2_1,peak,"(80, 150]",0.07092198581560284,282
+glia,S5_T2_2,remission,"(0, 10]",0.45454545454545453,77
+glia,S5_T2_2,remission,"(10, 20]",0.07894736842105263,114
+glia,S5_T2_2,remission,"(20, 30]",0.054945054945054944,91
+glia,S5_T2_2,remission,"(30, 50]",0.04,100
+glia,S5_T2_2,remission,"(50, 80]",0.03125,96
+glia,S5_T2_2,remission,"(80, 150]",0.0,122
+glia,S5_T3_0,peak,"(0, 10]",0.7704918032786885,61
+glia,S5_T3_0,peak,"(10, 20]",0.5367647058823529,136
+glia,S5_T3_0,peak,"(20, 30]",0.38372093023255816,172
+glia,S5_T3_0,peak,"(30, 50]",0.30194805194805197,308
+glia,S5_T3_0,peak,"(50, 80]",0.0815450643776824,233
+glia,S5_T3_0,peak,"(80, 150]",0.004524886877828055,442
+glia,S5_T3_1,remission,"(0, 10]",0.5384615384615384,26
+glia,S5_T3_1,remission,"(10, 20]",0.17857142857142858,56
+glia,S5_T3_1,remission,"(20, 30]",0.15384615384615385,104
+glia,S5_T3_1,remission,"(30, 50]",0.12056737588652482,141
+glia,S5_T3_1,remission,"(50, 80]",0.0,137
+glia,S5_T3_1,remission,"(80, 150]",0.0,258
+glia,S5_T3_2,peak,"(0, 10]",0.5,34
+glia,S5_T3_2,peak,"(10, 20]",0.3894736842105263,95
+glia,S5_T3_2,peak,"(20, 30]",0.13725490196078433,102
+glia,S5_T3_2,peak,"(30, 50]",0.0,134
+glia,S5_T3_2,peak,"(50, 80]",0.0,131
+glia,S5_T3_2,peak,"(80, 150]",0.003676470588235294,272
+glia,S6_T1_0,remission,"(0, 10]",0.375,48
+glia,S6_T1_0,remission,"(10, 20]",0.1282051282051282,156
+glia,S6_T1_0,remission,"(20, 30]",0.00980392156862745,102
+glia,S6_T1_0,remission,"(30, 50]",0.0,63
+glia,S6_T1_0,remission,"(50, 80]",0.0,92
+glia,S6_T1_0,remission,"(80, 150]",0.0,144
+glia,S6_T1_1,remission,"(0, 10]",0.4823529411764706,85
+glia,S6_T1_1,remission,"(10, 20]",0.23412698412698413,252
+glia,S6_T1_1,remission,"(20, 30]",0.16355140186915887,214
+glia,S6_T1_1,remission,"(30, 50]",0.05223880597014925,268
+glia,S6_T1_1,remission,"(50, 80]",0.00425531914893617,235
+glia,S6_T1_1,remission,"(80, 150]",0.0,388
+glia,S6_T1_2,remission,"(0, 10]",0.4,10
+glia,S6_T1_2,remission,"(10, 20]",0.15384615384615385,52
+glia,S6_T1_2,remission,"(20, 30]",0.02631578947368421,76
+glia,S6_T1_2,remission,"(30, 50]",0.14606741573033707,89
+glia,S6_T1_2,remission,"(50, 80]",0.0375,80
+glia,S6_T1_2,remission,"(80, 150]",0.0,150
+glia,S6_T2_0,remission,"(0, 10]",0.7692307692307693,26
+glia,S6_T2_0,remission,"(10, 20]",0.4050632911392405,79
+glia,S6_T2_0,remission,"(20, 30]",0.24545454545454545,110
+glia,S6_T2_0,remission,"(30, 50]",0.27011494252873564,174
+glia,S6_T2_0,remission,"(50, 80]",0.1446280991735537,242
+glia,S6_T2_0,remission,"(80, 150]",0.0,368
+glia,S6_T2_1,remission,"(0, 10]",0.047619047619047616,21
+glia,S6_T2_1,remission,"(10, 20]",0.08928571428571429,56
+glia,S6_T2_1,remission,"(20, 30]",0.1111111111111111,27
+glia,S6_T2_1,remission,"(30, 50]",0.0,46
+glia,S6_T2_1,remission,"(50, 80]",0.01694915254237288,59
+glia,S6_T2_1,remission,"(80, 150]",0.0,108
+glia,S6_T2_2,peak,"(0, 10]",0.45652173913043476,92
+glia,S6_T2_2,peak,"(10, 20]",0.23076923076923078,156
+glia,S6_T2_2,peak,"(20, 30]",0.2689655172413793,145
+glia,S6_T2_2,peak,"(30, 50]",0.13851351351351351,296
+glia,S6_T2_2,peak,"(50, 80]",0.08787878787878788,330
+glia,S6_T2_2,peak,"(80, 150]",0.0,600
+glia,S6_T3_0,peak,"(0, 10]",0.4482758620689655,29
+glia,S6_T3_0,peak,"(10, 20]",0.3617021276595745,94
+glia,S6_T3_0,peak,"(20, 30]",0.2088607594936709,158
+glia,S6_T3_0,peak,"(30, 50]",0.12790697674418605,172
+glia,S6_T3_0,peak,"(50, 80]",0.03333333333333333,150
+glia,S6_T3_0,peak,"(80, 150]",0.0032258064516129032,310
+glia,S6_T3_1,remission,"(0, 10]",0.22727272727272727,22
+glia,S6_T3_1,remission,"(10, 20]",0.10204081632653061,98
+glia,S6_T3_1,remission,"(20, 30]",0.057971014492753624,69
+glia,S6_T3_1,remission,"(30, 50]",0.09876543209876543,81
+glia,S6_T3_1,remission,"(50, 80]",0.038834951456310676,103
+glia,S6_T3_1,remission,"(80, 150]",0.0,259
+glia,S6_T3_2,peak,"(0, 10]",0.3150684931506849,73
+glia,S6_T3_2,peak,"(10, 20]",0.20512820512820512,117
+glia,S6_T3_2,peak,"(20, 30]",0.2767857142857143,112
+glia,S6_T3_2,peak,"(30, 50]",0.11940298507462686,134
+glia,S6_T3_2,peak,"(50, 80]",0.014492753623188406,69
+glia,S6_T3_2,peak,"(80, 150]",0.0,112
