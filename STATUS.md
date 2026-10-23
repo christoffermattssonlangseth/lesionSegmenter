@@ -62,8 +62,13 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
 ## Open items / next steps
 
 1. **Ask the collaborator** whether 40 µm edge exclusion is fine for the LMD wells (her protocol: 100 µm).
-2. **Meninges annotation (option 1)**: if she can draw meninges on ~6–8 sections, train a cell-level
-   classifier (like the lesion model) and validate the adaptive boundary; would also make thickness measurable.
+2. **Meninges annotation – ready to send.** `results/meninges_annotation/` (8 sections, every animal,
+   31 boxes of 300 µm: core_at_surface / swollen / internal / bare / typical; per-slide ROI GeoJSON, raw-image
+   previews) + protocol `docs/meninges_annotation.md` (napari, GeoJSON back). When the files come back:
+   `scripts/train_meninges_model.py --annot-dir <dir>` → rule vs model per box kind, held out by animal
+   (`lesionseg/meninges_model.py`). Plumbing dry-run on rule-derived fake labels worked (~7k labelled
+   cells). Feasibility (2026-10-23): shape alone predicts the *rule's* meninges only weakly (AUC 0.72);
+   geometry dominates – real labels are the bottleneck. Open question for her: perivascular cuffs = meninges?
 3. ~~Orientation analysis~~ done (nb 12).
 4. Meninges as its own **reaction compartment** (discussed, not decided): budget is 57/60, needs pooling.
 5. Cell identity needs markers (resident vs infiltrating myeloid: TMEM119/P2RY12 vs CCR2; meningeal

@@ -240,8 +240,11 @@ lesionseg/    io.py (CZI/TIFF readers)  sdata.py (SpatialData route)  masks.py (
               lesion.py (score, myeloid gate, zones)  assign.py (zones, sections)  wells.py (LMD wells)
               validate.py (vs manual annotations)  export.py (parquet/GeoJSON/TIFF/LMD)  viz.py
               pipeline.py  cli.py  config.py
+              meninges.py (adaptive boundary)  orientation.py (nuclear axes vs surface)  swelling.py
+              meninges_model.py + meninges_targets.py (supervised meninges model, annotation targets)
 configs/      eae_dvp_sdata.yaml (primary), eae_dvp.yaml (plain masks), quicklook_image.yaml
 docs/collaborator/  the collaborator's annotation + well-selection notebook (reference)
+docs/meninges_annotation.md  protocol for the manual meninges annotation (boxes in results/meninges_annotation)
 data/masks/cellpose_output -> unpacked cellpose_output.zip (not committed)
 tests/        synthetic end-to-end tests for both routes + LMD export
 data/raw ->   ../DVP/data/OneDrive_1_9-18-2026 (symlink, not committed)
@@ -255,5 +258,9 @@ data/raw ->   ../DVP/data/OneDrive_1_9-18-2026 (symlink, not committed)
   cells. Confirm with the collaborator that 40 µm is acceptable for the LMD wells.
 * Section threshold: 2 % lesion area calls CFA_L2_C (adjuvant-only control, CML_metal scene1) a
   lesion section at 2.2 % – raise `lesion_min_frac` or add a Pu.1⁺-fraction criterion?
+* Meninges: the adaptive boundary is a rule nobody has checked. Annotation targets are ready
+  (`scripts/meninges_annotation_targets.py` → `results/meninges_annotation/`, protocol
+  `docs/meninges_annotation.md`); once annotated, `scripts/train_meninges_model.py` scores the rule and a
+  cell-level model (held out by animal) against them.
 * Calibration-mark coordinates for the LMD export.
 * Scans 2023-1 and CML_2 have no Cellpose output yet.
