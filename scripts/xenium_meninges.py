@@ -27,7 +27,7 @@ ATLAS = os.environ.get("RRMAP2_H5AD", os.path.expanduser(
     "rerun.with_AnnoL1Curated_with_Region_Anno2to4Updated.h5ad"))
 SHEET = Path(__file__).resolve().parents[2] / "ImmunoTransformer/docs/sample_sheet/sections.csv"
 OBS = ["cell_id", "xenium_output", "meta_sample_id", "x_centroid", "y_centroid", "Anno_L1_curated", "Anno_L2",
-       "Global_niche_group", "condition", "stage"]
+       "Global_niche_group", "Physiological_niche", "Global_anatomical_region", "condition", "stage"]
 EXCLUDED = ["C2_G3_Mid_1"]          # dropped in most RRMAP2 analyses
 DEPTH_BINS = [0, 10, 20, 30, 50, 80, 150]
 

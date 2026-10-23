@@ -14,6 +14,7 @@ dependencies:
   - pyarrow
   - scikit-image
   - scikit-learn
+  - statsmodels
   - shapely
   - tifffile
   - matplotlib

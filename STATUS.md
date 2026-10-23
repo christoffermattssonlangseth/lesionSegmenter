@@ -6,7 +6,7 @@ reaction rules agreed with Ting. Last commit at handoff: `e6b8755` (main, pushed
 ## Where things stand
 
 The pipeline runs end to end on the 4 scenes (CML_1, CML_2_rescan, CML_metal scene 0/1), the mass-spec
-reaction plan is regenerated, and notebooks 01–14 are executed (`notebooks/`, copies in
+reaction plan is regenerated, and notebooks 01–15 are executed (`notebooks/`, copies in
 `results/notebooks/`, summary in `results/REPORT.md`).
 
 ### Decisions taken in this session (all in `configs/eae_dvp_sdata.yaml`)
@@ -91,6 +91,12 @@ Every cell now carries `surface_tier` (meninges | buffer | parenchyma | outside)
    infiltrate extension. Regenerate: `scripts/xenium_transcript_rasters.py` on the remote (env `sq`, raw data
    in /Volumes/moldiassd; ~10 min) → copy `rasters/*.npz` to `outputs/xenium_rasters/` → `scripts/xenium_meninges.py`
    (needs the curated atlas, `$RRMAP2_H5AD`, and `../ImmunoTransformer/docs/sample_sheet/sections.csv`).
+   **Meningeal regions** (notebook 15, `scripts/xenium_meningeal_regions.py`): per 50 µm stretch. Dorsal/lateral
+   meninges carry ~1.5× the immune cells per 100 µm of ventral (paired, 37–41/59 animals) – dorsally because
+   they are thicker (immune *share* lower dorsally); subpial infiltrate highest laterally; infiltrate is patchy
+   (Moran's I ~0.25, top 10 % of stretches hold ~70 %); vessels in the meninges ~2× (GEE); meningeal and subpial
+   infiltrate co-localise (ρ > 0 in 95 % of sections); B cells are meningeal (21 % vs 9 % subpial, 48/55
+   animals), DC/MDM subpial; onset meninges have almost no B cells.
 3. ~~Orientation analysis~~ done (nb 12).
 4. Meninges as its own **reaction compartment** (discussed, not decided): budget is 57/60, needs pooling.
 5. Cell identity needs markers (resident vs infiltrating myeloid: TMEM119/P2RY12 vs CCR2; meningeal

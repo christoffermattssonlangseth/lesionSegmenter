@@ -220,3 +220,51 @@ def section_view(raster_dir: Path, row, cells: pd.DataFrame, pia: pd.DataFrame, 
     rgb = np.clip(rgb * 1.2 + 0.08 * tis[..., None], 0, 1)
     ext = (origin[0], origin[0] + tis.shape[1] * res, origin[1] + tis.shape[0] * res, origin[1])
     return rgb, men, tis, ext
+
+
+# ---- meningeal regions: one row per surface stretch ------------------------------------------------------------
+CELL_GROUPS = {
+    "T_CD4": ["CD4+ T Cell"], "T_CD8": ["CD8+ T Cell"], "T_other": ["T Cell", "T cell_LowQuality"],
+    "B": ["B Cell", "B cell_LowQuality"], "MDM": ["MDM"], "CAM": ["CAM"], "DC": ["GMP-DC", "CLP-DC", "NK/DC"],
+    "neutrophil": ["Neutrophil"], "microglia": ["Microglia"], "meningeal_FB": MENINGEAL_FB,
+    "EAE_FB": ["EAE - Associated FBs"], "perineural_FB": ["Perineural FBs"], "schwann": ["Schwann cell"],
+    "endothelial": ["Endothelial"], "VSMC": ["VSMC"],
+    "astrocyte": ["Homo_AST", "Reactive_AST", "Myelin_AST", "Neurovascular_AST"],
+    "oligodendroglia": ["MOL", "NFOL", "DAO", "OPC/COP"],
+}
+IMMUNE_GROUPS = ["T_CD4", "T_CD8", "T_other", "B", "MDM", "CAM", "DC", "neutrophil"]
+ANATOMY = {"Dorsal funiculus": "dorsal", "DorsalHorn_sensory": "dorsal", "Lateral funiculus": "lateral",
+           "Ventral funiculus": "ventral", "VentralHorn_motor": "ventral", "DRG": "DRG"}
+
+
+def stretch_table(cells: pd.DataFrame, pia: pd.DataFrame, prof: pd.DataFrame, col: str = "pia_depth_um",
+                  subpial_um: float = 50.0) -> pd.DataFrame:
+    """One row per surface stretch with a pia: surface length, pia depth, cell counts by group in the meninges
+    (above the pia), in the subpial band (pia … pia + ``subpial_um``) and deeper (… 200 µm), and the anatomy of
+    the parenchyma under it (majority physiological niche of cells 50–200 µm below the pia: dorsal / lateral /
+    ventral / DRG). Atlas cells must carry ``section``, ``seg``, ``depth``, ``Anno_L2``, ``Physiological_niche``."""
+    c = cells.merge(pia[["section", "seg", col]], on=["section", "seg"])
+    rel = c["depth"] - c[col]
+    c["comp"] = np.select([rel <= 0, rel <= subpial_um, rel <= 200], ["men", "sub", "deep"], "")
+    c = c[c["comp"] != ""]
+    lab = c["Anno_L2"].astype(str)
+    c["cg"] = "other"
+    for g, types in CELL_GROUPS.items():
+        c.loc[lab.isin(types), "cg"] = g
+    cnt = c.groupby(["section", "seg", "comp", "cg"]).size().unstack(["comp", "cg"], fill_value=0)
+    cnt.columns = [f"{a}_{b}" for a, b in cnt.columns]
+    under = c[(c["comp"] != "men") & (rel > 50)]
+    anat = (under["Physiological_niche"].astype(str).map(ANATOMY).dropna().groupby([under["section"], under["seg"]])
+            .agg(lambda v: v.value_counts().idxmax()).rename("anatomy"))
+    length = (prof[prof["depth"] == prof["depth"].min()].groupby(["section", "seg"])["pixels"].sum()
+              * float(prof["depth"].min())).rename("surface_um")
+    t = (pia.set_index(["section", "seg"]).join([cnt, anat, length], how="left").reset_index())
+    num = [k for k in t.columns if k.startswith(("men_", "sub_", "deep_"))]
+    t[num] = t[num].fillna(0).astype(int)
+    for comp in ("men", "sub"):
+        t[f"{comp}_immune"] = t[[f"{comp}_{g}" for g in IMMUNE_GROUPS if f"{comp}_{g}" in t]].sum(1)
+    t["men_cells"] = t[[k for k in t.columns if k.startswith("men_") and k != "men_immune"]].sum(1)
+    t["anatomy"] = t["anatomy"].fillna("unassigned")
+    t["root_zone"] = (t.get("men_schwann", 0) + t.get("men_perineural_FB", 0) + t.get("sub_schwann", 0)) >= 2
+    t["layer"] = t[col] > 0
+    return t
